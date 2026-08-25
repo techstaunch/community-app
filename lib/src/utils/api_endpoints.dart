@@ -21,7 +21,8 @@ class ApiEndpoints {
   static const String search = '/search';
 
   // Family Endpoints
-  static const String family = '/family/hierarchy?depth=3';
+  static const String familyTree = '/family/hierarchy?depth=5';
+  static const String familyMember = '/family';
 
   // Communities Endpoints
   static const String communities = '/communities';

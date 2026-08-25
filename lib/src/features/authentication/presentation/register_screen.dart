@@ -5,7 +5,12 @@ import 'package:go_router/go_router.dart';
 import '../../../theme/app_theme.dart';
 import '../../../common_widgets/custom_buttons.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
+import '../../../common_widgets/custom_inputs.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 import '../../profile/data/profile_provider.dart';
+import '../../authentication/data/auth_provider.dart';
 
 class RegisterScreen extends HookConsumerWidget {
   final bool isEditing;
@@ -15,15 +20,46 @@ class RegisterScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
-    final dobController = useTextEditingController();
+    final selectedDob = useState<DateTime?>(null);
+    final selectedPhoto = useState<File?>(null);
     final cityController = useTextEditingController();
     final villageController = useTextEditingController();
     
     final gender = useState('Male');
     final gotra = useState<String?>(null);
-    final subGroup = useState<String?>(null);
+    final isSubmitting = useState<bool>(false);
 
     final profileState = ref.watch(profileControllerProvider);
+    final profileData = profileState.value?.profile;
+
+    useEffect(() {
+      if (isEditing && profileState.value != null && profileState.value!.profile != null) {
+        final core = profileState.value!.profile!;
+        final names = core.fullName?.split(' ') ?? [];
+        if (names.isNotEmpty) {
+          firstNameController.text = names.first;
+          if (names.length > 1) {
+            lastNameController.text = names.sublist(1).join(' ');
+          }
+        }
+        if (core.dob != null && core.dob!.isNotEmpty) {
+           try {
+             selectedDob.value = DateTime.parse(core.dob!);
+           } catch (e) {
+             // Ignore parsing error
+           }
+        }
+        gender.value = core.gender ?? 'Male';
+        cityController.text = core.city ?? '';
+        villageController.text = core.nativeVillage ?? '';
+        
+        final existingGotra = core.gotra;
+        if (['Kashyap', 'Bharadwaj', 'Vashisht', 'Atri'].contains(existingGotra)) {
+          gotra.value = existingGotra;
+        }
+      }
+      return null;
+    }, const []);
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -47,7 +83,15 @@ class RegisterScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomBackButton(
-                  onPressed: () => context.pop(),
+                  onPressed: () {
+                    if (GoRouter.of(context).canPop()) {
+                      context.pop();
+                    } else if (!isEditing) {
+                      ref.read(authControllerProvider.notifier).logout();
+                    } else {
+                      context.go('/home');
+                    }
+                  },
                   dark: false,
                 ),
                 const SizedBox(height: 16),
@@ -75,20 +119,42 @@ class RegisterScreen extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Center(
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: AppColors.orangeLight,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.orange,
-                          width: 2,
-                          style: BorderStyle.solid,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final image = await picker.pickImage(source: ImageSource.gallery);
+                        if (image != null) {
+                          selectedPhoto.value = File(image.path);
+                        }
+                      },
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.orangeLight,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.orange,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                          image: selectedPhoto.value != null
+                              ? DecorationImage(
+                                  image: FileImage(selectedPhoto.value!),
+                                  fit: BoxFit.cover,
+                                )
+                              : (profileData?.profilePhotoUrl != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(profileData!.profilePhotoUrl!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null),
                         ),
-                      ),
-                      child: const Center(
-                        child: TranslatedText('📷', style: TextStyle(fontSize: 28)),
+                        child: selectedPhoto.value == null && profileData?.profilePhotoUrl == null
+                            ? const Center(
+                                child: TranslatedText('📷', style: TextStyle(fontSize: 28)),
+                              )
+                            : null,
                       ),
                     ),
                   ),
@@ -143,18 +209,10 @@ class RegisterScreen extends HookConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  const TranslatedText(
-                    'Date of Birth',
-                    style: TextStyle(
-                      color: AppColors.indigo,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  TextField(
-                    controller: dobController,
-                    decoration: const InputDecoration(hintText: 'YYYY-MM-DD'),
+                  CustomDatePickerField(
+                    label: 'Date of Birth',
+                    selectedDate: selectedDob.value,
+                    onDateSelected: (date) => selectedDob.value = date,
                   ),
                   const SizedBox(height: 14),
                   const TranslatedText(
@@ -232,54 +290,50 @@ class RegisterScreen extends HookConsumerWidget {
                     onChanged: (v) => gotra.value = v,
                     hint: const TranslatedText('Select Gotra'),
                   ),
-                  const SizedBox(height: 14),
-                  const TranslatedText(
-                    'Sub-group / Shakha',
-                    style: TextStyle(
-                      color: AppColors.indigo,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  DropdownButton<String>(isExpanded: true,
-                    
-                    value: subGroup.value,
-                    items: const [
-                      DropdownMenuItem(
-                        value: '96 Kuli Patil',
-                        child: TranslatedText('96 Kuli Patil'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Deshmukh Patil',
-                        child: TranslatedText('Deshmukh Patil'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Deshpande',
-                        child: TranslatedText('Deshpande'),
-                      ),
-                    ],
-                    onChanged: (v) => subGroup.value = v,
-                    hint: const TranslatedText('Select Sub-group'),
-                  ),
+
                   const SizedBox(height: 24),
-                  profileState.isLoading 
+                  (profileState.isLoading || isSubmitting.value) 
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                     onPressed: () async {
-                      await ref.read(profileControllerProvider.notifier).updateCoreProfile({
-                        'fullName': '${firstNameController.text} ${lastNameController.text}'.trim(),
-                        'dob': dobController.text,
-                        'gender': gender.value,
-                        'city': cityController.text,
-                        'nativeVillage': villageController.text,
-                        'gotra': gotra.value,
-                      });
-                      if (context.mounted) {
-                        if (isEditing) {
-                          context.pop();
-                        } else {
-                          context.go('/pending_verification');
+                      isSubmitting.value = true;
+                      try {
+                        String dobString = "";
+                        if (selectedDob.value != null) {
+                          dobString = "${selectedDob.value!.year.toString().padLeft(4, '0')}-${selectedDob.value!.month.toString().padLeft(2, '0')}-${selectedDob.value!.day.toString().padLeft(2, '0')}";
+                        }
+                        if (selectedPhoto.value != null) {
+                          await ref.read(profileControllerProvider.notifier).uploadProfilePhoto(selectedPhoto.value!.path);
+                        }
+                        await ref.read(profileControllerProvider.notifier).updateCoreProfile({
+                          'fullName': '${firstNameController.text} ${lastNameController.text}'.trim(),
+                          'surname': lastNameController.text.trim(),
+                          'dob': dobString,
+                          'gender': gender.value,
+                          'city': cityController.text,
+                          'nativeVillage': villageController.text,
+                          'gotra': gotra.value,
+                        });
+                        if (context.mounted) {
+                          if (isEditing) {
+                            context.pop();
+                          } else {
+                            context.go('/pending_verification');
+                          }
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          String message = 'Failed to update profile';
+                          if (e is DioException && e.response?.data != null) {
+                            message = e.response!.data['message'] ?? message;
+                            final errors = e.response!.data['errors'] as List<dynamic>?;
+                            if (errors != null && errors.isNotEmpty) {
+                              message = errors.map((e) => "${e['field']}: ${e['message']}").join(', ');
+                            }
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
                         }
                       }
                     },

@@ -3,7 +3,7 @@ import 'export_repository.dart';
 
 part 'export_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ExportController extends _$ExportController {
   @override
   FutureOr<void> build() {}

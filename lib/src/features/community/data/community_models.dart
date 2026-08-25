@@ -28,3 +28,31 @@ abstract class CommunityMember with _$CommunityMember {
 
   factory CommunityMember.fromJson(Map<String, dynamic> json) => _$CommunityMemberFromJson(json);
 }
+
+@freezed
+abstract class Announcement with _$Announcement {
+  const factory Announcement({
+    String? id,
+    String? communityId,
+    String? title,
+    String? content,
+    String? createdAt,
+  }) = _Announcement;
+
+  factory Announcement.fromJson(Map<String, dynamic> json) => _$AnnouncementFromJson(json);
+}
+
+@freezed
+abstract class Event with _$Event {
+  const factory Event({
+    String? id,
+    String? communityId,
+    String? title,
+    String? description,
+    String? eventDate,
+    String? location,
+    String? createdAt,
+  }) = _Event;
+
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+}

@@ -26,7 +26,7 @@ class CommunityRepository {
   Future<List<Community>> getMyMemberships() async {
     final response = await _dio.get(ApiEndpoints.communitiesMyMemberships);
     final data = response.data['data'] as List;
-    return data.map((e) => Community.fromJson(e)).toList();
+    return data.map((e) => Community.fromJson(e['community'])).toList();
   }
 
   Future<Community> createCommunity(Map<String, dynamic> data) async {
@@ -55,5 +55,23 @@ class CommunityRepository {
       '${ApiEndpoints.communities}/$communityId/reject',
       data: {'membershipId': membershipId},
     );
+  }
+
+  Future<List<Announcement>> getAnnouncements(String communityId, {int page = 1, int limit = 10}) async {
+    final response = await _dio.get(
+      '/admin/$communityId/announcements',
+      queryParameters: {'page': page, 'limit': limit},
+    );
+    final data = response.data['data'] as List;
+    return data.map((e) => Announcement.fromJson(e)).toList();
+  }
+
+  Future<List<Event>> getEvents(String communityId, {int page = 1, int limit = 10}) async {
+    final response = await _dio.get(
+      '/admin/$communityId/events',
+      queryParameters: {'page': page, 'limit': limit},
+    );
+    final data = response.data['data'] as List;
+    return data.map((e) => Event.fromJson(e)).toList();
   }
 }

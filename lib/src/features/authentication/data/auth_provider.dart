@@ -10,6 +10,7 @@ enum AuthState { unauthenticated, loading, onboarding, pendingVerification, veri
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
   String? currentMobileNumber;
+  String? currentPurpose;
   Timer? _refreshTimer;
 
   @override
@@ -36,8 +37,8 @@ class AuthController extends _$AuthController {
 
   void _startPeriodicRefresh() {
     _refreshTimer?.cancel();
-    // Refresh token every 5 minutes
-    _refreshTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
+    // Refresh token every 15 minutes
+    _refreshTimer = Timer.periodic(const Duration(minutes: 15), (_) async {
       try {
         final repo = ref.read(authRepositoryProvider);
         final refreshToken = await ref.read(authStorageProvider.notifier).getRefreshToken();
@@ -59,12 +60,15 @@ class AuthController extends _$AuthController {
     });
   }
 
-  Future<void> requestOtp(String mobileNumber) async {
+  Future<void> requestOtp(String mobileNumber, {String? purpose}) async {
     currentMobileNumber = mobileNumber;
+    if (purpose != null) {
+      currentPurpose = purpose;
+    }
     state = AuthState.loading;
     try {
       final repo = ref.read(authRepositoryProvider);
-      final response = await repo.requestOtp(mobileNumber);
+      final response = await repo.requestOtp(mobileNumber, purpose: currentPurpose ?? 'Login');
       if (response.success) {
         state = AuthState.pendingVerification;
       } else {
@@ -79,7 +83,7 @@ class AuthController extends _$AuthController {
     state = AuthState.loading;
     try {
       final repo = ref.read(authRepositoryProvider);
-      final response = await repo.verifyOtp(mobileNumber, code);
+      final response = await repo.verifyOtp(mobileNumber, code, purpose: currentPurpose ?? 'Login');
       
       if (response.success && response.data != null) {
         // Save tokens
@@ -88,7 +92,7 @@ class AuthController extends _$AuthController {
           refreshToken: response.data!.refreshToken!,
         );
         
-        if (response.data!.isNewUser == true) {
+        if (response.data!.isNewUser == true || currentPurpose == 'Registration') {
           state = AuthState.onboarding;
         } else {
           state = AuthState.verified;
@@ -100,6 +104,12 @@ class AuthController extends _$AuthController {
     } catch (e) {
       state = AuthState.error;
     }
+  }
+
+  void resetToLogin() {
+    currentMobileNumber = null;
+    currentPurpose = null;
+    state = AuthState.unauthenticated;
   }
 
   Future<void> logout() async {

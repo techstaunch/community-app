@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
+import 'dart:async';
 import '../../../theme/app_theme.dart';
 import '../../../common_widgets/custom_buttons.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
@@ -20,6 +21,24 @@ class OtpScreen extends HookConsumerWidget {
     final controllers = List.generate(6, (index) => useTextEditingController());
     final focusNodes = List.generate(6, (index) => useFocusNode());
 
+    // Timer state
+    final timerValue = useState(30);
+    final canResend = useState(false);
+
+    useEffect(() {
+      if (canResend.value) return null;
+      
+      final timer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (timerValue.value > 0) {
+          timerValue.value--;
+        } else {
+          canResend.value = true;
+          t.cancel();
+        }
+      });
+      return timer.cancel;
+    }, [canResend.value]);
+
     ref.listen(authControllerProvider, (previous, next) {
       if (next == AuthState.onboarding) {
         // If it's a new user, they go to profile setup / registration
@@ -29,12 +48,17 @@ class OtpScreen extends HookConsumerWidget {
         context.go('/home');
       } else if (next == AuthState.error) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid OTP. Please try again.')),
+          const SnackBar(content: Text('Invalid OTP or error occurred. Please try again.')),
         );
       }
     });
 
     final currentNumber = authNotifier.currentMobileNumber ?? '';
+
+    void handleBackToLogin() {
+      authNotifier.resetToLogin();
+      context.go('/login');
+    }
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -57,8 +81,22 @@ class OtpScreen extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomBackButton(
-                  dark: false,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomBackButton(
+                      dark: false,
+                      onPressed: handleBackToLogin,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'assets/images/app_logo.png',
+                        height: 40,
+                        width: 40,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 TranslatedText(
@@ -79,7 +117,7 @@ class OtpScreen extends HookConsumerWidget {
             ),
           ),
           Expanded(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,25 +165,45 @@ class OtpScreen extends HookConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: const TextSpan(
-                      style: TextStyle(
-                        color: AppColors.textMuted,
-                        fontSize: 13,
-                      ),
-                      children: [
-                        TextSpan(text: 'Resend OTP in '),
-                        TextSpan(
-                          text: '28 sec',
-                          style: TextStyle(
-                            color: AppColors.indigo,
-                            fontWeight: FontWeight.bold,
+                  canResend.value
+                      ? Center(
+                          child: TextButton(
+                            onPressed: () {
+                              if (currentNumber.isNotEmpty) {
+                                authNotifier.requestOtp(currentNumber);
+                                canResend.value = false;
+                                timerValue.value = 30;
+                              }
+                            },
+                            child: const TranslatedText(
+                              'Resend OTP',
+                              style: TextStyle(
+                                color: AppColors.indigo,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        )
+                      : RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 13,
+                            ),
+                            children: [
+                              const TextSpan(text: 'Resend OTP in '),
+                              TextSpan(
+                                text: '${timerValue.value} sec',
+                                style: const TextStyle(
+                                  color: AppColors.indigo,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 24),
                   authState == AuthState.loading
                       ? const Center(child: CircularProgressIndicator())
@@ -160,7 +218,7 @@ class OtpScreen extends HookConsumerWidget {
                         ),
                   const SizedBox(height: 16),
                   TextButton(
-                    onPressed: () => context.pop(),
+                    onPressed: handleBackToLogin,
                     child: const TranslatedText(
                       'Edit phone number',
                       style: TextStyle(color: AppColors.textMuted),

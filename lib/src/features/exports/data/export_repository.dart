@@ -25,6 +25,6 @@ class ExportRepository {
 
   Future<String> generateProfileQrCode() async {
     final response = await _dio.post(ApiEndpoints.exportsQr);
-    return response.data['data']['qrCode'];
+    return response.data['data']['qrImageUrl'];
   }
 }

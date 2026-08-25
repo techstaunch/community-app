@@ -143,40 +143,42 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed ?? () {
-          if (GoRouter.of(context).canPop()) {
-            context.pop();
-          } else {
-            context.go('/home'); // Safe fallback
-          }
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: dark ? Colors.white : AppColors.indigo.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12),
-            border:
-                Border.all(color: dark ? AppColors.border : Colors.transparent),
-            boxShadow: dark
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    )
-                  ]
-                : null,
-          ),
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: dark ? AppColors.textDark : Colors.white,
-            size: 18,
+    return UnconstrainedBox(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed ?? () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            } else {
+              context.go('/home'); // Safe fallback
+            }
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: dark ? Colors.white : AppColors.indigo.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+              border:
+                  Border.all(color: dark ? AppColors.border : Colors.transparent),
+              boxShadow: dark
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      )
+                    ]
+                  : null,
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: dark ? AppColors.textDark : Colors.white,
+              size: 18,
+            ),
           ),
         ),
       ),

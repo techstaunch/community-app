@@ -20,7 +20,7 @@ final class ExportControllerProvider
         argument: null,
         retry: null,
         name: r'exportControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class ExportControllerProvider
   ExportController create() => ExportController();
 }
 
-String _$exportControllerHash() => r'd81125818e1fc3063e722bb8db4045e754265afe';
+String _$exportControllerHash() => r'f21d09fb1bdc1458e3c9e81a99f88150d813afd9';
 
 abstract class _$ExportController extends $AsyncNotifier<void> {
   FutureOr<void> build();

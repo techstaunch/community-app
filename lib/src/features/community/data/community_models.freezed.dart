@@ -562,4 +562,560 @@ as String?,
 
 }
 
+
+/// @nodoc
+mixin _$Announcement {
+
+ String? get id; String? get communityId; String? get title; String? get content; String? get createdAt;
+/// Create a copy of Announcement
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AnnouncementCopyWith<Announcement> get copyWith => _$AnnouncementCopyWithImpl<Announcement>(this as Announcement, _$identity);
+
+  /// Serializes this Announcement to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Announcement&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,title,content,createdAt);
+
+@override
+String toString() {
+  return 'Announcement(id: $id, communityId: $communityId, title: $title, content: $content, createdAt: $createdAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AnnouncementCopyWith<$Res>  {
+  factory $AnnouncementCopyWith(Announcement value, $Res Function(Announcement) _then) = _$AnnouncementCopyWithImpl;
+@useResult
+$Res call({
+ String? id, String? communityId, String? title, String? content, String? createdAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$AnnouncementCopyWithImpl<$Res>
+    implements $AnnouncementCopyWith<$Res> {
+  _$AnnouncementCopyWithImpl(this._self, this._then);
+
+  final Announcement _self;
+  final $Res Function(Announcement) _then;
+
+/// Create a copy of Announcement
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? content = freezed,Object? createdAt = freezed,}) {
+  return _then(Announcement(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [Announcement].
+extension AnnouncementPatterns on Announcement {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Announcement value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Announcement() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Announcement value)  $default,){
+final _that = this;
+switch (_that) {
+case _Announcement():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Announcement value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Announcement() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? content,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Announcement() when $default != null:
+return $default(_that.id,_that.communityId,_that.title,_that.content,_that.createdAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? content,  String? createdAt)  $default,) {final _that = this;
+switch (_that) {
+case _Announcement():
+return $default(_that.id,_that.communityId,_that.title,_that.content,_that.createdAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? communityId,  String? title,  String? content,  String? createdAt)?  $default,) {final _that = this;
+switch (_that) {
+case _Announcement() when $default != null:
+return $default(_that.id,_that.communityId,_that.title,_that.content,_that.createdAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _Announcement implements Announcement {
+  const _Announcement({this.id, this.communityId, this.title, this.content, this.createdAt});
+  factory _Announcement.fromJson(Map<String, dynamic> json) => _$AnnouncementFromJson(json);
+
+@override final  String? id;
+@override final  String? communityId;
+@override final  String? title;
+@override final  String? content;
+@override final  String? createdAt;
+
+/// Create a copy of Announcement
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AnnouncementCopyWith<_Announcement> get copyWith => __$AnnouncementCopyWithImpl<_Announcement>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$AnnouncementToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Announcement&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,title,content,createdAt);
+
+@override
+String toString() {
+  return 'Announcement(id: $id, communityId: $communityId, title: $title, content: $content, createdAt: $createdAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AnnouncementCopyWith<$Res> implements $AnnouncementCopyWith<$Res> {
+  factory _$AnnouncementCopyWith(_Announcement value, $Res Function(_Announcement) _then) = __$AnnouncementCopyWithImpl;
+@override @useResult
+$Res call({
+ String? id, String? communityId, String? title, String? content, String? createdAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$AnnouncementCopyWithImpl<$Res>
+    implements _$AnnouncementCopyWith<$Res> {
+  __$AnnouncementCopyWithImpl(this._self, this._then);
+
+  final _Announcement _self;
+  final $Res Function(_Announcement) _then;
+
+/// Create a copy of Announcement
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? content = freezed,Object? createdAt = freezed,}) {
+  return _then(_Announcement(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$Event {
+
+ String? get id; String? get communityId; String? get title; String? get description; String? get eventDate; String? get location; String? get createdAt;
+/// Create a copy of Event
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EventCopyWith<Event> get copyWith => _$EventCopyWithImpl<Event>(this as Event, _$identity);
+
+  /// Serializes this Event to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,createdAt);
+
+@override
+String toString() {
+  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, createdAt: $createdAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EventCopyWith<$Res>  {
+  factory $EventCopyWith(Event value, $Res Function(Event) _then) = _$EventCopyWithImpl;
+@useResult
+$Res call({
+ String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? createdAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$EventCopyWithImpl<$Res>
+    implements $EventCopyWith<$Res> {
+  _$EventCopyWithImpl(this._self, this._then);
+
+  final Event _self;
+  final $Res Function(Event) _then;
+
+/// Create a copy of Event
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? createdAt = freezed,}) {
+  return _then(Event(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,eventDate: freezed == eventDate ? _self.eventDate : eventDate // ignore: cast_nullable_to_non_nullable
+as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [Event].
+extension EventPatterns on Event {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Event value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Event() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Event value)  $default,){
+final _that = this;
+switch (_that) {
+case _Event():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Event value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Event() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Event() when $default != null:
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)  $default,) {final _that = this;
+switch (_that) {
+case _Event():
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)?  $default,) {final _that = this;
+switch (_that) {
+case _Event() when $default != null:
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _Event implements Event {
+  const _Event({this.id, this.communityId, this.title, this.description, this.eventDate, this.location, this.createdAt});
+  factory _Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+
+@override final  String? id;
+@override final  String? communityId;
+@override final  String? title;
+@override final  String? description;
+@override final  String? eventDate;
+@override final  String? location;
+@override final  String? createdAt;
+
+/// Create a copy of Event
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EventCopyWith<_Event> get copyWith => __$EventCopyWithImpl<_Event>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$EventToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,createdAt);
+
+@override
+String toString() {
+  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, createdAt: $createdAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
+  factory _$EventCopyWith(_Event value, $Res Function(_Event) _then) = __$EventCopyWithImpl;
+@override @useResult
+$Res call({
+ String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? createdAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$EventCopyWithImpl<$Res>
+    implements _$EventCopyWith<$Res> {
+  __$EventCopyWithImpl(this._self, this._then);
+
+  final _Event _self;
+  final $Res Function(_Event) _then;
+
+/// Create a copy of Event
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? createdAt = freezed,}) {
+  return _then(_Event(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,eventDate: freezed == eventDate ? _self.eventDate : eventDate // ignore: cast_nullable_to_non_nullable
+as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
 // dart format on

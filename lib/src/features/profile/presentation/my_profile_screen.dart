@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,12 +12,26 @@ import '../data/profile_provider.dart';
 import '../data/profile_models.dart';
 import '../../exports/data/export_provider.dart';
 
+String _formatDate(String? isoString) {
+  if (isoString == null || isoString.isEmpty) return 'Setup required';
+  try {
+    final date = DateTime.parse(isoString);
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return "${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}";
+  } catch (e) {
+    return isoString;
+  }
+}
+
 class MyProfileScreen extends HookConsumerWidget {
   const MyProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(profileControllerProvider);
+    final localPhotoPath = useState<String?>(null);
+    final isUploadingPhoto = useState<bool>(false);
+    
     return Scaffold(
       backgroundColor: AppColors.cream,
       body: SafeArea(
@@ -33,36 +48,53 @@ class MyProfileScreen extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TranslatedText(
-                    'My Profile & Settings',
+                    'Profile',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          fontSize: 22,
-                          color: AppColors.indigo,
-                        ),
+                      fontSize: 22,
+                      color: AppColors.indigo,
+                    ),
                   ),
                   Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.qr_code, color: AppColors.indigo),
+                        icon: const Icon(
+                          Icons.qr_code,
+                          color: AppColors.indigo,
+                        ),
                         onPressed: () => context.push('/my_qr_code'),
                         constraints: const BoxConstraints(minWidth: 40),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.picture_as_pdf, color: AppColors.indigo),
+                        icon: const Icon(
+                          Icons.picture_as_pdf,
+                          color: AppColors.indigo,
+                        ),
                         onPressed: () async {
                           final userId = profileState.value?.id;
                           if (userId != null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Generating PDF...')),
+                              const SnackBar(
+                                content: Text('Generating PDF...'),
+                              ),
                             );
-                            final url = await ref.read(exportControllerProvider.notifier).exportPdfBiodata(userId);
+                            final url = await ref
+                                .read(exportControllerProvider.notifier)
+                                .exportPdfBiodata(userId);
                             if (url != null && context.mounted) {
                               final uri = Uri.parse(url);
                               if (await canLaunchUrl(uri)) {
-                                await launchUrl(uri);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Could not open PDF')),
+                                await launchUrl(
+                                  uri,
+                                  mode: LaunchMode.externalApplication,
                                 );
+                              } else {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Could not open PDF'),
+                                    ),
+                                  );
+                                }
                               }
                             }
                           }
@@ -77,8 +109,10 @@ class MyProfileScreen extends HookConsumerWidget {
                           minimumSize: const Size(50, 30),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        child: const TranslatedText('Edit',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: const TranslatedText(
+                          'Edit',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -93,7 +127,8 @@ class MyProfileScreen extends HookConsumerWidget {
                 data: (profile) {
                   final core = profile?.profile;
                   final name = core?.fullName ?? 'Setup Profile';
-                  final subtitle = '${core?.city ?? 'City'} • ${core?.gotra ?? 'Gotra'}';
+                  final subtitle =
+                      '${core?.city ?? 'City'} • ${core?.gotra ?? 'Gotra'}';
 
                   return SingleChildScrollView(
                     child: Column(
@@ -115,9 +150,20 @@ class MyProfileScreen extends HookConsumerWidget {
                                     GestureDetector(
                                       onTap: () async {
                                         final picker = ImagePicker();
-                                        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                                        final XFile? image = await picker
+                                            .pickImage(
+                                              source: ImageSource.gallery,
+                                            );
                                         if (image != null) {
-                                          ref.read(profileControllerProvider.notifier).uploadProfilePhoto(image.path);
+                                          localPhotoPath.value = image.path;
+                                          isUploadingPhoto.value = true;
+                                          try {
+                                            await ref.read(profileControllerProvider.notifier).uploadProfilePhoto(image.path);
+                                          } finally {
+                                            if (context.mounted) {
+                                              isUploadingPhoto.value = false;
+                                            }
+                                          }
                                         }
                                       },
                                       child: Stack(
@@ -131,10 +177,38 @@ class MyProfileScreen extends HookConsumerWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             alignment: Alignment.center,
-                                            child: core?.profilePhotoUrl != null 
-                                                ? ClipOval(child: Image.network(core!.profilePhotoUrl!, width: 60, height: 60, fit: BoxFit.cover))
-                                                : const TranslatedText('👨', style: TextStyle(fontSize: 30)),
+                                            child: localPhotoPath.value != null
+                                                ? ClipOval(
+                                                    child: Image.file(
+                                                      File(localPhotoPath.value!),
+                                                      width: 60,
+                                                      height: 60,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                : core?.profilePhotoUrl != null
+                                                    ? ClipOval(
+                                                        child: Image.network(
+                                                          core!.profilePhotoUrl!,
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    : const TranslatedText(
+                                                        '👨',
+                                                        style: TextStyle(
+                                                          fontSize: 30,
+                                                        ),
+                                                      ),
                                           ),
+                                          if (isUploadingPhoto.value)
+                                            const Positioned.fill(
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 3.0,
+                                                color: AppColors.orange,
+                                              ),
+                                            ),
                                           Positioned(
                                             bottom: -4,
                                             right: -4,
@@ -144,7 +218,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                                 color: AppColors.orange,
                                                 shape: BoxShape.circle,
                                               ),
-                                              child: const Icon(Icons.edit, size: 12, color: Colors.white),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                size: 12,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -198,10 +276,18 @@ class MyProfileScreen extends HookConsumerWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(20),
                                         child: activeTab.value == 0
-                                            ? _buildPersonalTab(profile)
+                                            ? _buildPersonalTab(profile, ref)
                                             : activeTab.value == 1
-                                                ? _buildFamilyTab(context)
-                                                : _buildWorkTab(context, profile),
+                                            ? _buildFamilyTab(
+                                                context,
+                                                ref,
+                                                profile,
+                                              )
+                                            : _buildWorkTab(
+                                                context,
+                                                profile,
+                                                ref,
+                                              ),
                                       ),
                                     ],
                                   );
@@ -251,10 +337,10 @@ class MyProfileScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildPersonalTab(UserProfile? profile) {
+  Widget _buildPersonalTab(UserProfile? profile, WidgetRef ref) {
     final core = profile?.profile;
     final privacy = profile?.privacySettings;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -267,18 +353,48 @@ class MyProfileScreen extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 12),
-        _buildPrivacyField('Phone Number', profile?.mobileNumber ?? 'Setup required', privacy?.showMobileNumber ?? false),
-        _buildPrivacyField('Date of Birth', core?.dob ?? 'Setup required', false),
-        _buildPrivacyField('Native Village', core?.nativeVillage ?? 'Setup required', true),
+        _buildPrivacyField(
+          'Phone Number',
+          profile?.mobileNumber ?? 'Setup required',
+          privacy?.showMobileNumber ?? false,
+          onChanged: (val) {
+            ref.read(profileControllerProvider.notifier).updatePrivacySettings({
+              'showMobileNumber': val,
+            });
+          },
+        ),
+        _buildPrivacyField(
+          'Date of Birth',
+          _formatDate(core?.dob),
+          false,
+        ), // API model does not have showDob
+        _buildPrivacyField(
+          'Native Village',
+          core?.nativeVillage ?? 'Setup required',
+          true,
+        ), // API model does not have showNativeVillage
       ],
     );
   }
 
-  Widget _buildFamilyTab(BuildContext context) {
+  Widget _buildFamilyTab(
+    BuildContext context,
+    WidgetRef ref,
+    UserProfile? profile,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildPrivacyField('Family Tree Visibility', 'Public', true),
+        _buildPrivacyField(
+          'Family Tree Visibility',
+          'Public',
+          profile?.privacySettings?.showFamilyInfo ?? false,
+          onChanged: (val) {
+            ref.read(profileControllerProvider.notifier).updatePrivacySettings({
+              'showFamilyInfo': val,
+            });
+          },
+        ),
         const SizedBox(height: 24),
         const TranslatedText(
           'Linked Family',
@@ -298,51 +414,69 @@ class MyProfileScreen extends HookConsumerWidget {
           ),
           child: Row(
             children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: const BoxDecoration(
-                  color: AppColors.cream,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const TranslatedText('👨', style: TextStyle(fontSize: 24)),
+              const CircleAvatar(
+                radius: 20,
+                backgroundColor: AppColors.orangeLight,
+                child: Icon(Icons.person, color: AppColors.orange, size: 20),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TranslatedText('Sanjay Patil',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDark)),
-                    TranslatedText('Father',
-                        style:
-                            TextStyle(fontSize: 12, color: AppColors.textMid)),
+                    const TranslatedText(
+                      'Sunita Sharma',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TranslatedText(
+                      'Spouse • +91 9876543210',
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
               ),
+              const Icon(Icons.check_circle, color: AppColors.green, size: 20),
             ],
           ),
         ),
         const SizedBox(height: 20),
-        OutlinePrimaryButton(
-          text: '+ Add Family Member',
+        PrimaryButton(
+          text: 'Add Family Member',
           onPressed: () => context.push('/add_family'),
         ),
       ],
     );
   }
 
-  Widget _buildWorkTab(BuildContext context, UserProfile? profile) {
+  Widget _buildWorkTab(
+    BuildContext context,
+    UserProfile? profile,
+    WidgetRef ref,
+  ) {
     final job = profile?.job;
+    final business = profile?.business;
     final privacy = profile?.privacySettings;
+    
+    final bool hasJob = job != null && job.id != null;
+    final bool hasBusiness = business != null && business.id != null;
+    final bool hasWork = hasJob || hasBusiness;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildPrivacyField('Work Details Visibility', 'Public', privacy?.showProfessionalInfo ?? false),
+        _buildPrivacyField(
+          'Work Details Visibility',
+          'Public',
+          privacy?.showProfessionalInfo ?? false,
+          onChanged: (val) {
+            ref.read(profileControllerProvider.notifier).updatePrivacySettings({
+              'showProfessionalInfo': val,
+            });
+          },
+        ),
         const SizedBox(height: 24),
         const TranslatedText(
           'Current Profile',
@@ -353,47 +487,128 @@ class MyProfileScreen extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+        if (hasBusiness)
+          _buildWorkCard(
+            context,
+            title: business.businessName ?? 'Business',
+            subtitle: '${business.category ?? ''} • ${business.address ?? ''}',
+            isBusiness: true,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TranslatedText(job?.designation ?? 'Not Set',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: AppColors.textDark)),
-                  GestureDetector(
-                    onTap: () => context.push('/work_profile'),
-                    child: const Icon(Icons.edit,
-                        size: 18, color: AppColors.orange),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              TranslatedText('${job?.companyName ?? ''} • ${job?.yearsOfExperience ?? 0} Years Experience',
-                  style: const TextStyle(color: AppColors.textMid, fontSize: 13)),
-            ],
+        if (hasBusiness && hasJob) const SizedBox(height: 12),
+        if (hasJob)
+          _buildWorkCard(
+            context,
+            title: job.designation ?? 'Job',
+            subtitle: '${job.companyName ?? ''} • ${job.yearsOfExperience ?? 0} Years Experience',
+            isBusiness: false,
           ),
-        ),
-        const SizedBox(height: 20),
-        PrimaryButton(
-          text: 'Add Business / Job',
-          onPressed: () => context.push('/work_profile'),
-        ),
+        if (!hasWork) ...[
+          _buildWorkCard(
+            context,
+            title: 'Not Set',
+            subtitle: '0 Years Experience',
+            isBusiness: false,
+            isEmpty: true,
+          ),
+          const SizedBox(height: 20),
+          PrimaryButton(
+            text: 'Add Business / Job',
+            onPressed: () => context.push('/work_profile'),
+          ),
+        ],
+        if (hasWork && (!hasBusiness || !hasJob)) ...[
+          const SizedBox(height: 20),
+          PrimaryButton(
+            text: !hasBusiness ? 'Add Business' : 'Add Job',
+            onPressed: () => context.push('/work_profile', extra: {'isBusiness': !hasBusiness}),
+          ),
+        ],
       ],
     );
   }
 
-  Widget _buildPrivacyField(String label, String value, bool isPublic) {
+  Widget _buildWorkCard(BuildContext context, {required String title, required String subtitle, required bool isBusiness, bool isEmpty = false}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!isEmpty) ...[
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(isBusiness ? 'assets/images/business_icon.jpg' : 'assets/images/job_icon.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (!isEmpty)
+                      TranslatedText(
+                        isBusiness ? 'BUSINESS' : 'EMPLOYMENT',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.orange,
+                          letterSpacing: 1.2,
+                        ),
+                      )
+                    else
+                      const SizedBox(),
+                    GestureDetector(
+                      onTap: () => context.push('/work_profile', extra: {'isBusiness': isBusiness}),
+                      child: Icon(
+                        isEmpty ? Icons.add : Icons.edit,
+                        size: 18,
+                        color: AppColors.orange,
+                      ),
+                    ),
+                  ],
+                ),
+                if (!isEmpty) const SizedBox(height: 4),
+                TranslatedText(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.textDark,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                TranslatedText(
+                  subtitle,
+                  style: const TextStyle(color: AppColors.textMid, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrivacyField(
+    String label,
+    String value,
+    bool isPublic, {
+    ValueChanged<bool>? onChanged,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -409,41 +624,52 @@ class MyProfileScreen extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TranslatedText(label,
-                    style: const TextStyle(
-                        fontSize: 12, color: AppColors.textMuted)),
+                TranslatedText(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textMuted,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                TranslatedText(value,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark)),
+                TranslatedText(
+                  value,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textDark,
+                  ),
+                ),
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                children: [
-                  Icon(isPublic ? Icons.public : Icons.lock,
+          if (onChanged != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      isPublic ? Icons.public : Icons.lock,
                       size: 14,
-                      color: isPublic ? AppColors.green : AppColors.textMuted),
-                  const SizedBox(width: 4),
-                  TranslatedText(isPublic ? 'Public' : 'Private',
+                      color: isPublic ? AppColors.green : AppColors.textMuted,
+                    ),
+                    const SizedBox(width: 4),
+                    TranslatedText(
+                      isPublic ? 'Public' : 'Private',
                       style: TextStyle(
-                          fontSize: 11,
-                          color: isPublic
-                              ? AppColors.green
-                              : AppColors.textMuted)),
-                ],
-              ),
-              Switch(
-                value: isPublic,
-                onChanged: (v) {},
-                activeThumbColor: AppColors.orange,
-              ),
-            ],
-          )
+                        fontSize: 11,
+                        color: isPublic ? AppColors.green : AppColors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+                Switch(
+                  value: isPublic,
+                  onChanged: onChanged,
+                  activeThumbColor: AppColors.orange,
+                ),
+              ],
+            ),
         ],
       ),
     );

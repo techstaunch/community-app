@@ -18,19 +18,26 @@ class MyCommunitiesController extends _$MyCommunitiesController {
 
   Future<void> joinCommunity(String inviteCode) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    try {
       final repo = ref.read(communityRepositoryProvider);
       await repo.joinCommunity(inviteCode);
-      return _fetchMemberships();
-    });
+      state = AsyncValue.data(await _fetchMemberships());
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
   }
 
-  Future<void> createCommunity(Map<String, dynamic> data) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final repo = ref.read(communityRepositoryProvider);
-      await repo.createCommunity(data);
-      return _fetchMemberships();
-    });
-  }
+}
+
+@riverpod
+Future<List<Announcement>> communityAnnouncements(Ref ref, String communityId) async {
+  final repo = ref.watch(communityRepositoryProvider);
+  return repo.getAnnouncements(communityId);
+}
+
+@riverpod
+Future<List<Event>> communityEvents(Ref ref, String communityId) async {
+  final repo = ref.watch(communityRepositoryProvider);
+  return repo.getEvents(communityId);
 }

@@ -79,6 +79,21 @@ class AppTheme {
         labelStyle: const TextStyle(color: AppColors.indigo, fontSize: 12, fontWeight: FontWeight.w600),
         hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
       ),
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: AppColors.cream,
+        headerBackgroundColor: AppColors.indigo,
+        headerForegroundColor: AppColors.white,
+        dividerColor: AppColors.border,
+        todayForegroundColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected) ? AppColors.white : AppColors.orange),
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected) ? AppColors.white : AppColors.textDark),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected) ? AppColors.orange : Colors.transparent),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        cancelButtonStyle: TextButton.styleFrom(foregroundColor: AppColors.textMuted),
+        confirmButtonStyle: TextButton.styleFrom(foregroundColor: AppColors.orange, textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import '../../../theme/app_theme.dart';
+import '../../authentication/data/auth_provider.dart';
 import '../../translation/application/translation_provider.dart';
 
 import '../../../common_widgets/translated_text.dart';
@@ -48,7 +49,9 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           const TranslatedText('Danger Zone', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.red)),
           const SizedBox(height: 8),
-          _buildSettingsTile(Icons.logout, 'Log Out', () => context.go('/login'), color: AppColors.textDark),
+          _buildSettingsTile(Icons.logout, 'Log Out', () {
+            ref.read(authControllerProvider.notifier).logout();
+          }, color: AppColors.textDark),
           _buildSettingsTile(Icons.delete_forever, 'Delete Account', () {
             _showDeleteDialog(context);
           }, color: AppColors.red),
@@ -58,14 +61,21 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildSettingsTile(IconData icon, String title, VoidCallback onTap, {Color color = AppColors.textDark}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)),
-      child: ListTile(
-        leading: Icon(icon, color: color),
-        title: TranslatedText(title, style: TextStyle(color: color, fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
-        onTap: onTap,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: ListTile(
+          leading: Icon(icon, color: color),
+          title: TranslatedText(title, style: TextStyle(color: color, fontWeight: FontWeight.w500)),
+          trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
+          onTap: onTap,
+        ),
       ),
     );
   }

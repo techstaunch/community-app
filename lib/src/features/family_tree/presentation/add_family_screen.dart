@@ -14,7 +14,7 @@ class AddFamilyScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nameController = useTextEditingController();
-    final dobController = useTextEditingController();
+    final selectedDob = useState<DateTime?>(null);
     final mobileController = useTextEditingController();
     final relation = useState<String?>(null);
     final gender = useState<String>('Male');
@@ -134,7 +134,7 @@ class AddFamilyScreen extends HookConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: relation.value,
+                      initialValue: relation.value,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -184,7 +184,7 @@ class AddFamilyScreen extends HookConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: gender.value,
+                      initialValue: gender.value,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -212,10 +212,12 @@ class AddFamilyScreen extends HookConsumerWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    CustomInputField(
-                      controller: dobController,
+                    CustomDatePickerField(
                       label: 'Date of Birth (Optional)',
                       hintText: 'YYYY-MM-DD',
+                      selectedDate: selectedDob.value,
+                      onDateSelected: (date) => selectedDob.value = date,
+                      lastDate: DateTime.now(), // Can't be born in the future
                     ),
 
                     const SizedBox(height: 32),
@@ -234,7 +236,7 @@ class AddFamilyScreen extends HookConsumerWidget {
                                 'fullName': nameController.text,
                                 'gender': gender.value,
                                 'relationshipType': relation.value,
-                                'dob': dobController.text.isNotEmpty ? dobController.text : null,
+                                'dob': selectedDob.value != null ? "${selectedDob.value!.year}-${selectedDob.value!.month.toString().padLeft(2, '0')}-${selectedDob.value!.day.toString().padLeft(2, '0')}" : null,
                                 'isDeceased': false, // Add UI for this if needed
                                 'linkedMobile': isLinked.value ? mobileController.text : null,
                               });

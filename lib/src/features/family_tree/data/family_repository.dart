@@ -16,17 +16,17 @@ class FamilyRepository {
   FamilyRepository(this._dio);
 
   Future<List<FamilyMember>> getFamilyMembers() async {
-    final response = await _dio.get(ApiEndpoints.family);
+    final response = await _dio.get(ApiEndpoints.familyMember);
     return (response.data['data'] as List).map((e) => FamilyMember.fromJson(e)).toList();
   }
 
-  Future<FamilyTreeNode> getFamilyHierarchy({int depth = 3}) async {
-    final response = await _dio.get('${ApiEndpoints.family}/hierarchy?depth=$depth');
+  Future<FamilyTreeNode> getFamilyHierarchy() async {
+    final response = await _dio.get(ApiEndpoints.familyTree);
     return FamilyTreeNode.fromJson(response.data['data']);
   }
 
   Future<FamilyMember> addFamilyMember(Map<String, dynamic> data) async {
-    final response = await _dio.post(ApiEndpoints.family, data: data);
+    final response = await _dio.post(ApiEndpoints.familyMember, data: data);
     return FamilyMember.fromJson(response.data['data']);
   }
 }

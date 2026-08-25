@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,11 +8,12 @@ import 'package:community_connect/src/common_widgets/translated_text.dart';
 import '../data/profile_provider.dart';
 
 class WorkProfileScreen extends HookConsumerWidget {
-  const WorkProfileScreen({super.key});
+  final bool? initialIsBusiness;
+  const WorkProfileScreen({super.key, this.initialIsBusiness});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBusiness = useState(false);
+    final isBusiness = useState(initialIsBusiness ?? false);
     
     // Job Controllers
     final jobTitleController = useTextEditingController();
@@ -26,11 +28,35 @@ class WorkProfileScreen extends HookConsumerWidget {
     final addressController = useTextEditingController();
 
     final profileState = ref.watch(profileControllerProvider);
+    
+    useEffect(() {
+      if (profileState.value != null) {
+        final job = profileState.value!.job;
+        final business = profileState.value!.business;
+        
+        if (business != null && business.id != null) {
+          businessNameController.text = business.businessName ?? '';
+          businessTypeController.text = business.category ?? '';
+          productsController.text = business.productsServices ?? '';
+          addressController.text = business.address ?? '';
+          if (initialIsBusiness == null && job == null) isBusiness.value = true;
+        }
+        
+        if (job != null && job.id != null) {
+          jobTitleController.text = job.designation ?? '';
+          companyController.text = job.companyName ?? '';
+          industryController.text = job.industry ?? '';
+          experienceController.text = job.yearsOfExperience?.toString() ?? '';
+          if (initialIsBusiness == null && business == null) isBusiness.value = false;
+        }
+      }
+      return null;
+    }, const []);
 
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
-        title: const TranslatedText('Add Work Profile', style: TextStyle(color: AppColors.textDark)),
+        title: TranslatedText((profileState.value?.job != null || profileState.value?.business != null) ? 'Edit Work Profile' : 'Add Work Profile', style: const TextStyle(color: AppColors.textDark)),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -93,27 +119,68 @@ class WorkProfileScreen extends HookConsumerWidget {
                 ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: () async {
-                      if (isBusiness.value) {
-                        await ref.read(profileControllerProvider.notifier).updateBusinessDetails({
-                          'businessName': businessNameController.text,
-                          'category': businessTypeController.text,
-                          'productsServices': productsController.text,
-                          'address': addressController.text,
-                        });
-                      } else {
-                        await ref.read(profileControllerProvider.notifier).updateJobDetails({
-                          'designation': jobTitleController.text,
-                          'companyName': companyController.text,
-                          'industry': industryController.text,
-                          'yearsOfExperience': int.tryParse(experienceController.text) ?? 0,
-                        });
-                      }
-                      if (context.mounted) {
-                        context.pop();
+                      try {
+                        if (isBusiness.value) {
+                          await ref.read(profileControllerProvider.notifier).updateBusinessDetails({
+                            'businessName': businessNameController.text,
+                            'category': businessTypeController.text,
+                            'productsServices': productsController.text,
+                            'address': addressController.text,
+                          });
+                        } else {
+                          await ref.read(profileControllerProvider.notifier).updateJobDetails({
+                            'designation': jobTitleController.text,
+                            'companyName': companyController.text,
+                            'industry': industryController.text,
+                            'yearsOfExperience': int.tryParse(experienceController.text) ?? 0,
+                          });
+                        }
+                        if (context.mounted) {
+                          context.pop();
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          String message = 'Failed to update';
+                          if (e is DioException && e.response?.data != null) {
+                            message = e.response!.data['message'] ?? message;
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                        }
                       }
                     },
                     child: const TranslatedText('Save Work Profile'),
                   ),
+            const SizedBox(height: 12),
+            if (!profileState.isLoading && (
+              (!isBusiness.value && profileState.value?.job != null && profileState.value!.job!.id != null) ||
+              (isBusiness.value && profileState.value?.business != null && profileState.value!.business!.id != null)
+            ))
+              TextButton(
+                onPressed: () async {
+                  try {
+                    if (isBusiness.value) {
+                      await ref.read(profileControllerProvider.notifier).deleteBusinessDetails();
+                    } else {
+                      await ref.read(profileControllerProvider.notifier).deleteJobDetails();
+                    }
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      String message = 'Failed to delete';
+                      if (e is DioException && e.response?.data != null) {
+                        message = e.response!.data['message'] ?? message;
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                    }
+                  }
+                },
+                child: const TranslatedText(
+                  'Delete Work Profile',
+                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+              ),
           ],
         ),
       ),

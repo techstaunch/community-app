@@ -11,13 +11,57 @@ class SearchController extends _$SearchController {
     return _fetchResults();
   }
 
-  Future<List<SearchResult>> _fetchResults({String? query}) async {
+  Future<List<SearchResult>> _fetchResults({
+    String? query,
+    String? city,
+    String? gender,
+    String? gotra,
+    String? surname,
+    String? businessCategory,
+    String? occupation,
+    int? ageMin,
+    int? ageMax,
+    int page = 1,
+    int limit = 10,
+  }) async {
     final repo = ref.read(searchRepositoryProvider);
-    return await repo.searchMembers(query: query);
+    return await repo.searchMembers(
+      query: query,
+      city: city,
+      gender: gender,
+      gotra: gotra,
+      surname: surname,
+      businessCategory: businessCategory,
+      occupation: occupation,
+      ageMin: ageMin,
+      ageMax: ageMax,
+      page: page,
+      limit: limit,
+    );
   }
 
-  void search(String query) async {
+  void search({
+    String? query,
+    String? city,
+    String? gender,
+    String? gotra,
+    String? surname,
+    String? businessCategory,
+    String? occupation,
+    int? ageMin,
+    int? ageMax,
+  }) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _fetchResults(query: query));
+    state = await AsyncValue.guard(() => _fetchResults(
+      query: query,
+      city: city,
+      gender: gender,
+      gotra: gotra,
+      surname: surname,
+      businessCategory: businessCategory,
+      occupation: occupation,
+      ageMin: ageMin,
+      ageMax: ageMax,
+    ));
   }
 }

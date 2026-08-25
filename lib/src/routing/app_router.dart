@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../features/onboarding/presentation/splash_screen.dart';
+import '../features/onboarding/presentation/welcome_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/authentication/presentation/login_screen.dart';
 import '../features/authentication/presentation/otp_screen.dart';
@@ -23,6 +23,7 @@ import '../features/profile/presentation/my_qr_code_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/community/presentation/communities_screen.dart';
+import '../features/community/presentation/community_detail_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final shellNavigatorHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
@@ -51,18 +52,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(authControllerProvider);
       
       final isAuthRoute = state.matchedLocation == '/login' || 
+                          state.matchedLocation == '/signup' || 
                           state.matchedLocation == '/otp' || 
                           state.matchedLocation == '/onboarding1' ||
-                          state.matchedLocation == '/register';
+                          state.matchedLocation == '/register' ||
+                          state.matchedLocation == '/welcome';
       final isSplash = state.matchedLocation == '/';
 
       if (authState == AuthState.loading) {
-        return isSplash ? null : '/'; // Show splash while loading
+        // Let auth screens show their own inline loading indicators (e.g. on buttons)
+        if (isAuthRoute) return null;
+        return isSplash ? null : '/'; // Show blank splash while loading on initial boot
       }
 
       if (authState == AuthState.unauthenticated) {
-        if (!isAuthRoute && !isSplash) {
-          return '/onboarding1'; // Go to onboarding if trying to access secure routes
+        if (!isAuthRoute) {
+          return '/welcome'; // Go to welcome if trying to access secure routes or splash
         }
       }
 
@@ -89,11 +94,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => const Scaffold(backgroundColor: Colors.white),
+      ),
+      GoRoute(
+        path: '/welcome',
+        builder: (context, state) => const WelcomeScreen(),
       ),
       GoRoute(
         path: '/onboarding1',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const LoginScreen(isLogin: false),
       ),
       GoRoute(
         path: '/login',
@@ -139,7 +152,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/work_profile',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const WorkProfileScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return WorkProfileScreen(initialIsBusiness: extra?['isBusiness'] as bool?);
+        },
       ),
       GoRoute(
         path: '/add_family',
@@ -150,6 +166,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/communities',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const CommunitiesScreen(),
+      ),
+      GoRoute(
+        path: '/community_detail/:id',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final name = state.uri.queryParameters['name'] ?? 'Community Details';
+          return CommunityDetailScreen(communityId: id, communityName: name);
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

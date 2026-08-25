@@ -19,19 +19,19 @@ class OnboardingScreen extends HookConsumerWidget {
         title: 'Know Your Roots',
         description:
             'Map your complete family tree across generations. Add ancestors, siblings, in-laws and connect to their profiles.',
-        emojiArt: '👨‍👩‍👧‍👦',
+        imageAsset: 'assets/images/onboarding_roots.png',
       ),
       _OnboardPageData(
         title: 'Find & Connect',
         description:
             'Search members by name, gotra, or profession. Exchange biodata for marriage alliances within your samaj.',
-        emojiArt: '🤝',
+        imageAsset: 'assets/images/onboarding_connect.png',
       ),
       _OnboardPageData(
         title: 'Grow Together',
         description:
             'Discover businesses and professionals within your samaj. Network for career and business opportunities.',
-        emojiArt: '💼',
+        imageAsset: 'assets/images/onboarding_grow.png',
       ),
     ];
 
@@ -48,7 +48,7 @@ class OnboardingScreen extends HookConsumerWidget {
                 final page = pages[index];
                 return Column(
                   children: [
-                    _AnimatedHeroSection(emojiArt: page.emojiArt),
+                    _AnimatedHeroSection(imageAsset: page.imageAsset),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(36.0),
@@ -148,8 +148,8 @@ class OnboardingScreen extends HookConsumerWidget {
 /// the animation controller lifecycle is managed correctly on real devices
 /// in both debug and release builds.
 class _AnimatedHeroSection extends StatefulWidget {
-  final String emojiArt;
-  const _AnimatedHeroSection({required this.emojiArt});
+  final String imageAsset;
+  const _AnimatedHeroSection({required this.imageAsset});
 
   @override
   State<_AnimatedHeroSection> createState() => _AnimatedHeroSectionState();
@@ -200,15 +200,31 @@ class _AnimatedHeroSectionState extends State<_AnimatedHeroSection>
           ),
           child: Stack(
             children: [
-              // Main emoji with gentle float + subtle scale pulse
+              // Main illustration with gentle float + subtle scale pulse
               Center(
                 child: Transform.translate(
                   offset: Offset(0, -12 + (v * 24)),
                   child: Transform.scale(
-                    scale: 1.0 + (math.sin(v * math.pi) * 0.08),
-                    child: Text(
-                      widget.emojiArt,
-                      style: const TextStyle(fontSize: 80),
+                    scale: 1.0 + (math.sin(v * math.pi) * 0.04),
+                    child: Container(
+                      width: 180,
+                      height: 180,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 20,
+                            offset: Offset(0, 10),
+                          )
+                        ]
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          widget.imageAsset,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -224,11 +240,11 @@ class _AnimatedHeroSectionState extends State<_AnimatedHeroSection>
 class _OnboardPageData {
   final String title;
   final String description;
-  final String emojiArt;
+  final String imageAsset;
 
   _OnboardPageData({
     required this.title,
     required this.description,
-    required this.emojiArt,
+    required this.imageAsset,
   });
 }

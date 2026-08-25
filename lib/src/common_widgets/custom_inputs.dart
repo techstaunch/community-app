@@ -26,6 +26,7 @@ class CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -51,6 +52,82 @@ class CustomInputField extends StatelessWidget {
             hintText: hintText,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomDatePickerField extends StatelessWidget {
+  final String label;
+  final String? hintText;
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime> onDateSelected;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final Widget? prefixIcon;
+
+  const CustomDatePickerField({
+    super.key,
+    required this.label,
+    required this.onDateSelected,
+    this.hintText,
+    this.selectedDate,
+    this.firstDate,
+    this.lastDate,
+    this.prefixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String formattedDate = '';
+    if (selectedDate != null) {
+      formattedDate = "${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}";
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColors.indigo,
+            letterSpacing: 0.04,
+          ),
+        ),
+        const SizedBox(height: 5),
+        InkWell(
+          onTap: () async {
+            final now = DateTime.now();
+            final date = await showDatePicker(
+              context: context,
+              initialDate: selectedDate ?? now,
+              firstDate: firstDate ?? DateTime(1900),
+              lastDate: lastDate ?? DateTime(2100),
+              helpText: 'SELECT ${label.toUpperCase()}',
+            );
+            if (date != null) {
+              onDateSelected(date);
+            }
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: IgnorePointer(
+            child: TextFormField(
+              controller: TextEditingController(text: formattedDate),
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textDark,
+              ),
+              decoration: InputDecoration(
+                hintText: hintText ?? 'YYYY-MM-DD',
+                prefixIcon: prefixIcon,
+                suffixIcon: const Icon(Icons.calendar_today, color: AppColors.orange, size: 20),
+              ),
+            ),
           ),
         ),
       ],

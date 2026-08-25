@@ -57,7 +57,7 @@ class SearchScreen extends HookConsumerWidget {
                           child: TextField(
                             controller: searchController,
                             onSubmitted: (value) {
-                              ref.read(searchControllerProvider.notifier).search(value);
+                              ref.read(searchControllerProvider.notifier).search(query: value);
                             },
                             decoration: const InputDecoration(
                               hintText: 'Name, profession, gotra...',

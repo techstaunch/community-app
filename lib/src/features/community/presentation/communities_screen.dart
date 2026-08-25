@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -32,7 +33,22 @@ class CommunitiesScreen extends HookConsumerWidget {
       ),
       body: membershipsState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) {
+          String errorMessage = 'Failed to load communities.';
+          if (error is DioException && error.response?.data != null && error.response!.data is Map) {
+            errorMessage = error.response!.data['message'] ?? errorMessage;
+          }
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text(
+                errorMessage,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+          );
+        },
         data: (communities) {
           return Padding(
             padding: const EdgeInsets.all(20),
@@ -49,15 +65,22 @@ class CommunitiesScreen extends HookConsumerWidget {
                           separatorBuilder: (context, index) => const SizedBox(height: 12),
                           itemBuilder: (context, index) {
                             final comm = communities[index];
-                            return Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: AppColors.border),
-                              ),
-                              child: Row(
-                                children: [
+                            return InkWell(
+                              onTap: () {
+                                if (comm.id != null) {
+                                  context.push('/community_detail/${comm.id}?name=${Uri.encodeComponent(comm.name ?? "Community")}');
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Row(
+                                  children: [
                                   CircleAvatar(
                                     backgroundColor: AppColors.indigoLight,
                                     backgroundImage: comm.logoUrl != null ? NetworkImage(comm.logoUrl!) : null,
@@ -88,6 +111,7 @@ class CommunitiesScreen extends HookConsumerWidget {
                                   ),
                                 ],
                               ),
+                            ),
                             );
                           },
                         ),
@@ -142,9 +166,20 @@ class _JoinCommunityDialog extends HookConsumerWidget {
                   try {
                     await ref.read(myCommunitiesControllerProvider.notifier).joinCommunity(controller.text);
                     if (context.mounted) Navigator.pop(context);
+                  } on DioException catch (e) {
+                    isLoading.value = false;
+                    String errorMessage = 'Failed to join community.';
+                    if (e.response?.data != null && e.response!.data is Map) {
+                      errorMessage = e.response!.data['message'] ?? errorMessage;
+                    }
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
+                    }
                   } catch (e) {
                     isLoading.value = false;
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    }
                   }
                 },
                 child: const TranslatedText('Join', style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.bold)),

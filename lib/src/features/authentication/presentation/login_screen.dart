@@ -7,7 +7,8 @@ import 'package:community_connect/src/common_widgets/translated_text.dart';
 import '../data/auth_provider.dart';
 
 class LoginScreen extends HookConsumerWidget {
-  const LoginScreen({super.key});
+  final bool isLogin;
+  const LoginScreen({super.key, this.isLogin = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,16 +46,24 @@ class LoginScreen extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    'assets/images/app_logo.png',
+                    height: 54,
+                    width: 54,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 TranslatedText(
-                  'Welcome Back 👋',
+                  isLogin ? 'Welcome Back 👋' : 'Welcome 👋',
                   style: Theme.of(
                     context,
                   ).textTheme.displayMedium?.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 4),
                 TranslatedText(
-                  'Sign in to Patil Samaj Community',
+                  isLogin ? 'Sign in to Patil Samaj Community' : 'Create a new account',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
                     fontSize: 12,
@@ -133,7 +142,7 @@ class LoginScreen extends HookConsumerWidget {
                             if (number.isNotEmpty) {
                               // Include country code assuming the user typed 10 digits
                               final formattedNumber = '+91$number';
-                              ref.read(authControllerProvider.notifier).requestOtp(formattedNumber);
+                              ref.read(authControllerProvider.notifier).requestOtp(formattedNumber, purpose: isLogin ? 'Login' : 'Registration');
                             }
                           },
                     child: authState == AuthState.loading
@@ -144,33 +153,7 @@ class LoginScreen extends HookConsumerWidget {
                           )
                         : const TranslatedText('Send OTP '),
                   ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Divider(color: AppColors.border, thickness: 1),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TranslatedText(
-                          'OR',
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: Divider(color: AppColors.border, thickness: 1),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  OutlinedButton(
-                    onPressed: () => context.push('/otp'), // Email login might not be supported currently, leaving push
-                    child: const TranslatedText('Sign in with Email'),
-                  ),
+
                   const Spacer(),
                   RichText(
                     textAlign: TextAlign.center,
@@ -181,7 +164,7 @@ class LoginScreen extends HookConsumerWidget {
                         height: 1.6,
                       ),
                       children: [
-                        TextSpan(text: 'By signing in, you agree to our\n'),
+                        TextSpan(text: 'By continuing, you agree to our\n'),
                         TextSpan(
                           text: 'Terms of Service',
                           style: TextStyle(
@@ -198,6 +181,24 @@ class LoginScreen extends HookConsumerWidget {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () {
+                      if (isLogin) {
+                        context.push('/signup');
+                      } else {
+                        context.pop();
+                      }
+                    },
+                    child: TranslatedText(
+                      isLogin ? "Don't have an account? Register User" : "Already have an account? Login",
+                      style: const TextStyle(
+                        color: AppColors.indigo,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

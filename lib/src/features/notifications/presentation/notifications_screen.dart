@@ -181,15 +181,19 @@ class NotificationsScreen extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TranslatedText(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: AppColors.textDark,
+                    Expanded(
+                      child: TranslatedText(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: AppColors.textDark,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     TranslatedText(
                       time,
                       style: const TextStyle(

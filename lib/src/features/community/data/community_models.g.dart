@@ -40,3 +40,41 @@ Map<String, dynamic> _$CommunityMemberToJson(_CommunityMember instance) =>
       'role': instance.role,
       'status': instance.status,
     };
+
+_Announcement _$AnnouncementFromJson(Map<String, dynamic> json) =>
+    _Announcement(
+      id: json['id'] as String?,
+      communityId: json['communityId'] as String?,
+      title: json['title'] as String?,
+      content: json['content'] as String?,
+      createdAt: json['createdAt'] as String?,
+    );
+
+Map<String, dynamic> _$AnnouncementToJson(_Announcement instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'communityId': instance.communityId,
+      'title': instance.title,
+      'content': instance.content,
+      'createdAt': instance.createdAt,
+    };
+
+_Event _$EventFromJson(Map<String, dynamic> json) => _Event(
+  id: json['id'] as String?,
+  communityId: json['communityId'] as String?,
+  title: json['title'] as String?,
+  description: json['description'] as String?,
+  eventDate: json['eventDate'] as String?,
+  location: json['location'] as String?,
+  createdAt: json['createdAt'] as String?,
+);
+
+Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
+  'id': instance.id,
+  'communityId': instance.communityId,
+  'title': instance.title,
+  'description': instance.description,
+  'eventDate': instance.eventDate,
+  'location': instance.location,
+  'createdAt': instance.createdAt,
+};
