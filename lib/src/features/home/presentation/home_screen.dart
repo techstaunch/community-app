@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       TranslatedText(
-                        'Patil Samaj 🏡',
+                        'Marwadi Samaj 🏡',
                         style: Theme.of(context).textTheme.displaySmall?.copyWith(
                               fontSize: 18,
                               color: AppColors.indigo,

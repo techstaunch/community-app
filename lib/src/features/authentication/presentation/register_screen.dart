@@ -200,7 +200,7 @@ class RegisterScreen extends HookConsumerWidget {
                             TextField(
                               controller: lastNameController,
                               decoration: const InputDecoration(
-                                hintText: 'e.g. Patil',
+                                hintText: 'e.g. Agarwal',
                               ),
                             ),
                           ],

@@ -22,7 +22,7 @@ class BiodataScreen extends StatelessWidget {
             children: [
               pw.Header(
                 level: 0,
-                child: pw.Text('Aarti Patil - Marriage Biodata',
+                child: pw.Text('Aarti Agarwal - Marriage Biodata',
                     style: pw.TextStyle(
                         fontSize: 24, fontWeight: pw.FontWeight.bold)),
               ),
@@ -43,8 +43,8 @@ class BiodataScreen extends StatelessWidget {
               pw.Text('Family Details',
                   style: pw.TextStyle(
                       fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Bullet(text: 'Father: Sanjay Patil'),
-              pw.Bullet(text: 'Mother: Sunita Patil'),
+              pw.Bullet(text: 'Father: Sanjay Agarwal'),
+              pw.Bullet(text: 'Mother: Sunita Agarwal'),
             ],
           );
         },
@@ -186,7 +186,7 @@ class BiodataScreen extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           TranslatedText(
-                                            'Aarti Patil',
+                                            'Aarti Agarwal',
                                             style: TextStyle(
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold,
@@ -308,8 +308,8 @@ class BiodataScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           _buildDetailRow(
-                              'Father', 'Sanjay Patil (Businessman)'),
-                          _buildDetailRow('Mother', 'Sunita Patil (Homemaker)'),
+                              'Father', 'Sanjay Agarwal (Businessman)'),
+                          _buildDetailRow('Mother', 'Sunita Agarwal (Homemaker)'),
                           _buildDetailRow('Siblings', '1 Brother (Married)'),
                           _buildDetailRow('Native', 'Navsari, Gujarat'),
                           const Padding(

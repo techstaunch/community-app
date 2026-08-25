@@ -177,7 +177,7 @@ class SearchScreen extends HookConsumerWidget {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            _buildActionChip(Icons.history, 'Patil in Surat', () => searchController.text = 'Patil in Surat'),
+                            _buildActionChip(Icons.history, 'Marwadi in Surat', () => searchController.text = 'Marwadi in Surat'),
                             _buildActionChip(Icons.history, 'Software Engineers', () => searchController.text = 'Software Engineers'),
                             _buildActionChip(Icons.history, 'Kashyap Gotra', () => searchController.text = 'Kashyap Gotra'),
                           ],

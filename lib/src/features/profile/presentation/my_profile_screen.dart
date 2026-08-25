@@ -193,6 +193,12 @@ class MyProfileScreen extends HookConsumerWidget {
                                                           width: 60,
                                                           height: 60,
                                                           fit: BoxFit.cover,
+                                                          errorBuilder: (context, error, stackTrace) => const TranslatedText(
+                                                            '👨',
+                                                            style: TextStyle(
+                                                              fontSize: 30,
+                                                            ),
+                                                          ),
                                                         ),
                                                       )
                                                     : const TranslatedText(
@@ -382,6 +388,8 @@ class MyProfileScreen extends HookConsumerWidget {
     WidgetRef ref,
     UserProfile? profile,
   ) {
+    final familyMembers = profile?.ownedFamilyMembers ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -405,43 +413,73 @@ class MyProfileScreen extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: Row(
-            children: [
-              const CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.orangeLight,
-                child: Icon(Icons.person, color: AppColors.orange, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TranslatedText(
-                      'Sunita Sharma',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TranslatedText(
-                      'Spouse • +91 9876543210',
-                      style: TextStyle(
-                        color: AppColors.textMuted,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+        if (familyMembers.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: const TranslatedText(
+              'No family members added yet.',
+              style: TextStyle(color: AppColors.textMuted),
+            ),
+          )
+        else
+          ...familyMembers.map((member) => Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: AppColors.orangeLight,
+                    shape: BoxShape.circle,
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: member.photoUrl != null
+                      ? Image.network(
+                          member.photoUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.person, color: AppColors.orange, size: 20),
+                        )
+                      : const Icon(Icons.person, color: AppColors.orange, size: 20),
                 ),
-              ),
-              const Icon(Icons.check_circle, color: AppColors.green, size: 20),
-            ],
-          ),
-        ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TranslatedText(
+                        member.fullName ?? 'Unknown',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TranslatedText(
+                        '${member.relationshipType ?? 'Relative'}${member.isDeceased == true ? ' • (Deceased)' : ''}',
+                        style: const TextStyle(
+                          color: AppColors.textMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (member.linkedUserId != null)
+                  const Icon(Icons.check_circle, color: AppColors.green, size: 20)
+                else
+                  const Icon(Icons.link_off, color: AppColors.textMuted, size: 20),
+              ],
+            ),
+          )),
         const SizedBox(height: 20),
         PrimaryButton(
           text: 'Add Family Member',

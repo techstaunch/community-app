@@ -63,7 +63,7 @@ class LoginScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 TranslatedText(
-                  isLogin ? 'Sign in to Patil Samaj Community' : 'Create a new account',
+                  isLogin ? 'Sign in to Marwadi Samaj Community' : 'Create a new account',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
                     fontSize: 12,

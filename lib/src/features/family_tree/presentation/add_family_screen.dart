@@ -110,7 +110,7 @@ class AddFamilyScreen extends HookConsumerWidget {
                     CustomInputField(
                       controller: nameController,
                       label: 'Full Name',
-                      hintText: 'e.g. Suresh Patil',
+                      hintText: 'e.g. Suresh Agarwal',
                     ),
                     const SizedBox(height: 16),
 

@@ -65,7 +65,7 @@ class FamilyTreeScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const TranslatedText(
-                        'Patil Parivar',
+                        'Agarwal Parivar',
                         style: TextStyle(
                           fontSize: 11,
                           color: AppColors.textMuted,
