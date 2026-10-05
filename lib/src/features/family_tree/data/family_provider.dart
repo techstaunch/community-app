@@ -12,20 +12,60 @@ class FamilyController extends _$FamilyController {
   }
 
   Future<FamilyTreeNode?> _fetchHierarchy() async {
-    try {
-      final repo = ref.read(familyRepositoryProvider);
-      return await repo.getFamilyHierarchy();
-    } catch (e) {
-      return null;
-    }
+    final repo = ref.read(familyRepositoryProvider);
+    return await repo.getFamilyHierarchy();
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _fetchHierarchy());
   }
 
   Future<void> addFamilyMember(Map<String, dynamic> data) async {
+    final previousState = state;
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    try {
       final repo = ref.read(familyRepositoryProvider);
       await repo.addFamilyMember(data);
-      return await repo.getFamilyHierarchy();
-    });
+      final newTree = await repo.getFamilyHierarchy();
+      state = AsyncValue.data(newTree);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
   }
+
+  Future<void> updateFamilyMember(String id, Map<String, dynamic> data) async {
+    final previousState = state;
+    state = const AsyncValue.loading();
+    try {
+      final repo = ref.read(familyRepositoryProvider);
+      await repo.updateFamilyMember(id, data);
+      final newTree = await repo.getFamilyHierarchy();
+      state = AsyncValue.data(newTree);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
+
+  Future<void> deleteFamilyMember(String id) async {
+    final previousState = state;
+    state = const AsyncValue.loading();
+    try {
+      final repo = ref.read(familyRepositoryProvider);
+      await repo.deleteFamilyMember(id);
+      final newTree = await repo.getFamilyHierarchy();
+      state = AsyncValue.data(newTree);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
+}
+
+@riverpod
+Future<FamilyTreeNode?> memberFamilyTree(Ref ref, String userId) async {
+  final repo = ref.read(familyRepositoryProvider);
+  return await repo.getFamilyHierarchy(focusUserId: userId);
 }

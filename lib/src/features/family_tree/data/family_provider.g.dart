@@ -33,7 +33,7 @@ final class FamilyControllerProvider
   FamilyController create() => FamilyController();
 }
 
-String _$familyControllerHash() => r'53d9495f8a2a6cfa5c6d28730b4e67072d482a09';
+String _$familyControllerHash() => r'896a2a7785f835fec4dcdc7e9f6375a3feee9885';
 
 abstract class _$FamilyController extends $AsyncNotifier<FamilyTreeNode?> {
   FutureOr<FamilyTreeNode?> build();
@@ -51,4 +51,79 @@ abstract class _$FamilyController extends $AsyncNotifier<FamilyTreeNode?> {
             >;
     return element.handleCreate(ref, build);
   }
+}
+
+@ProviderFor(memberFamilyTree)
+final memberFamilyTreeProvider = MemberFamilyTreeFamily._();
+
+final class MemberFamilyTreeProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<FamilyTreeNode?>,
+          FamilyTreeNode?,
+          FutureOr<FamilyTreeNode?>
+        >
+    with $FutureModifier<FamilyTreeNode?>, $FutureProvider<FamilyTreeNode?> {
+  MemberFamilyTreeProvider._({
+    required MemberFamilyTreeFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'memberFamilyTreeProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$memberFamilyTreeHash();
+
+  @override
+  String toString() {
+    return r'memberFamilyTreeProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<FamilyTreeNode?> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<FamilyTreeNode?> create(Ref ref) {
+    final argument = this.argument as String;
+    return memberFamilyTree(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MemberFamilyTreeProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$memberFamilyTreeHash() => r'8704f1d3ffb570013fcc549ba7a54fa6421c944f';
+
+final class MemberFamilyTreeFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<FamilyTreeNode?>, String> {
+  MemberFamilyTreeFamily._()
+    : super(
+        retry: null,
+        name: r'memberFamilyTreeProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  MemberFamilyTreeProvider call(String userId) =>
+      MemberFamilyTreeProvider._(argument: userId, from: this);
+
+  @override
+  String toString() => r'memberFamilyTreeProvider';
 }

@@ -2,49 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import '../../../theme/app_theme.dart';
-import 'dart:math' as math;
 import 'package:community_connect/src/common_widgets/translated_text.dart';
+import '../../../utils/app_messenger.dart';
 import '../data/family_provider.dart';
 import '../data/family_models.dart';
+import '../data/family_tree_mock.dart';
+import '../data/kinship_engine.dart';
+import 'widgets/family_tree_canvas.dart';
+import 'widgets/family_stats_sheet.dart';
+import 'widgets/kinship_path_sheet.dart';
+import '../../profile/data/profile_provider.dart';
+import 'package:community_connect/src/utils/responsive_ext.dart';
+import 'package:dio/dio.dart';
 
 class FamilyTreeScreen extends HookConsumerWidget {
   const FamilyTreeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final transformationController = useTransformationController();
-    final treeKey = useMemoized(() => GlobalKey());
-    final viewportKey = useMemoized(() => GlobalKey());
-    
-    final treeState = ref.watch(familyControllerProvider);
+    final treeMode = useState<String>('live');
 
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final RenderBox? treeBox = treeKey.currentContext?.findRenderObject() as RenderBox?;
-        final RenderBox? viewportBox = viewportKey.currentContext?.findRenderObject() as RenderBox?;
-        
-        if (treeBox != null && viewportBox != null) {
-          final childSize = treeBox.size;
-          final viewportSize = viewportBox.size;
-          
-          final scaleX = viewportSize.width / childSize.width;
-          final scaleY = viewportSize.height / childSize.height;
-          
-          final scale = math.min(scaleX, scaleY).clamp(0.1, 1.0) * 0.95;
-          final dx = (viewportSize.width - (childSize.width * scale)) / 2;
-          final dy = (viewportSize.height - (childSize.height * scale)) / 2;
-          
-          transformationController.value = Matrix4.identity()
-            ..translate(dx, dy, 0.0)
-            ..scale(scale, scale, 1.0);
-        }
-      });
-      return null;
-    }, [treeState]);
+    final treeState = ref.watch(familyControllerProvider);
+    final currentUserId = ref.watch(
+      profileControllerProvider.select((p) => p.value?.id),
+    );
+    final activeTree = treeMode.value == 'patel'
+        ? AsyncValue.data(FamilyTreeMock.createPatelFamilyTree())
+        : treeMode.value == 'test_15'
+        ? AsyncValue.data(FamilyTreeMock.create5GenerationTree())
+        : treeMode.value == 'test_full'
+        ? AsyncValue.data(FamilyTreeMock.createExtendedFullFamilyTree())
+        : treeState;
+
+    final surname = ref.watch(
+      profileControllerProvider.select((p) => p.value?.profile?.surname),
+    );
+    final familyName = surname != null && surname.isNotEmpty
+        ? '$surname Parivar'
+        : 'Family Tree';
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -53,7 +49,7 @@ class FamilyTreeScreen extends HookConsumerWidget {
           children: [
             // Top Section
             Container(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+              padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 12.h),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -61,57 +57,167 @@ class FamilyTreeScreen extends HookConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const TranslatedText(
-                        'Agarwal Parivar',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.textMuted,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TranslatedText(
+                          familyName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: AppColors.textMuted,
+                          ),
                         ),
-                      ),
-                      TranslatedText(
-                        'My Family Tree',
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontSize: 18,
-                                  color: AppColors.indigo,
-                                ),
-                      ),
-                    ],
+                        TranslatedText(
+                          'Family Tree',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.displaySmall
+                              ?.copyWith(
+                                fontSize: 20.sp,
+                                color: AppColors.indigo,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     children: [
-                      const TranslatedText('🔍', style: TextStyle(fontSize: 20)),
-                      const SizedBox(width: 8),
-                      PopupMenuButton<String>(
-                        icon: const Icon(Icons.more_vert, color: AppColors.textDark),
-                        onSelected: (value) {
-                          if (value == 'stats') _showStatsDialog(context);
-                          if (value == 'path') _showPathFinderDialog(context);
-                          if (value == 'export') _exportTreePdf(context);
+                      // Quick Switcher Button for testing
+                      // InkWell(
+                      //   onTap: () {
+                      //     if (treeMode.value == 'live') {
+                      //       treeMode.value = 'patel';
+                      //       AppMessenger.showInfo(
+                      //         'Loaded Patel Family Tree (Canonical Architecture Spec)!',
+                      //       );
+                      //     } else if (treeMode.value == 'patel') {
+                      //       treeMode.value = 'test_15';
+                      //       AppMessenger.showInfo(
+                      //         'Loaded 5-Generation Test Tree with 15 Members!',
+                      //       );
+                      //     } else if (treeMode.value == 'test_15') {
+                      //       treeMode.value = 'test_full';
+                      //       AppMessenger.showInfo(
+                      //         'Loaded Full Extended Tree with 36 Members & Spouses!',
+                      //       );
+                      //     } else {
+                      //       treeMode.value = 'live';
+                      //       AppMessenger.showInfo(
+                      //         'Switched to Live Family Tree.',
+                      //       );
+                      //     }
+                      //   },
+                      //   borderRadius: BorderRadius.circular(12.r),
+                      //   child: Container(
+                      //     padding: EdgeInsets.symmetric(
+                      //       horizontal: 8.w,
+                      //       vertical: 6.h,
+                      //     ),
+                      //     decoration: BoxDecoration(
+                      //       color: treeMode.value != 'live'
+                      //           ? AppColors.orangeLight
+                      //           : AppColors.cream,
+                      //       borderRadius: BorderRadius.circular(12.r),
+                      //       border: Border.all(
+                      //         color: treeMode.value != 'live'
+                      //             ? AppColors.orange
+                      //             : AppColors.border,
+                      //       ),
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         Icon(
+                      //           treeMode.value != 'live'
+                      //               ? Icons.science
+                      //               : Icons.science_outlined,
+                      //           size: 14.sp,
+                      //           color: treeMode.value != 'live'
+                      //               ? AppColors.orange
+                      //               : AppColors.textMuted,
+                      //         ),
+                      //         SizedBox(width: 4.w),
+                      //         Text(
+                      //           treeMode.value == 'patel'
+                      //               ? 'Patel Spec'
+                      //               : treeMode.value == 'test_15'
+                      //               ? '15-Gen Test'
+                      //               : treeMode.value == 'test_full'
+                      //               ? '36-Member Test'
+                      //               : 'Test Tree',
+                      //           style: TextStyle(
+                      //             fontSize: 11.sp,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: treeMode.value != 'live'
+                      //                 ? AppColors.orange
+                      //                 : AppColors.textMuted,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(width: 6.w),
+                      IconButton(
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 20.sp,
+                          color: AppColors.textDark,
+                        ),
+                        tooltip: 'Refresh Tree',
+                        onPressed: () {
+                          if (treeMode.value != 'live') {
+                            treeMode.value = 'live';
+                          }
+                          ref.read(familyControllerProvider.notifier).refresh();
+                          AppMessenger.showInfo('Refreshing family tree...');
                         },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(value: 'stats', child: TranslatedText('Family Statistics')),
-                          const PopupMenuItem(value: 'path', child: TranslatedText('Relationship Path')),
-                          const PopupMenuItem(value: 'export', child: TranslatedText('Export as PDF')),
-                        ],
                       ),
-                      const SizedBox(width: 8),
+                      // PopupMenuButton<String>(
+                      //   icon: const Icon(
+                      //     Icons.more_vert,
+                      //     color: AppColors.textDark,
+                      //   ),
+                      //   onSelected: (value) {
+                      //     if (value == 'stats') {
+                      //       _showStatsDialog(context, activeTree.value);
+                      //     }
+                      //     if (value == 'path') {
+                      //       _showPathFinderDialog(context, activeTree.value);
+                      //     }
+                      //   },
+                      //   itemBuilder: (context) => [
+                      //     const PopupMenuItem(
+                      //       value: 'stats',
+                      //       child: TranslatedText('Family Statistics'),
+                      //     ),
+                      //     const PopupMenuItem(
+                      //       value: 'path',
+                      //       child: TranslatedText(
+                      //         'Relationship Path & Kinship',
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(width: 6.w),
                       GestureDetector(
                         onTap: () => _showAddMemberOptions(context),
                         child: Container(
-                          width: 38,
-                          height: 38,
+                          width: 38.r,
+                          height: 38.r,
                           decoration: BoxDecoration(
                             color: AppColors.orange,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                           alignment: Alignment.center,
-                          child: const TranslatedText('➕',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white)),
+                          child: Icon(
+                            Icons.add_rounded,
+                            size: 20.sp,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -121,42 +227,62 @@ class FamilyTreeScreen extends HookConsumerWidget {
             ),
 
             Expanded(
-              key: viewportKey,
-              child: treeState.when(
+              child: activeTree.when(
+                skipLoadingOnReload: true,
+                skipLoadingOnRefresh: true,
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => const Center(child: Text('Error loading family tree')),
+                error: (error, stack) {
+                  String errorMessage = 'Error loading family tree';
+                  try {
+                    if (error is DioException && error.response?.data != null) {
+                      final data = error.response!.data;
+                      if (data is Map && data['message'] != null) {
+                        errorMessage = data['message'];
+                      }
+                    }
+                  } catch (_) {}
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TranslatedText(
+                          errorMessage,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.textMuted,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                        SizedBox(height: 12.h),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            ref
+                                .read(familyControllerProvider.notifier)
+                                .refresh();
+                          },
+                          icon: Icon(Icons.refresh, size: 16.sp),
+                          label: TranslatedText(
+                            'Retry',
+                            style: TextStyle(fontSize: 14.sp),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 data: (treeNode) {
                   if (treeNode == null) {
-                    return const Center(child: Text('No family data. Click + to add members.'));
+                    return Center(
+                      child: Text(
+                        'No family data. Click + to Add Member.',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    );
                   }
-                  
-                  return Stack(
-                    children: [
-                      InteractiveViewer(
-                        transformationController: transformationController,
-                        constrained: false,
-                        boundaryMargin: const EdgeInsets.all(double.infinity),
-                        minScale: 0.1,
-                        maxScale: 4.0,
-                        child: Container(
-                          key: treeKey,
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-                          child: _buildDynamicTree(treeNode),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 20,
-                        right: 20,
-                        child: FloatingActionButton(
-                          mini: true,
-                          backgroundColor: AppColors.white,
-                          onPressed: () {
-                            transformationController.value = Matrix4.identity();
-                          },
-                          child: const Icon(Icons.center_focus_strong, color: AppColors.indigo),
-                        ),
-                      ),
-                    ],
+
+                  return FamilyTreeCanvas(
+                    rootNode: treeNode,
+                    currentUserId: currentUserId,
                   );
                 },
               ),
@@ -167,105 +293,102 @@ class FamilyTreeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildDynamicTree(FamilyTreeNode node) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildTreeNode(node.photoUrl ?? 'https://i.pravatar.cc/150', node.fullName ?? 'Unknown', node.relationshipType ?? 'Member', node.relationshipType == 'Me'),
-        if (node.children.isNotEmpty) ...[
-          _buildVerticalLine(),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: node.children.map((childNode) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: _buildDynamicTree(childNode),
-              );
-            }).toList(),
-          ),
-        ]
-      ],
-    );
-  }
-
-  Widget _buildTreeNode(String imageUrl, String name, String relation, bool isMe) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isMe ? AppColors.orangeLight : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isMe ? AppColors.orange : AppColors.border,
-          width: isMe ? 2 : 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isMe ? 0.12 : 0.05),
-            blurRadius: isMe ? 15 : 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 26,
-            backgroundImage: NetworkImage(imageUrl),
-          ),
-          const SizedBox(height: 10),
-          TranslatedText(
-            name,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDark,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: isMe ? Colors.white : AppColors.cream,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: TranslatedText(
-              relation,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textMuted,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVerticalLine() {
-    return Container(
-      width: 2,
-      height: 40,
-      color: AppColors.border,
-    );
-  }
-
   void _showAddMemberOptions(BuildContext context) {
     context.push('/add_family');
   }
 
-  Future<void> _exportTreePdf(BuildContext context) async {
-    // simplified
+  List<FamilyTreeNode> _collectAllNodes(FamilyTreeNode root) {
+    final list = <FamilyTreeNode>[];
+    final visited = <String>{};
+
+    void traverse(FamilyTreeNode node) {
+      final key = node.id ?? node.fullName ?? node.hashCode.toString();
+      if (visited.contains(key)) return;
+      visited.add(key);
+      list.add(node);
+
+      for (final p in node.parents) {
+        traverse(p);
+      }
+      for (final sp in node.spouses) {
+        traverse(sp);
+      }
+      for (final s in node.siblings) {
+        traverse(s);
+      }
+      for (final c in node.children) {
+        traverse(c);
+      }
+    }
+
+    traverse(root);
+    return list;
   }
 
-  void _showStatsDialog(BuildContext context) {
-    // simplified
+  void _showStatsDialog(BuildContext context, FamilyTreeNode? tree) {
+    if (tree == null) {
+      AppMessenger.showInfo('No family tree loaded.');
+      return;
+    }
+
+    final allNodes = _collectAllNodes(tree);
+    final totalMembers = allNodes.length;
+    final isDeceasedFn = (FamilyTreeNode n) =>
+        n.isDeceased == true ||
+        (n.title != null && n.title!.toLowerCase() == 'late');
+    final livingMembers = allNodes.where((n) => !isDeceasedFn(n)).length;
+    final deceasedMembers = allNodes.where((n) => isDeceasedFn(n)).length;
+    final linkedMembers = allNodes
+        .where(
+          (n) =>
+              n.isRegisteredUser == true ||
+              (n.linkedUserId != null && n.linkedUserId!.isNotEmpty),
+        )
+        .length;
+
+    // Generational breakdown
+    final Map<int, List<FamilyTreeNode>> genMap = {};
+    for (final node in allNodes) {
+      final rel =
+          node.directRelationship ?? node.relationshipType ?? 'Relative';
+      final level = KinshipEngine.getGenerationalLevel(rel);
+      genMap.putIfAbsent(level, () => []).add(node);
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => FamilyStatsSheet(
+        totalMembers: totalMembers,
+        livingMembers: livingMembers,
+        deceasedMembers: deceasedMembers,
+        linkedMembers: linkedMembers,
+        genMap: genMap,
+      ),
+    );
   }
 
-  void _showPathFinderDialog(BuildContext context) {
-    // simplified
+  void _showPathFinderDialog(BuildContext context, FamilyTreeNode? root) {
+    if (root == null) {
+      AppMessenger.showInfo('No family tree loaded.');
+      return;
+    }
+
+    final allNodes = _collectAllNodes(root);
+    final otherMembers = allNodes.where((n) => n.id != root.id).toList();
+
+    if (otherMembers.isEmpty) {
+      AppMessenger.showInfo('Add more family members to trace kinship paths.');
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) =>
+          KinshipPathSheet(root: root, otherMembers: otherMembers),
+    );
   }
 }
