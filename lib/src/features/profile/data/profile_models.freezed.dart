@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserProfile {
 
- String? get id; String? get mobileNumber; String? get email; bool? get isVerified; bool? get isActive; String? get createdAt; String? get updatedAt; CoreProfile? get profile; JobDetails? get job; BusinessDetails? get business; PrivacySettings? get privacySettings; QrCodeDetails? get qrCode; List<OwnedFamilyMember>? get ownedFamilyMembers;
+ String? get id; String? get mobileNumber; String? get email; bool? get isVerified; bool? get isActive; bool? get isApproved; String? get membershipStatus; String? get createdAt; String? get updatedAt; CoreProfile? get profile; JobDetails? get job; BusinessDetails? get business; PrivacySettings? get privacySettings;@JsonKey(readValue: readQrCodeDetails) QrCodeDetails? get qrCode;@JsonKey(readValue: readPdfUrl) String? get pdfUrl;@JsonKey(readValue: readFamilyMembers) List<OwnedFamilyMember>? get ownedFamilyMembers;
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserProfileCopyWith<UserProfile> get copyWith => _$UserProfileCopyWithImpl<User
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.email, email) || other.email == email)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.job, job) || other.job == job)&&(identical(other.business, business) || other.business == business)&&(identical(other.privacySettings, privacySettings) || other.privacySettings == privacySettings)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&const DeepCollectionEquality().equals(other.ownedFamilyMembers, ownedFamilyMembers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.email, email) || other.email == email)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.job, job) || other.job == job)&&(identical(other.business, business) || other.business == business)&&(identical(other.privacySettings, privacySettings) || other.privacySettings == privacySettings)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&(identical(other.pdfUrl, pdfUrl) || other.pdfUrl == pdfUrl)&&const DeepCollectionEquality().equals(other.ownedFamilyMembers, ownedFamilyMembers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,mobileNumber,email,isVerified,isActive,createdAt,updatedAt,profile,job,business,privacySettings,qrCode,const DeepCollectionEquality().hash(ownedFamilyMembers));
+int get hashCode => Object.hash(runtimeType,id,mobileNumber,email,isVerified,isActive,isApproved,membershipStatus,createdAt,updatedAt,profile,job,business,privacySettings,qrCode,pdfUrl,const DeepCollectionEquality().hash(ownedFamilyMembers));
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, mobileNumber: $mobileNumber, email: $email, isVerified: $isVerified, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, profile: $profile, job: $job, business: $business, privacySettings: $privacySettings, qrCode: $qrCode, ownedFamilyMembers: $ownedFamilyMembers)';
+  return 'UserProfile(id: $id, mobileNumber: $mobileNumber, email: $email, isVerified: $isVerified, isActive: $isActive, isApproved: $isApproved, membershipStatus: $membershipStatus, createdAt: $createdAt, updatedAt: $updatedAt, profile: $profile, job: $job, business: $business, privacySettings: $privacySettings, qrCode: $qrCode, pdfUrl: $pdfUrl, ownedFamilyMembers: $ownedFamilyMembers)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserProfileCopyWith<$Res>  {
   factory $UserProfileCopyWith(UserProfile value, $Res Function(UserProfile) _then) = _$UserProfileCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? mobileNumber, String? email, bool? isVerified, bool? isActive, String? createdAt, String? updatedAt, CoreProfile? profile, JobDetails? job, BusinessDetails? business, PrivacySettings? privacySettings, QrCodeDetails? qrCode, List<OwnedFamilyMember>? ownedFamilyMembers
+ String? id, String? mobileNumber, String? email, bool? isVerified, bool? isActive, bool? isApproved, String? membershipStatus, String? createdAt, String? updatedAt, CoreProfile? profile, JobDetails? job, BusinessDetails? business, PrivacySettings? privacySettings,@JsonKey(readValue: readQrCodeDetails) QrCodeDetails? qrCode,@JsonKey(readValue: readPdfUrl) String? pdfUrl,@JsonKey(readValue: readFamilyMembers) List<OwnedFamilyMember>? ownedFamilyMembers
 });
 
 
@@ -66,21 +66,24 @@ class _$UserProfileCopyWithImpl<$Res>
 
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? mobileNumber = freezed,Object? email = freezed,Object? isVerified = freezed,Object? isActive = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? profile = freezed,Object? job = freezed,Object? business = freezed,Object? privacySettings = freezed,Object? qrCode = freezed,Object? ownedFamilyMembers = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? mobileNumber = freezed,Object? email = freezed,Object? isVerified = freezed,Object? isActive = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? profile = freezed,Object? job = freezed,Object? business = freezed,Object? privacySettings = freezed,Object? qrCode = freezed,Object? pdfUrl = freezed,Object? ownedFamilyMembers = freezed,}) {
   return _then(UserProfile(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,mobileNumber: freezed == mobileNumber ? _self.mobileNumber : mobileNumber // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,isVerified: freezed == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
 as bool?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as bool?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as String?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as CoreProfile?,job: freezed == job ? _self.job : job // ignore: cast_nullable_to_non_nullable
 as JobDetails?,business: freezed == business ? _self.business : business // ignore: cast_nullable_to_non_nullable
 as BusinessDetails?,privacySettings: freezed == privacySettings ? _self.privacySettings : privacySettings // ignore: cast_nullable_to_non_nullable
 as PrivacySettings?,qrCode: freezed == qrCode ? _self.qrCode : qrCode // ignore: cast_nullable_to_non_nullable
-as QrCodeDetails?,ownedFamilyMembers: freezed == ownedFamilyMembers ? _self.ownedFamilyMembers : ownedFamilyMembers // ignore: cast_nullable_to_non_nullable
+as QrCodeDetails?,pdfUrl: freezed == pdfUrl ? _self.pdfUrl : pdfUrl // ignore: cast_nullable_to_non_nullable
+as String?,ownedFamilyMembers: freezed == ownedFamilyMembers ? _self.ownedFamilyMembers : ownedFamilyMembers // ignore: cast_nullable_to_non_nullable
 as List<OwnedFamilyMember>?,
   ));
 }
@@ -226,10 +229,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings,  QrCodeDetails? qrCode,  List<OwnedFamilyMember>? ownedFamilyMembers)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  bool? isApproved,  String? membershipStatus,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings, @JsonKey(readValue: readQrCodeDetails)  QrCodeDetails? qrCode, @JsonKey(readValue: readPdfUrl)  String? pdfUrl, @JsonKey(readValue: readFamilyMembers)  List<OwnedFamilyMember>? ownedFamilyMembers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserProfile() when $default != null:
-return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.ownedFamilyMembers);case _:
+return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.isApproved,_that.membershipStatus,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.pdfUrl,_that.ownedFamilyMembers);case _:
   return orElse();
 
 }
@@ -247,10 +250,10 @@ return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.i
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings,  QrCodeDetails? qrCode,  List<OwnedFamilyMember>? ownedFamilyMembers)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  bool? isApproved,  String? membershipStatus,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings, @JsonKey(readValue: readQrCodeDetails)  QrCodeDetails? qrCode, @JsonKey(readValue: readPdfUrl)  String? pdfUrl, @JsonKey(readValue: readFamilyMembers)  List<OwnedFamilyMember>? ownedFamilyMembers)  $default,) {final _that = this;
 switch (_that) {
 case _UserProfile():
-return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.ownedFamilyMembers);case _:
+return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.isApproved,_that.membershipStatus,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.pdfUrl,_that.ownedFamilyMembers);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -267,10 +270,10 @@ return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.i
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings,  QrCodeDetails? qrCode,  List<OwnedFamilyMember>? ownedFamilyMembers)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? mobileNumber,  String? email,  bool? isVerified,  bool? isActive,  bool? isApproved,  String? membershipStatus,  String? createdAt,  String? updatedAt,  CoreProfile? profile,  JobDetails? job,  BusinessDetails? business,  PrivacySettings? privacySettings, @JsonKey(readValue: readQrCodeDetails)  QrCodeDetails? qrCode, @JsonKey(readValue: readPdfUrl)  String? pdfUrl, @JsonKey(readValue: readFamilyMembers)  List<OwnedFamilyMember>? ownedFamilyMembers)?  $default,) {final _that = this;
 switch (_that) {
 case _UserProfile() when $default != null:
-return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.ownedFamilyMembers);case _:
+return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.isActive,_that.isApproved,_that.membershipStatus,_that.createdAt,_that.updatedAt,_that.profile,_that.job,_that.business,_that.privacySettings,_that.qrCode,_that.pdfUrl,_that.ownedFamilyMembers);case _:
   return null;
 
 }
@@ -282,7 +285,7 @@ return $default(_that.id,_that.mobileNumber,_that.email,_that.isVerified,_that.i
 @JsonSerializable()
 
 class _UserProfile implements UserProfile {
-  const _UserProfile({this.id, this.mobileNumber, this.email, this.isVerified, this.isActive, this.createdAt, this.updatedAt, this.profile, this.job, this.business, this.privacySettings, this.qrCode,  List<OwnedFamilyMember>? ownedFamilyMembers}): _ownedFamilyMembers = ownedFamilyMembers;
+  const _UserProfile({this.id, this.mobileNumber, this.email, this.isVerified, this.isActive, this.isApproved, this.membershipStatus, this.createdAt, this.updatedAt, this.profile, this.job, this.business, this.privacySettings, @JsonKey(readValue: readQrCodeDetails) this.qrCode, @JsonKey(readValue: readPdfUrl) this.pdfUrl, @JsonKey(readValue: readFamilyMembers)  List<OwnedFamilyMember>? ownedFamilyMembers}): _ownedFamilyMembers = ownedFamilyMembers;
   factory _UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);
 
 @override final  String? id;
@@ -290,15 +293,18 @@ class _UserProfile implements UserProfile {
 @override final  String? email;
 @override final  bool? isVerified;
 @override final  bool? isActive;
+@override final  bool? isApproved;
+@override final  String? membershipStatus;
 @override final  String? createdAt;
 @override final  String? updatedAt;
 @override final  CoreProfile? profile;
 @override final  JobDetails? job;
 @override final  BusinessDetails? business;
 @override final  PrivacySettings? privacySettings;
-@override final  QrCodeDetails? qrCode;
+@override@JsonKey(readValue: readQrCodeDetails) final  QrCodeDetails? qrCode;
+@override@JsonKey(readValue: readPdfUrl) final  String? pdfUrl;
  final  List<OwnedFamilyMember>? _ownedFamilyMembers;
-@override List<OwnedFamilyMember>? get ownedFamilyMembers {
+@override@JsonKey(readValue: readFamilyMembers) List<OwnedFamilyMember>? get ownedFamilyMembers {
   final value = _ownedFamilyMembers;
   if (value == null) return null;
   if (_ownedFamilyMembers is EqualUnmodifiableListView) return _ownedFamilyMembers;
@@ -320,16 +326,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.email, email) || other.email == email)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.job, job) || other.job == job)&&(identical(other.business, business) || other.business == business)&&(identical(other.privacySettings, privacySettings) || other.privacySettings == privacySettings)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&const DeepCollectionEquality().equals(other._ownedFamilyMembers, _ownedFamilyMembers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.email, email) || other.email == email)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.job, job) || other.job == job)&&(identical(other.business, business) || other.business == business)&&(identical(other.privacySettings, privacySettings) || other.privacySettings == privacySettings)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&(identical(other.pdfUrl, pdfUrl) || other.pdfUrl == pdfUrl)&&const DeepCollectionEquality().equals(other._ownedFamilyMembers, _ownedFamilyMembers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,mobileNumber,email,isVerified,isActive,createdAt,updatedAt,profile,job,business,privacySettings,qrCode,const DeepCollectionEquality().hash(_ownedFamilyMembers));
+int get hashCode => Object.hash(runtimeType,id,mobileNumber,email,isVerified,isActive,isApproved,membershipStatus,createdAt,updatedAt,profile,job,business,privacySettings,qrCode,pdfUrl,const DeepCollectionEquality().hash(_ownedFamilyMembers));
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, mobileNumber: $mobileNumber, email: $email, isVerified: $isVerified, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, profile: $profile, job: $job, business: $business, privacySettings: $privacySettings, qrCode: $qrCode, ownedFamilyMembers: $ownedFamilyMembers)';
+  return 'UserProfile(id: $id, mobileNumber: $mobileNumber, email: $email, isVerified: $isVerified, isActive: $isActive, isApproved: $isApproved, membershipStatus: $membershipStatus, createdAt: $createdAt, updatedAt: $updatedAt, profile: $profile, job: $job, business: $business, privacySettings: $privacySettings, qrCode: $qrCode, pdfUrl: $pdfUrl, ownedFamilyMembers: $ownedFamilyMembers)';
 }
 
 
@@ -340,7 +346,7 @@ abstract mixin class _$UserProfileCopyWith<$Res> implements $UserProfileCopyWith
   factory _$UserProfileCopyWith(_UserProfile value, $Res Function(_UserProfile) _then) = __$UserProfileCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? mobileNumber, String? email, bool? isVerified, bool? isActive, String? createdAt, String? updatedAt, CoreProfile? profile, JobDetails? job, BusinessDetails? business, PrivacySettings? privacySettings, QrCodeDetails? qrCode, List<OwnedFamilyMember>? ownedFamilyMembers
+ String? id, String? mobileNumber, String? email, bool? isVerified, bool? isActive, bool? isApproved, String? membershipStatus, String? createdAt, String? updatedAt, CoreProfile? profile, JobDetails? job, BusinessDetails? business, PrivacySettings? privacySettings,@JsonKey(readValue: readQrCodeDetails) QrCodeDetails? qrCode,@JsonKey(readValue: readPdfUrl) String? pdfUrl,@JsonKey(readValue: readFamilyMembers) List<OwnedFamilyMember>? ownedFamilyMembers
 });
 
 
@@ -357,21 +363,24 @@ class __$UserProfileCopyWithImpl<$Res>
 
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? mobileNumber = freezed,Object? email = freezed,Object? isVerified = freezed,Object? isActive = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? profile = freezed,Object? job = freezed,Object? business = freezed,Object? privacySettings = freezed,Object? qrCode = freezed,Object? ownedFamilyMembers = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? mobileNumber = freezed,Object? email = freezed,Object? isVerified = freezed,Object? isActive = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? profile = freezed,Object? job = freezed,Object? business = freezed,Object? privacySettings = freezed,Object? qrCode = freezed,Object? pdfUrl = freezed,Object? ownedFamilyMembers = freezed,}) {
   return _then(_UserProfile(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,mobileNumber: freezed == mobileNumber ? _self.mobileNumber : mobileNumber // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,isVerified: freezed == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
 as bool?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as bool?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as String?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as CoreProfile?,job: freezed == job ? _self.job : job // ignore: cast_nullable_to_non_nullable
 as JobDetails?,business: freezed == business ? _self.business : business // ignore: cast_nullable_to_non_nullable
 as BusinessDetails?,privacySettings: freezed == privacySettings ? _self.privacySettings : privacySettings // ignore: cast_nullable_to_non_nullable
 as PrivacySettings?,qrCode: freezed == qrCode ? _self.qrCode : qrCode // ignore: cast_nullable_to_non_nullable
-as QrCodeDetails?,ownedFamilyMembers: freezed == ownedFamilyMembers ? _self._ownedFamilyMembers : ownedFamilyMembers // ignore: cast_nullable_to_non_nullable
+as QrCodeDetails?,pdfUrl: freezed == pdfUrl ? _self.pdfUrl : pdfUrl // ignore: cast_nullable_to_non_nullable
+as String?,ownedFamilyMembers: freezed == ownedFamilyMembers ? _self._ownedFamilyMembers : ownedFamilyMembers // ignore: cast_nullable_to_non_nullable
 as List<OwnedFamilyMember>?,
   ));
 }
@@ -443,7 +452,7 @@ $QrCodeDetailsCopyWith<$Res>? get qrCode {
 /// @nodoc
 mixin _$CoreProfile {
 
- String? get id; String? get userId; String? get fullName; String? get dob; String? get gender; String? get profilePhotoUrl; String? get city; String? get nativeVillage; String? get surname; String? get gotra; String? get createdAt; String? get updatedAt;
+ String? get id; String? get userId; String? get title; String? get fullName; String? get dob; String? get gender; String? get profilePhotoUrl; String? get state; String? get city; String? get nativeVillage; String? get surname; String? get gotra; String? get address; String? get bio; String? get height; String? get education; String? get instagram; String? get facebook; String? get linkedin; String? get twitter; String? get subCaste; String? get timeOfBirth; String? get disability; String? get manglik; String? get maternalGrandfather; String? get maternalGrandmother; String? get maternalSurname; String? get maternalGotra; String? get maternalVillage;@JsonKey(readValue: readPdfUrl) String? get biodataUrl; String? get createdAt; String? get updatedAt;
 /// Create a copy of CoreProfile
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -456,16 +465,16 @@ $CoreProfileCopyWith<CoreProfile> get copyWith => _$CoreProfileCopyWithImpl<Core
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.nativeVillage, nativeVillage) || other.nativeVillage == nativeVillage)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gotra, gotra) || other.gotra == gotra)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.title, title) || other.title == title)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.nativeVillage, nativeVillage) || other.nativeVillage == nativeVillage)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gotra, gotra) || other.gotra == gotra)&&(identical(other.address, address) || other.address == address)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.height, height) || other.height == height)&&(identical(other.education, education) || other.education == education)&&(identical(other.instagram, instagram) || other.instagram == instagram)&&(identical(other.facebook, facebook) || other.facebook == facebook)&&(identical(other.linkedin, linkedin) || other.linkedin == linkedin)&&(identical(other.twitter, twitter) || other.twitter == twitter)&&(identical(other.subCaste, subCaste) || other.subCaste == subCaste)&&(identical(other.timeOfBirth, timeOfBirth) || other.timeOfBirth == timeOfBirth)&&(identical(other.disability, disability) || other.disability == disability)&&(identical(other.manglik, manglik) || other.manglik == manglik)&&(identical(other.maternalGrandfather, maternalGrandfather) || other.maternalGrandfather == maternalGrandfather)&&(identical(other.maternalGrandmother, maternalGrandmother) || other.maternalGrandmother == maternalGrandmother)&&(identical(other.maternalSurname, maternalSurname) || other.maternalSurname == maternalSurname)&&(identical(other.maternalGotra, maternalGotra) || other.maternalGotra == maternalGotra)&&(identical(other.maternalVillage, maternalVillage) || other.maternalVillage == maternalVillage)&&(identical(other.biodataUrl, biodataUrl) || other.biodataUrl == biodataUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,fullName,dob,gender,profilePhotoUrl,city,nativeVillage,surname,gotra,createdAt,updatedAt);
+int get hashCode => Object.hashAll([runtimeType,id,userId,title,fullName,dob,gender,profilePhotoUrl,state,city,nativeVillage,surname,gotra,address,bio,height,education,instagram,facebook,linkedin,twitter,subCaste,timeOfBirth,disability,manglik,maternalGrandfather,maternalGrandmother,maternalSurname,maternalGotra,maternalVillage,biodataUrl,createdAt,updatedAt]);
 
 @override
 String toString() {
-  return 'CoreProfile(id: $id, userId: $userId, fullName: $fullName, dob: $dob, gender: $gender, profilePhotoUrl: $profilePhotoUrl, city: $city, nativeVillage: $nativeVillage, surname: $surname, gotra: $gotra, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'CoreProfile(id: $id, userId: $userId, title: $title, fullName: $fullName, dob: $dob, gender: $gender, profilePhotoUrl: $profilePhotoUrl, state: $state, city: $city, nativeVillage: $nativeVillage, surname: $surname, gotra: $gotra, address: $address, bio: $bio, height: $height, education: $education, instagram: $instagram, facebook: $facebook, linkedin: $linkedin, twitter: $twitter, subCaste: $subCaste, timeOfBirth: $timeOfBirth, disability: $disability, manglik: $manglik, maternalGrandfather: $maternalGrandfather, maternalGrandmother: $maternalGrandmother, maternalSurname: $maternalSurname, maternalGotra: $maternalGotra, maternalVillage: $maternalVillage, biodataUrl: $biodataUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -476,7 +485,7 @@ abstract mixin class $CoreProfileCopyWith<$Res>  {
   factory $CoreProfileCopyWith(CoreProfile value, $Res Function(CoreProfile) _then) = _$CoreProfileCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? userId, String? fullName, String? dob, String? gender, String? profilePhotoUrl, String? city, String? nativeVillage, String? surname, String? gotra, String? createdAt, String? updatedAt
+ String? id, String? userId, String? title, String? fullName, String? dob, String? gender, String? profilePhotoUrl, String? state, String? city, String? nativeVillage, String? surname, String? gotra, String? address, String? bio, String? height, String? education, String? instagram, String? facebook, String? linkedin, String? twitter, String? subCaste, String? timeOfBirth, String? disability, String? manglik, String? maternalGrandfather, String? maternalGrandmother, String? maternalSurname, String? maternalGotra, String? maternalVillage,@JsonKey(readValue: readPdfUrl) String? biodataUrl, String? createdAt, String? updatedAt
 });
 
 
@@ -493,18 +502,38 @@ class _$CoreProfileCopyWithImpl<$Res>
 
 /// Create a copy of CoreProfile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? fullName = freezed,Object? dob = freezed,Object? gender = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? nativeVillage = freezed,Object? surname = freezed,Object? gotra = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? title = freezed,Object? fullName = freezed,Object? dob = freezed,Object? gender = freezed,Object? profilePhotoUrl = freezed,Object? state = freezed,Object? city = freezed,Object? nativeVillage = freezed,Object? surname = freezed,Object? gotra = freezed,Object? address = freezed,Object? bio = freezed,Object? height = freezed,Object? education = freezed,Object? instagram = freezed,Object? facebook = freezed,Object? linkedin = freezed,Object? twitter = freezed,Object? subCaste = freezed,Object? timeOfBirth = freezed,Object? disability = freezed,Object? manglik = freezed,Object? maternalGrandfather = freezed,Object? maternalGrandmother = freezed,Object? maternalSurname = freezed,Object? maternalGotra = freezed,Object? maternalVillage = freezed,Object? biodataUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(CoreProfile(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,nativeVillage: freezed == nativeVillage ? _self.nativeVillage : nativeVillage // ignore: cast_nullable_to_non_nullable
 as String?,surname: freezed == surname ? _self.surname : surname // ignore: cast_nullable_to_non_nullable
 as String?,gotra: freezed == gotra ? _self.gotra : gotra // ignore: cast_nullable_to_non_nullable
+as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,height: freezed == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
+as String?,education: freezed == education ? _self.education : education // ignore: cast_nullable_to_non_nullable
+as String?,instagram: freezed == instagram ? _self.instagram : instagram // ignore: cast_nullable_to_non_nullable
+as String?,facebook: freezed == facebook ? _self.facebook : facebook // ignore: cast_nullable_to_non_nullable
+as String?,linkedin: freezed == linkedin ? _self.linkedin : linkedin // ignore: cast_nullable_to_non_nullable
+as String?,twitter: freezed == twitter ? _self.twitter : twitter // ignore: cast_nullable_to_non_nullable
+as String?,subCaste: freezed == subCaste ? _self.subCaste : subCaste // ignore: cast_nullable_to_non_nullable
+as String?,timeOfBirth: freezed == timeOfBirth ? _self.timeOfBirth : timeOfBirth // ignore: cast_nullable_to_non_nullable
+as String?,disability: freezed == disability ? _self.disability : disability // ignore: cast_nullable_to_non_nullable
+as String?,manglik: freezed == manglik ? _self.manglik : manglik // ignore: cast_nullable_to_non_nullable
+as String?,maternalGrandfather: freezed == maternalGrandfather ? _self.maternalGrandfather : maternalGrandfather // ignore: cast_nullable_to_non_nullable
+as String?,maternalGrandmother: freezed == maternalGrandmother ? _self.maternalGrandmother : maternalGrandmother // ignore: cast_nullable_to_non_nullable
+as String?,maternalSurname: freezed == maternalSurname ? _self.maternalSurname : maternalSurname // ignore: cast_nullable_to_non_nullable
+as String?,maternalGotra: freezed == maternalGotra ? _self.maternalGotra : maternalGotra // ignore: cast_nullable_to_non_nullable
+as String?,maternalVillage: freezed == maternalVillage ? _self.maternalVillage : maternalVillage // ignore: cast_nullable_to_non_nullable
+as String?,biodataUrl: freezed == biodataUrl ? _self.biodataUrl : biodataUrl // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -592,10 +621,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? createdAt,  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? title,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? state,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? address,  String? bio,  String? height,  String? education,  String? instagram,  String? facebook,  String? linkedin,  String? twitter,  String? subCaste,  String? timeOfBirth,  String? disability,  String? manglik,  String? maternalGrandfather,  String? maternalGrandmother,  String? maternalSurname,  String? maternalGotra,  String? maternalVillage, @JsonKey(readValue: readPdfUrl)  String? biodataUrl,  String? createdAt,  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CoreProfile() when $default != null:
-return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.userId,_that.title,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.state,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.address,_that.bio,_that.height,_that.education,_that.instagram,_that.facebook,_that.linkedin,_that.twitter,_that.subCaste,_that.timeOfBirth,_that.disability,_that.manglik,_that.maternalGrandfather,_that.maternalGrandmother,_that.maternalSurname,_that.maternalGotra,_that.maternalVillage,_that.biodataUrl,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -613,10 +642,10 @@ return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? createdAt,  String? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? title,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? state,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? address,  String? bio,  String? height,  String? education,  String? instagram,  String? facebook,  String? linkedin,  String? twitter,  String? subCaste,  String? timeOfBirth,  String? disability,  String? manglik,  String? maternalGrandfather,  String? maternalGrandmother,  String? maternalSurname,  String? maternalGotra,  String? maternalVillage, @JsonKey(readValue: readPdfUrl)  String? biodataUrl,  String? createdAt,  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _CoreProfile():
-return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.userId,_that.title,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.state,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.address,_that.bio,_that.height,_that.education,_that.instagram,_that.facebook,_that.linkedin,_that.twitter,_that.subCaste,_that.timeOfBirth,_that.disability,_that.manglik,_that.maternalGrandfather,_that.maternalGrandmother,_that.maternalSurname,_that.maternalGotra,_that.maternalVillage,_that.biodataUrl,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -633,10 +662,10 @@ return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? createdAt,  String? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? title,  String? fullName,  String? dob,  String? gender,  String? profilePhotoUrl,  String? state,  String? city,  String? nativeVillage,  String? surname,  String? gotra,  String? address,  String? bio,  String? height,  String? education,  String? instagram,  String? facebook,  String? linkedin,  String? twitter,  String? subCaste,  String? timeOfBirth,  String? disability,  String? manglik,  String? maternalGrandfather,  String? maternalGrandmother,  String? maternalSurname,  String? maternalGotra,  String? maternalVillage, @JsonKey(readValue: readPdfUrl)  String? biodataUrl,  String? createdAt,  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _CoreProfile() when $default != null:
-return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.userId,_that.title,_that.fullName,_that.dob,_that.gender,_that.profilePhotoUrl,_that.state,_that.city,_that.nativeVillage,_that.surname,_that.gotra,_that.address,_that.bio,_that.height,_that.education,_that.instagram,_that.facebook,_that.linkedin,_that.twitter,_that.subCaste,_that.timeOfBirth,_that.disability,_that.manglik,_that.maternalGrandfather,_that.maternalGrandmother,_that.maternalSurname,_that.maternalGotra,_that.maternalVillage,_that.biodataUrl,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -648,19 +677,39 @@ return $default(_that.id,_that.userId,_that.fullName,_that.dob,_that.gender,_tha
 @JsonSerializable()
 
 class _CoreProfile implements CoreProfile {
-  const _CoreProfile({this.id, this.userId, this.fullName, this.dob, this.gender, this.profilePhotoUrl, this.city, this.nativeVillage, this.surname, this.gotra, this.createdAt, this.updatedAt});
+  const _CoreProfile({this.id, this.userId, this.title, this.fullName, this.dob, this.gender, this.profilePhotoUrl, this.state, this.city, this.nativeVillage, this.surname, this.gotra, this.address, this.bio, this.height, this.education, this.instagram, this.facebook, this.linkedin, this.twitter, this.subCaste, this.timeOfBirth, this.disability, this.manglik, this.maternalGrandfather, this.maternalGrandmother, this.maternalSurname, this.maternalGotra, this.maternalVillage, @JsonKey(readValue: readPdfUrl) this.biodataUrl, this.createdAt, this.updatedAt});
   factory _CoreProfile.fromJson(Map<String, dynamic> json) => _$CoreProfileFromJson(json);
 
 @override final  String? id;
 @override final  String? userId;
+@override final  String? title;
 @override final  String? fullName;
 @override final  String? dob;
 @override final  String? gender;
 @override final  String? profilePhotoUrl;
+@override final  String? state;
 @override final  String? city;
 @override final  String? nativeVillage;
 @override final  String? surname;
 @override final  String? gotra;
+@override final  String? address;
+@override final  String? bio;
+@override final  String? height;
+@override final  String? education;
+@override final  String? instagram;
+@override final  String? facebook;
+@override final  String? linkedin;
+@override final  String? twitter;
+@override final  String? subCaste;
+@override final  String? timeOfBirth;
+@override final  String? disability;
+@override final  String? manglik;
+@override final  String? maternalGrandfather;
+@override final  String? maternalGrandmother;
+@override final  String? maternalSurname;
+@override final  String? maternalGotra;
+@override final  String? maternalVillage;
+@override@JsonKey(readValue: readPdfUrl) final  String? biodataUrl;
 @override final  String? createdAt;
 @override final  String? updatedAt;
 
@@ -677,16 +726,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.nativeVillage, nativeVillage) || other.nativeVillage == nativeVillage)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gotra, gotra) || other.gotra == gotra)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.title, title) || other.title == title)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.nativeVillage, nativeVillage) || other.nativeVillage == nativeVillage)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gotra, gotra) || other.gotra == gotra)&&(identical(other.address, address) || other.address == address)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.height, height) || other.height == height)&&(identical(other.education, education) || other.education == education)&&(identical(other.instagram, instagram) || other.instagram == instagram)&&(identical(other.facebook, facebook) || other.facebook == facebook)&&(identical(other.linkedin, linkedin) || other.linkedin == linkedin)&&(identical(other.twitter, twitter) || other.twitter == twitter)&&(identical(other.subCaste, subCaste) || other.subCaste == subCaste)&&(identical(other.timeOfBirth, timeOfBirth) || other.timeOfBirth == timeOfBirth)&&(identical(other.disability, disability) || other.disability == disability)&&(identical(other.manglik, manglik) || other.manglik == manglik)&&(identical(other.maternalGrandfather, maternalGrandfather) || other.maternalGrandfather == maternalGrandfather)&&(identical(other.maternalGrandmother, maternalGrandmother) || other.maternalGrandmother == maternalGrandmother)&&(identical(other.maternalSurname, maternalSurname) || other.maternalSurname == maternalSurname)&&(identical(other.maternalGotra, maternalGotra) || other.maternalGotra == maternalGotra)&&(identical(other.maternalVillage, maternalVillage) || other.maternalVillage == maternalVillage)&&(identical(other.biodataUrl, biodataUrl) || other.biodataUrl == biodataUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,fullName,dob,gender,profilePhotoUrl,city,nativeVillage,surname,gotra,createdAt,updatedAt);
+int get hashCode => Object.hashAll([runtimeType,id,userId,title,fullName,dob,gender,profilePhotoUrl,state,city,nativeVillage,surname,gotra,address,bio,height,education,instagram,facebook,linkedin,twitter,subCaste,timeOfBirth,disability,manglik,maternalGrandfather,maternalGrandmother,maternalSurname,maternalGotra,maternalVillage,biodataUrl,createdAt,updatedAt]);
 
 @override
 String toString() {
-  return 'CoreProfile(id: $id, userId: $userId, fullName: $fullName, dob: $dob, gender: $gender, profilePhotoUrl: $profilePhotoUrl, city: $city, nativeVillage: $nativeVillage, surname: $surname, gotra: $gotra, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'CoreProfile(id: $id, userId: $userId, title: $title, fullName: $fullName, dob: $dob, gender: $gender, profilePhotoUrl: $profilePhotoUrl, state: $state, city: $city, nativeVillage: $nativeVillage, surname: $surname, gotra: $gotra, address: $address, bio: $bio, height: $height, education: $education, instagram: $instagram, facebook: $facebook, linkedin: $linkedin, twitter: $twitter, subCaste: $subCaste, timeOfBirth: $timeOfBirth, disability: $disability, manglik: $manglik, maternalGrandfather: $maternalGrandfather, maternalGrandmother: $maternalGrandmother, maternalSurname: $maternalSurname, maternalGotra: $maternalGotra, maternalVillage: $maternalVillage, biodataUrl: $biodataUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -697,7 +746,7 @@ abstract mixin class _$CoreProfileCopyWith<$Res> implements $CoreProfileCopyWith
   factory _$CoreProfileCopyWith(_CoreProfile value, $Res Function(_CoreProfile) _then) = __$CoreProfileCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? userId, String? fullName, String? dob, String? gender, String? profilePhotoUrl, String? city, String? nativeVillage, String? surname, String? gotra, String? createdAt, String? updatedAt
+ String? id, String? userId, String? title, String? fullName, String? dob, String? gender, String? profilePhotoUrl, String? state, String? city, String? nativeVillage, String? surname, String? gotra, String? address, String? bio, String? height, String? education, String? instagram, String? facebook, String? linkedin, String? twitter, String? subCaste, String? timeOfBirth, String? disability, String? manglik, String? maternalGrandfather, String? maternalGrandmother, String? maternalSurname, String? maternalGotra, String? maternalVillage,@JsonKey(readValue: readPdfUrl) String? biodataUrl, String? createdAt, String? updatedAt
 });
 
 
@@ -714,18 +763,38 @@ class __$CoreProfileCopyWithImpl<$Res>
 
 /// Create a copy of CoreProfile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? fullName = freezed,Object? dob = freezed,Object? gender = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? nativeVillage = freezed,Object? surname = freezed,Object? gotra = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? title = freezed,Object? fullName = freezed,Object? dob = freezed,Object? gender = freezed,Object? profilePhotoUrl = freezed,Object? state = freezed,Object? city = freezed,Object? nativeVillage = freezed,Object? surname = freezed,Object? gotra = freezed,Object? address = freezed,Object? bio = freezed,Object? height = freezed,Object? education = freezed,Object? instagram = freezed,Object? facebook = freezed,Object? linkedin = freezed,Object? twitter = freezed,Object? subCaste = freezed,Object? timeOfBirth = freezed,Object? disability = freezed,Object? manglik = freezed,Object? maternalGrandfather = freezed,Object? maternalGrandmother = freezed,Object? maternalSurname = freezed,Object? maternalGotra = freezed,Object? maternalVillage = freezed,Object? biodataUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_CoreProfile(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,nativeVillage: freezed == nativeVillage ? _self.nativeVillage : nativeVillage // ignore: cast_nullable_to_non_nullable
 as String?,surname: freezed == surname ? _self.surname : surname // ignore: cast_nullable_to_non_nullable
 as String?,gotra: freezed == gotra ? _self.gotra : gotra // ignore: cast_nullable_to_non_nullable
+as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,height: freezed == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
+as String?,education: freezed == education ? _self.education : education // ignore: cast_nullable_to_non_nullable
+as String?,instagram: freezed == instagram ? _self.instagram : instagram // ignore: cast_nullable_to_non_nullable
+as String?,facebook: freezed == facebook ? _self.facebook : facebook // ignore: cast_nullable_to_non_nullable
+as String?,linkedin: freezed == linkedin ? _self.linkedin : linkedin // ignore: cast_nullable_to_non_nullable
+as String?,twitter: freezed == twitter ? _self.twitter : twitter // ignore: cast_nullable_to_non_nullable
+as String?,subCaste: freezed == subCaste ? _self.subCaste : subCaste // ignore: cast_nullable_to_non_nullable
+as String?,timeOfBirth: freezed == timeOfBirth ? _self.timeOfBirth : timeOfBirth // ignore: cast_nullable_to_non_nullable
+as String?,disability: freezed == disability ? _self.disability : disability // ignore: cast_nullable_to_non_nullable
+as String?,manglik: freezed == manglik ? _self.manglik : manglik // ignore: cast_nullable_to_non_nullable
+as String?,maternalGrandfather: freezed == maternalGrandfather ? _self.maternalGrandfather : maternalGrandfather // ignore: cast_nullable_to_non_nullable
+as String?,maternalGrandmother: freezed == maternalGrandmother ? _self.maternalGrandmother : maternalGrandmother // ignore: cast_nullable_to_non_nullable
+as String?,maternalSurname: freezed == maternalSurname ? _self.maternalSurname : maternalSurname // ignore: cast_nullable_to_non_nullable
+as String?,maternalGotra: freezed == maternalGotra ? _self.maternalGotra : maternalGotra // ignore: cast_nullable_to_non_nullable
+as String?,maternalVillage: freezed == maternalVillage ? _self.maternalVillage : maternalVillage // ignore: cast_nullable_to_non_nullable
+as String?,biodataUrl: freezed == biodataUrl ? _self.biodataUrl : biodataUrl // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -739,7 +808,7 @@ as String?,
 /// @nodoc
 mixin _$JobDetails {
 
- String? get id; String? get userId; String? get companyName; String? get designation; String? get industry; int? get yearsOfExperience;
+ String? get id; String? get userId; String? get companyName; String? get designation; String? get industry; int? get yearsOfExperience; String? get state; String? get city;
 /// Create a copy of JobDetails
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -752,16 +821,16 @@ $JobDetailsCopyWith<JobDetails> get copyWith => _$JobDetailsCopyWithImpl<JobDeta
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JobDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.industry, industry) || other.industry == industry)&&(identical(other.yearsOfExperience, yearsOfExperience) || other.yearsOfExperience == yearsOfExperience));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JobDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.industry, industry) || other.industry == industry)&&(identical(other.yearsOfExperience, yearsOfExperience) || other.yearsOfExperience == yearsOfExperience)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,companyName,designation,industry,yearsOfExperience);
+int get hashCode => Object.hash(runtimeType,id,userId,companyName,designation,industry,yearsOfExperience,state,city);
 
 @override
 String toString() {
-  return 'JobDetails(id: $id, userId: $userId, companyName: $companyName, designation: $designation, industry: $industry, yearsOfExperience: $yearsOfExperience)';
+  return 'JobDetails(id: $id, userId: $userId, companyName: $companyName, designation: $designation, industry: $industry, yearsOfExperience: $yearsOfExperience, state: $state, city: $city)';
 }
 
 
@@ -772,7 +841,7 @@ abstract mixin class $JobDetailsCopyWith<$Res>  {
   factory $JobDetailsCopyWith(JobDetails value, $Res Function(JobDetails) _then) = _$JobDetailsCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? userId, String? companyName, String? designation, String? industry, int? yearsOfExperience
+ String? id, String? userId, String? companyName, String? designation, String? industry, int? yearsOfExperience, String? state, String? city
 });
 
 
@@ -789,7 +858,7 @@ class _$JobDetailsCopyWithImpl<$Res>
 
 /// Create a copy of JobDetails
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? companyName = freezed,Object? designation = freezed,Object? industry = freezed,Object? yearsOfExperience = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? companyName = freezed,Object? designation = freezed,Object? industry = freezed,Object? yearsOfExperience = freezed,Object? state = freezed,Object? city = freezed,}) {
   return _then(JobDetails(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -797,7 +866,9 @@ as String?,companyName: freezed == companyName ? _self.companyName : companyName
 as String?,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
 as String?,industry: freezed == industry ? _self.industry : industry // ignore: cast_nullable_to_non_nullable
 as String?,yearsOfExperience: freezed == yearsOfExperience ? _self.yearsOfExperience : yearsOfExperience // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -882,10 +953,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience,  String? state,  String? city)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _JobDetails() when $default != null:
-return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience);case _:
+return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience,_that.state,_that.city);case _:
   return orElse();
 
 }
@@ -903,10 +974,10 @@ return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience,  String? state,  String? city)  $default,) {final _that = this;
 switch (_that) {
 case _JobDetails():
-return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience);case _:
+return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience,_that.state,_that.city);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -923,10 +994,10 @@ return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? companyName,  String? designation,  String? industry,  int? yearsOfExperience,  String? state,  String? city)?  $default,) {final _that = this;
 switch (_that) {
 case _JobDetails() when $default != null:
-return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience);case _:
+return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.industry,_that.yearsOfExperience,_that.state,_that.city);case _:
   return null;
 
 }
@@ -938,7 +1009,7 @@ return $default(_that.id,_that.userId,_that.companyName,_that.designation,_that.
 @JsonSerializable()
 
 class _JobDetails implements JobDetails {
-  const _JobDetails({this.id, this.userId, this.companyName, this.designation, this.industry, this.yearsOfExperience});
+  const _JobDetails({this.id, this.userId, this.companyName, this.designation, this.industry, this.yearsOfExperience, this.state, this.city});
   factory _JobDetails.fromJson(Map<String, dynamic> json) => _$JobDetailsFromJson(json);
 
 @override final  String? id;
@@ -947,6 +1018,8 @@ class _JobDetails implements JobDetails {
 @override final  String? designation;
 @override final  String? industry;
 @override final  int? yearsOfExperience;
+@override final  String? state;
+@override final  String? city;
 
 /// Create a copy of JobDetails
 /// with the given fields replaced by the non-null parameter values.
@@ -961,16 +1034,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JobDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.industry, industry) || other.industry == industry)&&(identical(other.yearsOfExperience, yearsOfExperience) || other.yearsOfExperience == yearsOfExperience));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JobDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.industry, industry) || other.industry == industry)&&(identical(other.yearsOfExperience, yearsOfExperience) || other.yearsOfExperience == yearsOfExperience)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,companyName,designation,industry,yearsOfExperience);
+int get hashCode => Object.hash(runtimeType,id,userId,companyName,designation,industry,yearsOfExperience,state,city);
 
 @override
 String toString() {
-  return 'JobDetails(id: $id, userId: $userId, companyName: $companyName, designation: $designation, industry: $industry, yearsOfExperience: $yearsOfExperience)';
+  return 'JobDetails(id: $id, userId: $userId, companyName: $companyName, designation: $designation, industry: $industry, yearsOfExperience: $yearsOfExperience, state: $state, city: $city)';
 }
 
 
@@ -981,7 +1054,7 @@ abstract mixin class _$JobDetailsCopyWith<$Res> implements $JobDetailsCopyWith<$
   factory _$JobDetailsCopyWith(_JobDetails value, $Res Function(_JobDetails) _then) = __$JobDetailsCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? userId, String? companyName, String? designation, String? industry, int? yearsOfExperience
+ String? id, String? userId, String? companyName, String? designation, String? industry, int? yearsOfExperience, String? state, String? city
 });
 
 
@@ -998,7 +1071,7 @@ class __$JobDetailsCopyWithImpl<$Res>
 
 /// Create a copy of JobDetails
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? companyName = freezed,Object? designation = freezed,Object? industry = freezed,Object? yearsOfExperience = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? companyName = freezed,Object? designation = freezed,Object? industry = freezed,Object? yearsOfExperience = freezed,Object? state = freezed,Object? city = freezed,}) {
   return _then(_JobDetails(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -1006,7 +1079,9 @@ as String?,companyName: freezed == companyName ? _self.companyName : companyName
 as String?,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
 as String?,industry: freezed == industry ? _self.industry : industry // ignore: cast_nullable_to_non_nullable
 as String?,yearsOfExperience: freezed == yearsOfExperience ? _self.yearsOfExperience : yearsOfExperience // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -1017,7 +1092,7 @@ as int?,
 /// @nodoc
 mixin _$BusinessDetails {
 
- String? get id; String? get userId; String? get businessName; String? get category; String? get productsServices; String? get address; String? get website;
+ String? get id; String? get userId; String? get businessName; String? get category; String? get productsServices; String? get state; String? get city; String? get website; String? get role;
 /// Create a copy of BusinessDetails
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1030,16 +1105,16 @@ $BusinessDetailsCopyWith<BusinessDetails> get copyWith => _$BusinessDetailsCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BusinessDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.category, category) || other.category == category)&&(identical(other.productsServices, productsServices) || other.productsServices == productsServices)&&(identical(other.address, address) || other.address == address)&&(identical(other.website, website) || other.website == website));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BusinessDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.category, category) || other.category == category)&&(identical(other.productsServices, productsServices) || other.productsServices == productsServices)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.website, website) || other.website == website)&&(identical(other.role, role) || other.role == role));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,businessName,category,productsServices,address,website);
+int get hashCode => Object.hash(runtimeType,id,userId,businessName,category,productsServices,state,city,website,role);
 
 @override
 String toString() {
-  return 'BusinessDetails(id: $id, userId: $userId, businessName: $businessName, category: $category, productsServices: $productsServices, address: $address, website: $website)';
+  return 'BusinessDetails(id: $id, userId: $userId, businessName: $businessName, category: $category, productsServices: $productsServices, state: $state, city: $city, website: $website, role: $role)';
 }
 
 
@@ -1050,7 +1125,7 @@ abstract mixin class $BusinessDetailsCopyWith<$Res>  {
   factory $BusinessDetailsCopyWith(BusinessDetails value, $Res Function(BusinessDetails) _then) = _$BusinessDetailsCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? userId, String? businessName, String? category, String? productsServices, String? address, String? website
+ String? id, String? userId, String? businessName, String? category, String? productsServices, String? state, String? city, String? website, String? role
 });
 
 
@@ -1067,15 +1142,17 @@ class _$BusinessDetailsCopyWithImpl<$Res>
 
 /// Create a copy of BusinessDetails
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? businessName = freezed,Object? category = freezed,Object? productsServices = freezed,Object? address = freezed,Object? website = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? businessName = freezed,Object? category = freezed,Object? productsServices = freezed,Object? state = freezed,Object? city = freezed,Object? website = freezed,Object? role = freezed,}) {
   return _then(BusinessDetails(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,businessName: freezed == businessName ? _self.businessName : businessName // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String?,productsServices: freezed == productsServices ? _self.productsServices : productsServices // ignore: cast_nullable_to_non_nullable
-as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,website: freezed == website ? _self.website : website // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -1161,10 +1238,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? address,  String? website)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? state,  String? city,  String? website,  String? role)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BusinessDetails() when $default != null:
-return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.address,_that.website);case _:
+return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.state,_that.city,_that.website,_that.role);case _:
   return orElse();
 
 }
@@ -1182,10 +1259,10 @@ return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.pr
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? address,  String? website)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? state,  String? city,  String? website,  String? role)  $default,) {final _that = this;
 switch (_that) {
 case _BusinessDetails():
-return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.address,_that.website);case _:
+return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.state,_that.city,_that.website,_that.role);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1202,10 +1279,10 @@ return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.pr
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? address,  String? website)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  String? businessName,  String? category,  String? productsServices,  String? state,  String? city,  String? website,  String? role)?  $default,) {final _that = this;
 switch (_that) {
 case _BusinessDetails() when $default != null:
-return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.address,_that.website);case _:
+return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.productsServices,_that.state,_that.city,_that.website,_that.role);case _:
   return null;
 
 }
@@ -1217,7 +1294,7 @@ return $default(_that.id,_that.userId,_that.businessName,_that.category,_that.pr
 @JsonSerializable()
 
 class _BusinessDetails implements BusinessDetails {
-  const _BusinessDetails({this.id, this.userId, this.businessName, this.category, this.productsServices, this.address, this.website});
+  const _BusinessDetails({this.id, this.userId, this.businessName, this.category, this.productsServices, this.state, this.city, this.website, this.role});
   factory _BusinessDetails.fromJson(Map<String, dynamic> json) => _$BusinessDetailsFromJson(json);
 
 @override final  String? id;
@@ -1225,8 +1302,10 @@ class _BusinessDetails implements BusinessDetails {
 @override final  String? businessName;
 @override final  String? category;
 @override final  String? productsServices;
-@override final  String? address;
+@override final  String? state;
+@override final  String? city;
 @override final  String? website;
+@override final  String? role;
 
 /// Create a copy of BusinessDetails
 /// with the given fields replaced by the non-null parameter values.
@@ -1241,16 +1320,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BusinessDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.category, category) || other.category == category)&&(identical(other.productsServices, productsServices) || other.productsServices == productsServices)&&(identical(other.address, address) || other.address == address)&&(identical(other.website, website) || other.website == website));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BusinessDetails&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.category, category) || other.category == category)&&(identical(other.productsServices, productsServices) || other.productsServices == productsServices)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.website, website) || other.website == website)&&(identical(other.role, role) || other.role == role));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,businessName,category,productsServices,address,website);
+int get hashCode => Object.hash(runtimeType,id,userId,businessName,category,productsServices,state,city,website,role);
 
 @override
 String toString() {
-  return 'BusinessDetails(id: $id, userId: $userId, businessName: $businessName, category: $category, productsServices: $productsServices, address: $address, website: $website)';
+  return 'BusinessDetails(id: $id, userId: $userId, businessName: $businessName, category: $category, productsServices: $productsServices, state: $state, city: $city, website: $website, role: $role)';
 }
 
 
@@ -1261,7 +1340,7 @@ abstract mixin class _$BusinessDetailsCopyWith<$Res> implements $BusinessDetails
   factory _$BusinessDetailsCopyWith(_BusinessDetails value, $Res Function(_BusinessDetails) _then) = __$BusinessDetailsCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? userId, String? businessName, String? category, String? productsServices, String? address, String? website
+ String? id, String? userId, String? businessName, String? category, String? productsServices, String? state, String? city, String? website, String? role
 });
 
 
@@ -1278,15 +1357,17 @@ class __$BusinessDetailsCopyWithImpl<$Res>
 
 /// Create a copy of BusinessDetails
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? businessName = freezed,Object? category = freezed,Object? productsServices = freezed,Object? address = freezed,Object? website = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? businessName = freezed,Object? category = freezed,Object? productsServices = freezed,Object? state = freezed,Object? city = freezed,Object? website = freezed,Object? role = freezed,}) {
   return _then(_BusinessDetails(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,businessName: freezed == businessName ? _self.businessName : businessName // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String?,productsServices: freezed == productsServices ? _self.productsServices : productsServices // ignore: cast_nullable_to_non_nullable
-as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,website: freezed == website ? _self.website : website // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -1298,7 +1379,7 @@ as String?,
 /// @nodoc
 mixin _$PrivacySettings {
 
- String? get id; String? get userId; bool? get showMobileNumber; bool? get showEmail; bool? get showFamilyInfo; bool? get showBusinessInfo; bool? get showProfessionalInfo;
+ String? get id; String? get userId; bool? get showMobileNumber; bool? get showEmail; bool? get showGotra; bool? get showFamilyInfo; bool? get showMaternalInfo; bool? get showBusinessInfo; bool? get showProfessionalInfo; bool? get showInstagram; bool? get showFacebook; bool? get showLinkedin; bool? get showTwitter; bool? get isFindmatch;
 /// Create a copy of PrivacySettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1311,16 +1392,16 @@ $PrivacySettingsCopyWith<PrivacySettings> get copyWith => _$PrivacySettingsCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrivacySettings&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.showMobileNumber, showMobileNumber) || other.showMobileNumber == showMobileNumber)&&(identical(other.showEmail, showEmail) || other.showEmail == showEmail)&&(identical(other.showFamilyInfo, showFamilyInfo) || other.showFamilyInfo == showFamilyInfo)&&(identical(other.showBusinessInfo, showBusinessInfo) || other.showBusinessInfo == showBusinessInfo)&&(identical(other.showProfessionalInfo, showProfessionalInfo) || other.showProfessionalInfo == showProfessionalInfo));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrivacySettings&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.showMobileNumber, showMobileNumber) || other.showMobileNumber == showMobileNumber)&&(identical(other.showEmail, showEmail) || other.showEmail == showEmail)&&(identical(other.showGotra, showGotra) || other.showGotra == showGotra)&&(identical(other.showFamilyInfo, showFamilyInfo) || other.showFamilyInfo == showFamilyInfo)&&(identical(other.showMaternalInfo, showMaternalInfo) || other.showMaternalInfo == showMaternalInfo)&&(identical(other.showBusinessInfo, showBusinessInfo) || other.showBusinessInfo == showBusinessInfo)&&(identical(other.showProfessionalInfo, showProfessionalInfo) || other.showProfessionalInfo == showProfessionalInfo)&&(identical(other.showInstagram, showInstagram) || other.showInstagram == showInstagram)&&(identical(other.showFacebook, showFacebook) || other.showFacebook == showFacebook)&&(identical(other.showLinkedin, showLinkedin) || other.showLinkedin == showLinkedin)&&(identical(other.showTwitter, showTwitter) || other.showTwitter == showTwitter)&&(identical(other.isFindmatch, isFindmatch) || other.isFindmatch == isFindmatch));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,showMobileNumber,showEmail,showFamilyInfo,showBusinessInfo,showProfessionalInfo);
+int get hashCode => Object.hash(runtimeType,id,userId,showMobileNumber,showEmail,showGotra,showFamilyInfo,showMaternalInfo,showBusinessInfo,showProfessionalInfo,showInstagram,showFacebook,showLinkedin,showTwitter,isFindmatch);
 
 @override
 String toString() {
-  return 'PrivacySettings(id: $id, userId: $userId, showMobileNumber: $showMobileNumber, showEmail: $showEmail, showFamilyInfo: $showFamilyInfo, showBusinessInfo: $showBusinessInfo, showProfessionalInfo: $showProfessionalInfo)';
+  return 'PrivacySettings(id: $id, userId: $userId, showMobileNumber: $showMobileNumber, showEmail: $showEmail, showGotra: $showGotra, showFamilyInfo: $showFamilyInfo, showMaternalInfo: $showMaternalInfo, showBusinessInfo: $showBusinessInfo, showProfessionalInfo: $showProfessionalInfo, showInstagram: $showInstagram, showFacebook: $showFacebook, showLinkedin: $showLinkedin, showTwitter: $showTwitter, isFindmatch: $isFindmatch)';
 }
 
 
@@ -1331,7 +1412,7 @@ abstract mixin class $PrivacySettingsCopyWith<$Res>  {
   factory $PrivacySettingsCopyWith(PrivacySettings value, $Res Function(PrivacySettings) _then) = _$PrivacySettingsCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? userId, bool? showMobileNumber, bool? showEmail, bool? showFamilyInfo, bool? showBusinessInfo, bool? showProfessionalInfo
+ String? id, String? userId, bool? showMobileNumber, bool? showEmail, bool? showGotra, bool? showFamilyInfo, bool? showMaternalInfo, bool? showBusinessInfo, bool? showProfessionalInfo, bool? showInstagram, bool? showFacebook, bool? showLinkedin, bool? showTwitter, bool? isFindmatch
 });
 
 
@@ -1348,15 +1429,22 @@ class _$PrivacySettingsCopyWithImpl<$Res>
 
 /// Create a copy of PrivacySettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? showMobileNumber = freezed,Object? showEmail = freezed,Object? showFamilyInfo = freezed,Object? showBusinessInfo = freezed,Object? showProfessionalInfo = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? showMobileNumber = freezed,Object? showEmail = freezed,Object? showGotra = freezed,Object? showFamilyInfo = freezed,Object? showMaternalInfo = freezed,Object? showBusinessInfo = freezed,Object? showProfessionalInfo = freezed,Object? showInstagram = freezed,Object? showFacebook = freezed,Object? showLinkedin = freezed,Object? showTwitter = freezed,Object? isFindmatch = freezed,}) {
   return _then(PrivacySettings(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,showMobileNumber: freezed == showMobileNumber ? _self.showMobileNumber : showMobileNumber // ignore: cast_nullable_to_non_nullable
 as bool?,showEmail: freezed == showEmail ? _self.showEmail : showEmail // ignore: cast_nullable_to_non_nullable
+as bool?,showGotra: freezed == showGotra ? _self.showGotra : showGotra // ignore: cast_nullable_to_non_nullable
 as bool?,showFamilyInfo: freezed == showFamilyInfo ? _self.showFamilyInfo : showFamilyInfo // ignore: cast_nullable_to_non_nullable
+as bool?,showMaternalInfo: freezed == showMaternalInfo ? _self.showMaternalInfo : showMaternalInfo // ignore: cast_nullable_to_non_nullable
 as bool?,showBusinessInfo: freezed == showBusinessInfo ? _self.showBusinessInfo : showBusinessInfo // ignore: cast_nullable_to_non_nullable
 as bool?,showProfessionalInfo: freezed == showProfessionalInfo ? _self.showProfessionalInfo : showProfessionalInfo // ignore: cast_nullable_to_non_nullable
+as bool?,showInstagram: freezed == showInstagram ? _self.showInstagram : showInstagram // ignore: cast_nullable_to_non_nullable
+as bool?,showFacebook: freezed == showFacebook ? _self.showFacebook : showFacebook // ignore: cast_nullable_to_non_nullable
+as bool?,showLinkedin: freezed == showLinkedin ? _self.showLinkedin : showLinkedin // ignore: cast_nullable_to_non_nullable
+as bool?,showTwitter: freezed == showTwitter ? _self.showTwitter : showTwitter // ignore: cast_nullable_to_non_nullable
+as bool?,isFindmatch: freezed == isFindmatch ? _self.isFindmatch : isFindmatch // ignore: cast_nullable_to_non_nullable
 as bool?,
   ));
 }
@@ -1442,10 +1530,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showFamilyInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showGotra,  bool? showFamilyInfo,  bool? showMaternalInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo,  bool? showInstagram,  bool? showFacebook,  bool? showLinkedin,  bool? showTwitter,  bool? isFindmatch)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PrivacySettings() when $default != null:
-return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showFamilyInfo,_that.showBusinessInfo,_that.showProfessionalInfo);case _:
+return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showGotra,_that.showFamilyInfo,_that.showMaternalInfo,_that.showBusinessInfo,_that.showProfessionalInfo,_that.showInstagram,_that.showFacebook,_that.showLinkedin,_that.showTwitter,_that.isFindmatch);case _:
   return orElse();
 
 }
@@ -1463,10 +1551,10 @@ return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showFamilyInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showGotra,  bool? showFamilyInfo,  bool? showMaternalInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo,  bool? showInstagram,  bool? showFacebook,  bool? showLinkedin,  bool? showTwitter,  bool? isFindmatch)  $default,) {final _that = this;
 switch (_that) {
 case _PrivacySettings():
-return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showFamilyInfo,_that.showBusinessInfo,_that.showProfessionalInfo);case _:
+return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showGotra,_that.showFamilyInfo,_that.showMaternalInfo,_that.showBusinessInfo,_that.showProfessionalInfo,_that.showInstagram,_that.showFacebook,_that.showLinkedin,_that.showTwitter,_that.isFindmatch);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1483,10 +1571,10 @@ return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showFamilyInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? userId,  bool? showMobileNumber,  bool? showEmail,  bool? showGotra,  bool? showFamilyInfo,  bool? showMaternalInfo,  bool? showBusinessInfo,  bool? showProfessionalInfo,  bool? showInstagram,  bool? showFacebook,  bool? showLinkedin,  bool? showTwitter,  bool? isFindmatch)?  $default,) {final _that = this;
 switch (_that) {
 case _PrivacySettings() when $default != null:
-return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showFamilyInfo,_that.showBusinessInfo,_that.showProfessionalInfo);case _:
+return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_that.showGotra,_that.showFamilyInfo,_that.showMaternalInfo,_that.showBusinessInfo,_that.showProfessionalInfo,_that.showInstagram,_that.showFacebook,_that.showLinkedin,_that.showTwitter,_that.isFindmatch);case _:
   return null;
 
 }
@@ -1498,16 +1586,23 @@ return $default(_that.id,_that.userId,_that.showMobileNumber,_that.showEmail,_th
 @JsonSerializable()
 
 class _PrivacySettings implements PrivacySettings {
-  const _PrivacySettings({this.id, this.userId, this.showMobileNumber, this.showEmail, this.showFamilyInfo, this.showBusinessInfo, this.showProfessionalInfo});
+  const _PrivacySettings({this.id, this.userId, this.showMobileNumber, this.showEmail, this.showGotra, this.showFamilyInfo, this.showMaternalInfo, this.showBusinessInfo, this.showProfessionalInfo, this.showInstagram, this.showFacebook, this.showLinkedin, this.showTwitter, this.isFindmatch});
   factory _PrivacySettings.fromJson(Map<String, dynamic> json) => _$PrivacySettingsFromJson(json);
 
 @override final  String? id;
 @override final  String? userId;
 @override final  bool? showMobileNumber;
 @override final  bool? showEmail;
+@override final  bool? showGotra;
 @override final  bool? showFamilyInfo;
+@override final  bool? showMaternalInfo;
 @override final  bool? showBusinessInfo;
 @override final  bool? showProfessionalInfo;
+@override final  bool? showInstagram;
+@override final  bool? showFacebook;
+@override final  bool? showLinkedin;
+@override final  bool? showTwitter;
+@override final  bool? isFindmatch;
 
 /// Create a copy of PrivacySettings
 /// with the given fields replaced by the non-null parameter values.
@@ -1522,16 +1617,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PrivacySettings&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.showMobileNumber, showMobileNumber) || other.showMobileNumber == showMobileNumber)&&(identical(other.showEmail, showEmail) || other.showEmail == showEmail)&&(identical(other.showFamilyInfo, showFamilyInfo) || other.showFamilyInfo == showFamilyInfo)&&(identical(other.showBusinessInfo, showBusinessInfo) || other.showBusinessInfo == showBusinessInfo)&&(identical(other.showProfessionalInfo, showProfessionalInfo) || other.showProfessionalInfo == showProfessionalInfo));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PrivacySettings&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.showMobileNumber, showMobileNumber) || other.showMobileNumber == showMobileNumber)&&(identical(other.showEmail, showEmail) || other.showEmail == showEmail)&&(identical(other.showGotra, showGotra) || other.showGotra == showGotra)&&(identical(other.showFamilyInfo, showFamilyInfo) || other.showFamilyInfo == showFamilyInfo)&&(identical(other.showMaternalInfo, showMaternalInfo) || other.showMaternalInfo == showMaternalInfo)&&(identical(other.showBusinessInfo, showBusinessInfo) || other.showBusinessInfo == showBusinessInfo)&&(identical(other.showProfessionalInfo, showProfessionalInfo) || other.showProfessionalInfo == showProfessionalInfo)&&(identical(other.showInstagram, showInstagram) || other.showInstagram == showInstagram)&&(identical(other.showFacebook, showFacebook) || other.showFacebook == showFacebook)&&(identical(other.showLinkedin, showLinkedin) || other.showLinkedin == showLinkedin)&&(identical(other.showTwitter, showTwitter) || other.showTwitter == showTwitter)&&(identical(other.isFindmatch, isFindmatch) || other.isFindmatch == isFindmatch));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,showMobileNumber,showEmail,showFamilyInfo,showBusinessInfo,showProfessionalInfo);
+int get hashCode => Object.hash(runtimeType,id,userId,showMobileNumber,showEmail,showGotra,showFamilyInfo,showMaternalInfo,showBusinessInfo,showProfessionalInfo,showInstagram,showFacebook,showLinkedin,showTwitter,isFindmatch);
 
 @override
 String toString() {
-  return 'PrivacySettings(id: $id, userId: $userId, showMobileNumber: $showMobileNumber, showEmail: $showEmail, showFamilyInfo: $showFamilyInfo, showBusinessInfo: $showBusinessInfo, showProfessionalInfo: $showProfessionalInfo)';
+  return 'PrivacySettings(id: $id, userId: $userId, showMobileNumber: $showMobileNumber, showEmail: $showEmail, showGotra: $showGotra, showFamilyInfo: $showFamilyInfo, showMaternalInfo: $showMaternalInfo, showBusinessInfo: $showBusinessInfo, showProfessionalInfo: $showProfessionalInfo, showInstagram: $showInstagram, showFacebook: $showFacebook, showLinkedin: $showLinkedin, showTwitter: $showTwitter, isFindmatch: $isFindmatch)';
 }
 
 
@@ -1542,7 +1637,7 @@ abstract mixin class _$PrivacySettingsCopyWith<$Res> implements $PrivacySettings
   factory _$PrivacySettingsCopyWith(_PrivacySettings value, $Res Function(_PrivacySettings) _then) = __$PrivacySettingsCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? userId, bool? showMobileNumber, bool? showEmail, bool? showFamilyInfo, bool? showBusinessInfo, bool? showProfessionalInfo
+ String? id, String? userId, bool? showMobileNumber, bool? showEmail, bool? showGotra, bool? showFamilyInfo, bool? showMaternalInfo, bool? showBusinessInfo, bool? showProfessionalInfo, bool? showInstagram, bool? showFacebook, bool? showLinkedin, bool? showTwitter, bool? isFindmatch
 });
 
 
@@ -1559,15 +1654,22 @@ class __$PrivacySettingsCopyWithImpl<$Res>
 
 /// Create a copy of PrivacySettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? showMobileNumber = freezed,Object? showEmail = freezed,Object? showFamilyInfo = freezed,Object? showBusinessInfo = freezed,Object? showProfessionalInfo = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? showMobileNumber = freezed,Object? showEmail = freezed,Object? showGotra = freezed,Object? showFamilyInfo = freezed,Object? showMaternalInfo = freezed,Object? showBusinessInfo = freezed,Object? showProfessionalInfo = freezed,Object? showInstagram = freezed,Object? showFacebook = freezed,Object? showLinkedin = freezed,Object? showTwitter = freezed,Object? isFindmatch = freezed,}) {
   return _then(_PrivacySettings(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,showMobileNumber: freezed == showMobileNumber ? _self.showMobileNumber : showMobileNumber // ignore: cast_nullable_to_non_nullable
 as bool?,showEmail: freezed == showEmail ? _self.showEmail : showEmail // ignore: cast_nullable_to_non_nullable
+as bool?,showGotra: freezed == showGotra ? _self.showGotra : showGotra // ignore: cast_nullable_to_non_nullable
 as bool?,showFamilyInfo: freezed == showFamilyInfo ? _self.showFamilyInfo : showFamilyInfo // ignore: cast_nullable_to_non_nullable
+as bool?,showMaternalInfo: freezed == showMaternalInfo ? _self.showMaternalInfo : showMaternalInfo // ignore: cast_nullable_to_non_nullable
 as bool?,showBusinessInfo: freezed == showBusinessInfo ? _self.showBusinessInfo : showBusinessInfo // ignore: cast_nullable_to_non_nullable
 as bool?,showProfessionalInfo: freezed == showProfessionalInfo ? _self.showProfessionalInfo : showProfessionalInfo // ignore: cast_nullable_to_non_nullable
+as bool?,showInstagram: freezed == showInstagram ? _self.showInstagram : showInstagram // ignore: cast_nullable_to_non_nullable
+as bool?,showFacebook: freezed == showFacebook ? _self.showFacebook : showFacebook // ignore: cast_nullable_to_non_nullable
+as bool?,showLinkedin: freezed == showLinkedin ? _self.showLinkedin : showLinkedin // ignore: cast_nullable_to_non_nullable
+as bool?,showTwitter: freezed == showTwitter ? _self.showTwitter : showTwitter // ignore: cast_nullable_to_non_nullable
+as bool?,isFindmatch: freezed == isFindmatch ? _self.isFindmatch : isFindmatch // ignore: cast_nullable_to_non_nullable
 as bool?,
   ));
 }
@@ -1579,7 +1681,7 @@ as bool?,
 /// @nodoc
 mixin _$QrCodeDetails {
 
- String? get id; String? get code; String? get qrImageUrl;
+ String? get id; String? get code;@JsonKey(readValue: readQrUrl) String? get qrImageUrl;
 /// Create a copy of QrCodeDetails
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1612,7 +1714,7 @@ abstract mixin class $QrCodeDetailsCopyWith<$Res>  {
   factory $QrCodeDetailsCopyWith(QrCodeDetails value, $Res Function(QrCodeDetails) _then) = _$QrCodeDetailsCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? code, String? qrImageUrl
+ String? id, String? code,@JsonKey(readValue: readQrUrl) String? qrImageUrl
 });
 
 
@@ -1719,7 +1821,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? code,  String? qrImageUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? code, @JsonKey(readValue: readQrUrl)  String? qrImageUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _QrCodeDetails() when $default != null:
 return $default(_that.id,_that.code,_that.qrImageUrl);case _:
@@ -1740,7 +1842,7 @@ return $default(_that.id,_that.code,_that.qrImageUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? code,  String? qrImageUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? code, @JsonKey(readValue: readQrUrl)  String? qrImageUrl)  $default,) {final _that = this;
 switch (_that) {
 case _QrCodeDetails():
 return $default(_that.id,_that.code,_that.qrImageUrl);case _:
@@ -1760,7 +1862,7 @@ return $default(_that.id,_that.code,_that.qrImageUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? code,  String? qrImageUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? code, @JsonKey(readValue: readQrUrl)  String? qrImageUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _QrCodeDetails() when $default != null:
 return $default(_that.id,_that.code,_that.qrImageUrl);case _:
@@ -1775,12 +1877,12 @@ return $default(_that.id,_that.code,_that.qrImageUrl);case _:
 @JsonSerializable()
 
 class _QrCodeDetails implements QrCodeDetails {
-  const _QrCodeDetails({this.id, this.code, this.qrImageUrl});
+  const _QrCodeDetails({this.id, this.code, @JsonKey(readValue: readQrUrl) this.qrImageUrl});
   factory _QrCodeDetails.fromJson(Map<String, dynamic> json) => _$QrCodeDetailsFromJson(json);
 
 @override final  String? id;
 @override final  String? code;
-@override final  String? qrImageUrl;
+@override@JsonKey(readValue: readQrUrl) final  String? qrImageUrl;
 
 /// Create a copy of QrCodeDetails
 /// with the given fields replaced by the non-null parameter values.
@@ -1815,7 +1917,7 @@ abstract mixin class _$QrCodeDetailsCopyWith<$Res> implements $QrCodeDetailsCopy
   factory _$QrCodeDetailsCopyWith(_QrCodeDetails value, $Res Function(_QrCodeDetails) _then) = __$QrCodeDetailsCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? code, String? qrImageUrl
+ String? id, String? code,@JsonKey(readValue: readQrUrl) String? qrImageUrl
 });
 
 
@@ -1848,7 +1950,7 @@ as String?,
 /// @nodoc
 mixin _$OwnedFamilyMember {
 
- String? get id; String? get fullName; String? get gender; String? get dob; String? get relationshipType; bool? get isDeceased; String? get photoUrl; String? get linkedUserId;
+ String? get id; String? get fullName; String? get gender; String? get dob; String? get relationshipType; bool? get isDeceased; String? get photoUrl; String? get qrImageUrl; String? get linkedUserId;
 /// Create a copy of OwnedFamilyMember
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1861,16 +1963,16 @@ $OwnedFamilyMemberCopyWith<OwnedFamilyMember> get copyWith => _$OwnedFamilyMembe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OwnedFamilyMember&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.relationshipType, relationshipType) || other.relationshipType == relationshipType)&&(identical(other.isDeceased, isDeceased) || other.isDeceased == isDeceased)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.linkedUserId, linkedUserId) || other.linkedUserId == linkedUserId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OwnedFamilyMember&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.relationshipType, relationshipType) || other.relationshipType == relationshipType)&&(identical(other.isDeceased, isDeceased) || other.isDeceased == isDeceased)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.qrImageUrl, qrImageUrl) || other.qrImageUrl == qrImageUrl)&&(identical(other.linkedUserId, linkedUserId) || other.linkedUserId == linkedUserId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,gender,dob,relationshipType,isDeceased,photoUrl,linkedUserId);
+int get hashCode => Object.hash(runtimeType,id,fullName,gender,dob,relationshipType,isDeceased,photoUrl,qrImageUrl,linkedUserId);
 
 @override
 String toString() {
-  return 'OwnedFamilyMember(id: $id, fullName: $fullName, gender: $gender, dob: $dob, relationshipType: $relationshipType, isDeceased: $isDeceased, photoUrl: $photoUrl, linkedUserId: $linkedUserId)';
+  return 'OwnedFamilyMember(id: $id, fullName: $fullName, gender: $gender, dob: $dob, relationshipType: $relationshipType, isDeceased: $isDeceased, photoUrl: $photoUrl, qrImageUrl: $qrImageUrl, linkedUserId: $linkedUserId)';
 }
 
 
@@ -1881,7 +1983,7 @@ abstract mixin class $OwnedFamilyMemberCopyWith<$Res>  {
   factory $OwnedFamilyMemberCopyWith(OwnedFamilyMember value, $Res Function(OwnedFamilyMember) _then) = _$OwnedFamilyMemberCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? fullName, String? gender, String? dob, String? relationshipType, bool? isDeceased, String? photoUrl, String? linkedUserId
+ String? id, String? fullName, String? gender, String? dob, String? relationshipType, bool? isDeceased, String? photoUrl, String? qrImageUrl, String? linkedUserId
 });
 
 
@@ -1898,7 +2000,7 @@ class _$OwnedFamilyMemberCopyWithImpl<$Res>
 
 /// Create a copy of OwnedFamilyMember
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fullName = freezed,Object? gender = freezed,Object? dob = freezed,Object? relationshipType = freezed,Object? isDeceased = freezed,Object? photoUrl = freezed,Object? linkedUserId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fullName = freezed,Object? gender = freezed,Object? dob = freezed,Object? relationshipType = freezed,Object? isDeceased = freezed,Object? photoUrl = freezed,Object? qrImageUrl = freezed,Object? linkedUserId = freezed,}) {
   return _then(OwnedFamilyMember(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -1907,6 +2009,7 @@ as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non
 as String?,relationshipType: freezed == relationshipType ? _self.relationshipType : relationshipType // ignore: cast_nullable_to_non_nullable
 as String?,isDeceased: freezed == isDeceased ? _self.isDeceased : isDeceased // ignore: cast_nullable_to_non_nullable
 as bool?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String?,qrImageUrl: freezed == qrImageUrl ? _self.qrImageUrl : qrImageUrl // ignore: cast_nullable_to_non_nullable
 as String?,linkedUserId: freezed == linkedUserId ? _self.linkedUserId : linkedUserId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -1993,10 +2096,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? linkedUserId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? qrImageUrl,  String? linkedUserId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OwnedFamilyMember() when $default != null:
-return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.linkedUserId);case _:
+return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.qrImageUrl,_that.linkedUserId);case _:
   return orElse();
 
 }
@@ -2014,10 +2117,10 @@ return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? linkedUserId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? qrImageUrl,  String? linkedUserId)  $default,) {final _that = this;
 switch (_that) {
 case _OwnedFamilyMember():
-return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.linkedUserId);case _:
+return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.qrImageUrl,_that.linkedUserId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2034,10 +2137,10 @@ return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? linkedUserId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? fullName,  String? gender,  String? dob,  String? relationshipType,  bool? isDeceased,  String? photoUrl,  String? qrImageUrl,  String? linkedUserId)?  $default,) {final _that = this;
 switch (_that) {
 case _OwnedFamilyMember() when $default != null:
-return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.linkedUserId);case _:
+return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshipType,_that.isDeceased,_that.photoUrl,_that.qrImageUrl,_that.linkedUserId);case _:
   return null;
 
 }
@@ -2049,7 +2152,7 @@ return $default(_that.id,_that.fullName,_that.gender,_that.dob,_that.relationshi
 @JsonSerializable()
 
 class _OwnedFamilyMember implements OwnedFamilyMember {
-  const _OwnedFamilyMember({this.id, this.fullName, this.gender, this.dob, this.relationshipType, this.isDeceased, this.photoUrl, this.linkedUserId});
+  const _OwnedFamilyMember({this.id, this.fullName, this.gender, this.dob, this.relationshipType, this.isDeceased, this.photoUrl, this.qrImageUrl, this.linkedUserId});
   factory _OwnedFamilyMember.fromJson(Map<String, dynamic> json) => _$OwnedFamilyMemberFromJson(json);
 
 @override final  String? id;
@@ -2059,6 +2162,7 @@ class _OwnedFamilyMember implements OwnedFamilyMember {
 @override final  String? relationshipType;
 @override final  bool? isDeceased;
 @override final  String? photoUrl;
+@override final  String? qrImageUrl;
 @override final  String? linkedUserId;
 
 /// Create a copy of OwnedFamilyMember
@@ -2074,16 +2178,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OwnedFamilyMember&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.relationshipType, relationshipType) || other.relationshipType == relationshipType)&&(identical(other.isDeceased, isDeceased) || other.isDeceased == isDeceased)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.linkedUserId, linkedUserId) || other.linkedUserId == linkedUserId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OwnedFamilyMember&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.relationshipType, relationshipType) || other.relationshipType == relationshipType)&&(identical(other.isDeceased, isDeceased) || other.isDeceased == isDeceased)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.qrImageUrl, qrImageUrl) || other.qrImageUrl == qrImageUrl)&&(identical(other.linkedUserId, linkedUserId) || other.linkedUserId == linkedUserId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,gender,dob,relationshipType,isDeceased,photoUrl,linkedUserId);
+int get hashCode => Object.hash(runtimeType,id,fullName,gender,dob,relationshipType,isDeceased,photoUrl,qrImageUrl,linkedUserId);
 
 @override
 String toString() {
-  return 'OwnedFamilyMember(id: $id, fullName: $fullName, gender: $gender, dob: $dob, relationshipType: $relationshipType, isDeceased: $isDeceased, photoUrl: $photoUrl, linkedUserId: $linkedUserId)';
+  return 'OwnedFamilyMember(id: $id, fullName: $fullName, gender: $gender, dob: $dob, relationshipType: $relationshipType, isDeceased: $isDeceased, photoUrl: $photoUrl, qrImageUrl: $qrImageUrl, linkedUserId: $linkedUserId)';
 }
 
 
@@ -2094,7 +2198,7 @@ abstract mixin class _$OwnedFamilyMemberCopyWith<$Res> implements $OwnedFamilyMe
   factory _$OwnedFamilyMemberCopyWith(_OwnedFamilyMember value, $Res Function(_OwnedFamilyMember) _then) = __$OwnedFamilyMemberCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? fullName, String? gender, String? dob, String? relationshipType, bool? isDeceased, String? photoUrl, String? linkedUserId
+ String? id, String? fullName, String? gender, String? dob, String? relationshipType, bool? isDeceased, String? photoUrl, String? qrImageUrl, String? linkedUserId
 });
 
 
@@ -2111,7 +2215,7 @@ class __$OwnedFamilyMemberCopyWithImpl<$Res>
 
 /// Create a copy of OwnedFamilyMember
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fullName = freezed,Object? gender = freezed,Object? dob = freezed,Object? relationshipType = freezed,Object? isDeceased = freezed,Object? photoUrl = freezed,Object? linkedUserId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fullName = freezed,Object? gender = freezed,Object? dob = freezed,Object? relationshipType = freezed,Object? isDeceased = freezed,Object? photoUrl = freezed,Object? qrImageUrl = freezed,Object? linkedUserId = freezed,}) {
   return _then(_OwnedFamilyMember(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -2120,6 +2224,7 @@ as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non
 as String?,relationshipType: freezed == relationshipType ? _self.relationshipType : relationshipType // ignore: cast_nullable_to_non_nullable
 as String?,isDeceased: freezed == isDeceased ? _self.isDeceased : isDeceased // ignore: cast_nullable_to_non_nullable
 as bool?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String?,qrImageUrl: freezed == qrImageUrl ? _self.qrImageUrl : qrImageUrl // ignore: cast_nullable_to_non_nullable
 as String?,linkedUserId: freezed == linkedUserId ? _self.linkedUserId : linkedUserId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
