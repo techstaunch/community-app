@@ -26,10 +26,14 @@ _AuthData _$AuthDataFromJson(Map<String, dynamic> json) => _AuthData(
   accessToken: json['accessToken'] as String?,
   refreshToken: json['refreshToken'] as String?,
   isNewUser: json['isNewUser'] as bool?,
+  isApproved: json['isApproved'] as bool?,
+  membershipStatus: json['membershipStatus'] as String?,
 );
 
 Map<String, dynamic> _$AuthDataToJson(_AuthData instance) => <String, dynamic>{
   'accessToken': instance.accessToken,
   'refreshToken': instance.refreshToken,
   'isNewUser': instance.isNewUser,
+  'isApproved': instance.isApproved,
+  'membershipStatus': instance.membershipStatus,
 };

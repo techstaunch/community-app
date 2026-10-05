@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../utils/responsive_ext.dart';
 import '../../../theme/app_theme.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
 import 'package:community_connect/src/common_widgets/line_grid_animation.dart';
@@ -57,18 +58,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 80,
-                        height: 80,
+                        width: 80.r,
+                        height: 80.r,
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.18),
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(22.r),
                           border: Border.all(
                             color: Colors.white.withValues(alpha: 0.3),
                             width: 1.5,
                           ),
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           child: Image.asset(
                             'assets/images/app_logo.png',
                             fit: BoxFit.contain,
@@ -76,30 +77,32 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       TranslatedText(
-                        'SamajConnect',
+                        'Parichay',
                         style: Theme.of(context).textTheme.displaySmall
                             ?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
                             ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       TranslatedText(
                         'Your Community, Connected',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.white.withValues(alpha: 0.75),
                           letterSpacing: 1.1,
+                          fontSize: 14.sp,
                         ),
                       ),
                     ],
                   ),
                 ),
                 Positioned(
-                  bottom: 50,
-                  left: 40,
-                  right: 40,
+                  bottom: 50.h,
+                  left: 40.w,
+                  right: 40.w,
                   child: Column(
                     children: [
                       ElevatedButton(
@@ -113,18 +116,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             width: 1.5,
                           ),
                           elevation: 0,
+                          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
                         ),
-                        child: const TranslatedText(
+                        child: TranslatedText(
                           'Get Started ',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 15.sp),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
                       TranslatedText(
                         'Marwadi Samaj Community',
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.5),
-                          fontSize: 11,
+                          fontSize: 11.sp,
                         ),
                       ),
                     ],

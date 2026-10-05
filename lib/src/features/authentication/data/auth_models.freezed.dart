@@ -309,7 +309,7 @@ $AuthDataCopyWith<$Res>? get data {
 /// @nodoc
 mixin _$AuthData {
 
- String? get accessToken; String? get refreshToken; bool? get isNewUser;
+ String? get accessToken; String? get refreshToken; bool? get isNewUser; bool? get isApproved; String? get membershipStatus;
 /// Create a copy of AuthData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -322,16 +322,16 @@ $AuthDataCopyWith<AuthData> get copyWith => _$AuthDataCopyWithImpl<AuthData>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthData&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthData&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,isNewUser);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,isNewUser,isApproved,membershipStatus);
 
 @override
 String toString() {
-  return 'AuthData(accessToken: $accessToken, refreshToken: $refreshToken, isNewUser: $isNewUser)';
+  return 'AuthData(accessToken: $accessToken, refreshToken: $refreshToken, isNewUser: $isNewUser, isApproved: $isApproved, membershipStatus: $membershipStatus)';
 }
 
 
@@ -342,7 +342,7 @@ abstract mixin class $AuthDataCopyWith<$Res>  {
   factory $AuthDataCopyWith(AuthData value, $Res Function(AuthData) _then) = _$AuthDataCopyWithImpl;
 @useResult
 $Res call({
- String? accessToken, String? refreshToken, bool? isNewUser
+ String? accessToken, String? refreshToken, bool? isNewUser, bool? isApproved, String? membershipStatus
 });
 
 
@@ -359,12 +359,14 @@ class _$AuthDataCopyWithImpl<$Res>
 
 /// Create a copy of AuthData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,Object? isNewUser = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,Object? isNewUser = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,}) {
   return _then(AuthData(
 accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,isNewUser: freezed == isNewUser ? _self.isNewUser : isNewUser // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -449,10 +451,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  bool? isNewUser)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  bool? isNewUser,  bool? isApproved,  String? membershipStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthData() when $default != null:
-return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.isNewUser,_that.isApproved,_that.membershipStatus);case _:
   return orElse();
 
 }
@@ -470,10 +472,10 @@ return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  bool? isNewUser)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken,  bool? isNewUser,  bool? isApproved,  String? membershipStatus)  $default,) {final _that = this;
 switch (_that) {
 case _AuthData():
-return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.isNewUser,_that.isApproved,_that.membershipStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -490,10 +492,10 @@ return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? accessToken,  String? refreshToken,  bool? isNewUser)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? accessToken,  String? refreshToken,  bool? isNewUser,  bool? isApproved,  String? membershipStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthData() when $default != null:
-return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.isNewUser,_that.isApproved,_that.membershipStatus);case _:
   return null;
 
 }
@@ -505,12 +507,14 @@ return $default(_that.accessToken,_that.refreshToken,_that.isNewUser);case _:
 @JsonSerializable()
 
 class _AuthData implements AuthData {
-  const _AuthData({this.accessToken, this.refreshToken, this.isNewUser});
+  const _AuthData({this.accessToken, this.refreshToken, this.isNewUser, this.isApproved, this.membershipStatus});
   factory _AuthData.fromJson(Map<String, dynamic> json) => _$AuthDataFromJson(json);
 
 @override final  String? accessToken;
 @override final  String? refreshToken;
 @override final  bool? isNewUser;
+@override final  bool? isApproved;
+@override final  String? membershipStatus;
 
 /// Create a copy of AuthData
 /// with the given fields replaced by the non-null parameter values.
@@ -525,16 +529,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthData&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthData&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,isNewUser);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,isNewUser,isApproved,membershipStatus);
 
 @override
 String toString() {
-  return 'AuthData(accessToken: $accessToken, refreshToken: $refreshToken, isNewUser: $isNewUser)';
+  return 'AuthData(accessToken: $accessToken, refreshToken: $refreshToken, isNewUser: $isNewUser, isApproved: $isApproved, membershipStatus: $membershipStatus)';
 }
 
 
@@ -545,7 +549,7 @@ abstract mixin class _$AuthDataCopyWith<$Res> implements $AuthDataCopyWith<$Res>
   factory _$AuthDataCopyWith(_AuthData value, $Res Function(_AuthData) _then) = __$AuthDataCopyWithImpl;
 @override @useResult
 $Res call({
- String? accessToken, String? refreshToken, bool? isNewUser
+ String? accessToken, String? refreshToken, bool? isNewUser, bool? isApproved, String? membershipStatus
 });
 
 
@@ -562,12 +566,14 @@ class __$AuthDataCopyWithImpl<$Res>
 
 /// Create a copy of AuthData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,Object? isNewUser = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,Object? isNewUser = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,}) {
   return _then(_AuthData(
 accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,isNewUser: freezed == isNewUser ? _self.isNewUser : isNewUser // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

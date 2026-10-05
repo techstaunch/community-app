@@ -39,8 +39,12 @@ class AuthRepository {
     return AuthResponse.fromJson(response.data);
   }
 
-  Future<void> logout() async {
-    await _dio.post(ApiEndpoints.authLogout);
+  Future<void> logout(String refreshToken) async {
+    await _dio.post(ApiEndpoints.authLogout, data: {'refreshToken': refreshToken});
+  }
+
+  Future<void> deleteAccount() async {
+    await _dio.delete(ApiEndpoints.authDeleteAccount);
   }
 
   Future<AuthResponse> refreshToken(String refreshToken) async {

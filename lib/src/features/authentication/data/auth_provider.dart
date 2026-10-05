@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'auth_repository.dart';
 import '../../../core/storage/secure_storage_provider.dart';
+import '../../home/data/home_provider.dart';
+import '../../profile/data/profile_provider.dart';
+import '../../community/data/community_provider.dart';
 
 part 'auth_provider.g.dart';
 
@@ -25,9 +28,23 @@ class AuthController extends _$AuthController {
     return AuthState.loading;
   }
 
+  Future<void> _preloadHomeData() async {
+    try {
+      final profile = await ref.read(profileControllerProvider.future);
+      if (profile?.isApproved == true) {
+        await Future.wait([
+          ref.read(recentMembersProvider.future).catchError((_) => []),
+          ref.read(notificationsControllerProvider.future).catchError((_) => []),
+          ref.read(myCommunitiesControllerProvider.future).catchError((_) => []),
+        ]);
+      }
+    } catch (_) {}
+  }
+
   Future<void> checkAuthStatus() async {
     final token = await ref.read(authStorageProvider.notifier).getAccessToken();
     if (token != null) {
+      await _preloadHomeData();
       state = AuthState.verified;
       _startPeriodicRefresh();
     } else {
@@ -73,9 +90,11 @@ class AuthController extends _$AuthController {
         state = AuthState.pendingVerification;
       } else {
         state = AuthState.error;
+        throw Exception(response.message);
       }
     } catch (e) {
       state = AuthState.error;
+      rethrow;
     }
   }
 
@@ -95,14 +114,17 @@ class AuthController extends _$AuthController {
         if (response.data!.isNewUser == true || currentPurpose == 'Registration') {
           state = AuthState.onboarding;
         } else {
+          await _preloadHomeData();
           state = AuthState.verified;
           _startPeriodicRefresh();
         }
       } else {
         state = AuthState.error;
+        throw Exception(response.message);
       }
     } catch (e) {
       state = AuthState.error;
+      rethrow;
     }
   }
 
@@ -112,15 +134,41 @@ class AuthController extends _$AuthController {
     state = AuthState.unauthenticated;
   }
 
+  void completeOnboarding() async {
+    await _preloadHomeData();
+    state = AuthState.verified;
+    _startPeriodicRefresh();
+  }
+
   Future<void> logout() async {
     _refreshTimer?.cancel();
     try {
       final repo = ref.read(authRepositoryProvider);
-      await repo.logout();
+      final refreshToken = await ref.read(authStorageProvider.notifier).getRefreshToken();
+      if (refreshToken != null) {
+        await repo.logout(refreshToken);
+      }
     } catch (_) {} // Ignore logout errors
     finally {
       await ref.read(authStorageProvider.notifier).clearTokens();
       state = AuthState.unauthenticated;
+      ref.invalidate(recentMembersProvider);
+      ref.invalidate(profileControllerProvider);
+      ref.invalidate(notificationsControllerProvider);
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    _refreshTimer?.cancel();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      await repo.deleteAccount();
+    } finally {
+      await ref.read(authStorageProvider.notifier).clearTokens();
+      state = AuthState.unauthenticated;
+      ref.invalidate(recentMembersProvider);
+      ref.invalidate(profileControllerProvider);
+      ref.invalidate(notificationsControllerProvider);
     }
   }
 }

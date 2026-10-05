@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../theme/app_theme.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
+import 'package:community_connect/src/utils/responsive_ext.dart';
 
 class OnboardingScreen extends HookConsumerWidget {
   const OnboardingScreen({super.key});
@@ -51,7 +52,7 @@ class OnboardingScreen extends HookConsumerWidget {
                     _AnimatedHeroSection(imageAsset: page.imageAsset),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(36.0),
+                        padding: EdgeInsets.all(36.w),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -62,7 +63,7 @@ class OnboardingScreen extends HookConsumerWidget {
                                   .displayMedium
                                   ?.copyWith(color: AppColors.indigo),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.h),
                             TranslatedText(
                               page.description,
                               style: Theme.of(
@@ -79,7 +80,7 @@ class OnboardingScreen extends HookConsumerWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 36),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 36.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -87,23 +88,23 @@ class OnboardingScreen extends HookConsumerWidget {
                   onPressed: () {
                     context.go('/login');
                   },
-                  child: const TranslatedText(
+                  child: TranslatedText(
                     'Skip',
-                    style: TextStyle(color: AppColors.textMuted),
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 14.sp),
                   ),
                 ),
                 Row(
                   children: List.generate(
                     pages.length,
                     (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      width: currentPage.value == index ? 20 : 6,
-                      height: 6,
+                      margin: EdgeInsets.symmetric(horizontal: 3.w),
+                      width: currentPage.value == index ? 20.w : 6.w,
+                      height: 6.h,
                       decoration: BoxDecoration(
                         color: currentPage.value == index
                             ? AppColors.orange
                             : AppColors.border,
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: BorderRadius.circular(3.r),
                       ),
                     ),
                   ),
@@ -120,12 +121,12 @@ class OnboardingScreen extends HookConsumerWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 12.h,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                   ),
                   child: TranslatedText(
@@ -181,7 +182,7 @@ class _AnimatedHeroSectionState extends State<_AnimatedHeroSection>
       builder: (context, child) {
         final v = _controller.value;
         return Container(
-          height: 300,
+          height: 300.h,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               // Move the gradient start/end points significantly to create a "sweeping" or "breathing" effect
@@ -193,9 +194,9 @@ class _AnimatedHeroSectionState extends State<_AnimatedHeroSection>
                 Color.lerp(AppColors.orangeDark, AppColors.orange, v)!,
               ],
             ),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(36),
-              bottomRight: Radius.circular(36),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(36.r),
+              bottomRight: Radius.circular(36.r),
             ),
           ),
           child: Stack(
@@ -207,8 +208,8 @@ class _AnimatedHeroSectionState extends State<_AnimatedHeroSection>
                   child: Transform.scale(
                     scale: 1.0 + (math.sin(v * math.pi) * 0.04),
                     child: Container(
-                      width: 180,
-                      height: 180,
+                      width: 180.r,
+                      height: 180.r,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [

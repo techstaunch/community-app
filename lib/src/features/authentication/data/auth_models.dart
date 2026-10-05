@@ -20,6 +20,8 @@ abstract class AuthData with _$AuthData {
     String? accessToken,
     String? refreshToken,
     bool? isNewUser,
+    bool? isApproved,
+    String? membershipStatus,
   }) = _AuthData;
 
   factory AuthData.fromJson(Map<String, dynamic> json) => _$AuthDataFromJson(json);
