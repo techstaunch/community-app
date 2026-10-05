@@ -12,33 +12,30 @@ part of 'search_models.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$SearchResult {
 
- String? get id; String? get fullName; String? get profilePhotoUrl; String? get city; String? get gender; String? get designation; String? get companyName;
+ String? get id; String? get fullName; String? get profilePhotoUrl; String? get city; String? get gender; String? get dob; String? get designation; String? get companyName; String? get businessName; String? get mobileNumber; int? get familyMembersCount; bool? get isApproved; String? get membershipStatus; bool? get isVerified;
 /// Create a copy of SearchResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SearchResultCopyWith<SearchResult> get copyWith => _$SearchResultCopyWithImpl<SearchResult>(this as SearchResult, _$identity);
 
-  /// Serializes this SearchResult to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchResult&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.companyName, companyName) || other.companyName == companyName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchResult&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.familyMembersCount, familyMembersCount) || other.familyMembersCount == familyMembersCount)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,profilePhotoUrl,city,gender,designation,companyName);
+int get hashCode => Object.hash(runtimeType,id,fullName,profilePhotoUrl,city,gender,dob,designation,companyName,businessName,mobileNumber,familyMembersCount,isApproved,membershipStatus,isVerified);
 
 @override
 String toString() {
-  return 'SearchResult(id: $id, fullName: $fullName, profilePhotoUrl: $profilePhotoUrl, city: $city, gender: $gender, designation: $designation, companyName: $companyName)';
+  return 'SearchResult(id: $id, fullName: $fullName, profilePhotoUrl: $profilePhotoUrl, city: $city, gender: $gender, dob: $dob, designation: $designation, companyName: $companyName, businessName: $businessName, mobileNumber: $mobileNumber, familyMembersCount: $familyMembersCount, isApproved: $isApproved, membershipStatus: $membershipStatus, isVerified: $isVerified)';
 }
 
 
@@ -49,7 +46,7 @@ abstract mixin class $SearchResultCopyWith<$Res>  {
   factory $SearchResultCopyWith(SearchResult value, $Res Function(SearchResult) _then) = _$SearchResultCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? fullName, String? profilePhotoUrl, String? city, String? gender, String? designation, String? companyName
+ String? id, String? fullName, String? profilePhotoUrl, String? city, String? gender, String? dob, String? designation, String? companyName, String? businessName, String? mobileNumber, int? familyMembersCount, bool? isApproved, String? membershipStatus, bool? isVerified
 });
 
 
@@ -66,16 +63,23 @@ class _$SearchResultCopyWithImpl<$Res>
 
 /// Create a copy of SearchResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fullName = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? gender = freezed,Object? designation = freezed,Object? companyName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fullName = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? gender = freezed,Object? dob = freezed,Object? designation = freezed,Object? companyName = freezed,Object? businessName = freezed,Object? mobileNumber = freezed,Object? familyMembersCount = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,Object? isVerified = freezed,}) {
   return _then(SearchResult(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
+as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String?,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
 as String?,companyName: freezed == companyName ? _self.companyName : companyName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,businessName: freezed == businessName ? _self.businessName : businessName // ignore: cast_nullable_to_non_nullable
+as String?,mobileNumber: freezed == mobileNumber ? _self.mobileNumber : mobileNumber // ignore: cast_nullable_to_non_nullable
+as String?,familyMembersCount: freezed == familyMembersCount ? _self.familyMembersCount : familyMembersCount // ignore: cast_nullable_to_non_nullable
+as int?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,isVerified: freezed == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
@@ -160,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? designation,  String? companyName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? dob,  String? designation,  String? companyName,  String? businessName,  String? mobileNumber,  int? familyMembersCount,  bool? isApproved,  String? membershipStatus,  bool? isVerified)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchResult() when $default != null:
-return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.designation,_that.companyName);case _:
+return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.dob,_that.designation,_that.companyName,_that.businessName,_that.mobileNumber,_that.familyMembersCount,_that.isApproved,_that.membershipStatus,_that.isVerified);case _:
   return orElse();
 
 }
@@ -181,10 +185,10 @@ return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.g
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? designation,  String? companyName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? dob,  String? designation,  String? companyName,  String? businessName,  String? mobileNumber,  int? familyMembersCount,  bool? isApproved,  String? membershipStatus,  bool? isVerified)  $default,) {final _that = this;
 switch (_that) {
 case _SearchResult():
-return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.designation,_that.companyName);case _:
+return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.dob,_that.designation,_that.companyName,_that.businessName,_that.mobileNumber,_that.familyMembersCount,_that.isApproved,_that.membershipStatus,_that.isVerified);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +205,10 @@ return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.g
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? designation,  String? companyName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? fullName,  String? profilePhotoUrl,  String? city,  String? gender,  String? dob,  String? designation,  String? companyName,  String? businessName,  String? mobileNumber,  int? familyMembersCount,  bool? isApproved,  String? membershipStatus,  bool? isVerified)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchResult() when $default != null:
-return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.designation,_that.companyName);case _:
+return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.gender,_that.dob,_that.designation,_that.companyName,_that.businessName,_that.mobileNumber,_that.familyMembersCount,_that.isApproved,_that.membershipStatus,_that.isVerified);case _:
   return null;
 
 }
@@ -213,19 +217,26 @@ return $default(_that.id,_that.fullName,_that.profilePhotoUrl,_that.city,_that.g
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _SearchResult implements SearchResult {
-  const _SearchResult({this.id, this.fullName, this.profilePhotoUrl, this.city, this.gender, this.designation, this.companyName});
-  factory _SearchResult.fromJson(Map<String, dynamic> json) => _$SearchResultFromJson(json);
+
+class _SearchResult extends SearchResult {
+  const _SearchResult({this.id, this.fullName, this.profilePhotoUrl, this.city, this.gender, this.dob, this.designation, this.companyName, this.businessName, this.mobileNumber, this.familyMembersCount, this.isApproved, this.membershipStatus, this.isVerified}): super._();
+  
 
 @override final  String? id;
 @override final  String? fullName;
 @override final  String? profilePhotoUrl;
 @override final  String? city;
 @override final  String? gender;
+@override final  String? dob;
 @override final  String? designation;
 @override final  String? companyName;
+@override final  String? businessName;
+@override final  String? mobileNumber;
+@override final  int? familyMembersCount;
+@override final  bool? isApproved;
+@override final  String? membershipStatus;
+@override final  bool? isVerified;
 
 /// Create a copy of SearchResult
 /// with the given fields replaced by the non-null parameter values.
@@ -233,23 +244,20 @@ class _SearchResult implements SearchResult {
 @pragma('vm:prefer-inline')
 _$SearchResultCopyWith<_SearchResult> get copyWith => __$SearchResultCopyWithImpl<_SearchResult>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$SearchResultToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchResult&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.companyName, companyName) || other.companyName == companyName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchResult&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.companyName, companyName) || other.companyName == companyName)&&(identical(other.businessName, businessName) || other.businessName == businessName)&&(identical(other.mobileNumber, mobileNumber) || other.mobileNumber == mobileNumber)&&(identical(other.familyMembersCount, familyMembersCount) || other.familyMembersCount == familyMembersCount)&&(identical(other.isApproved, isApproved) || other.isApproved == isApproved)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus)&&(identical(other.isVerified, isVerified) || other.isVerified == isVerified));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,profilePhotoUrl,city,gender,designation,companyName);
+int get hashCode => Object.hash(runtimeType,id,fullName,profilePhotoUrl,city,gender,dob,designation,companyName,businessName,mobileNumber,familyMembersCount,isApproved,membershipStatus,isVerified);
 
 @override
 String toString() {
-  return 'SearchResult(id: $id, fullName: $fullName, profilePhotoUrl: $profilePhotoUrl, city: $city, gender: $gender, designation: $designation, companyName: $companyName)';
+  return 'SearchResult(id: $id, fullName: $fullName, profilePhotoUrl: $profilePhotoUrl, city: $city, gender: $gender, dob: $dob, designation: $designation, companyName: $companyName, businessName: $businessName, mobileNumber: $mobileNumber, familyMembersCount: $familyMembersCount, isApproved: $isApproved, membershipStatus: $membershipStatus, isVerified: $isVerified)';
 }
 
 
@@ -260,7 +268,7 @@ abstract mixin class _$SearchResultCopyWith<$Res> implements $SearchResultCopyWi
   factory _$SearchResultCopyWith(_SearchResult value, $Res Function(_SearchResult) _then) = __$SearchResultCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? fullName, String? profilePhotoUrl, String? city, String? gender, String? designation, String? companyName
+ String? id, String? fullName, String? profilePhotoUrl, String? city, String? gender, String? dob, String? designation, String? companyName, String? businessName, String? mobileNumber, int? familyMembersCount, bool? isApproved, String? membershipStatus, bool? isVerified
 });
 
 
@@ -277,16 +285,23 @@ class __$SearchResultCopyWithImpl<$Res>
 
 /// Create a copy of SearchResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fullName = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? gender = freezed,Object? designation = freezed,Object? companyName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fullName = freezed,Object? profilePhotoUrl = freezed,Object? city = freezed,Object? gender = freezed,Object? dob = freezed,Object? designation = freezed,Object? companyName = freezed,Object? businessName = freezed,Object? mobileNumber = freezed,Object? familyMembersCount = freezed,Object? isApproved = freezed,Object? membershipStatus = freezed,Object? isVerified = freezed,}) {
   return _then(_SearchResult(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fullName: freezed == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
+as String?,dob: freezed == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String?,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
 as String?,companyName: freezed == companyName ? _self.companyName : companyName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,businessName: freezed == businessName ? _self.businessName : businessName // ignore: cast_nullable_to_non_nullable
+as String?,mobileNumber: freezed == mobileNumber ? _self.mobileNumber : mobileNumber // ignore: cast_nullable_to_non_nullable
+as String?,familyMembersCount: freezed == familyMembersCount ? _self.familyMembersCount : familyMembersCount // ignore: cast_nullable_to_non_nullable
+as int?,isApproved: freezed == isApproved ? _self.isApproved : isApproved // ignore: cast_nullable_to_non_nullable
+as bool?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
+as String?,isVerified: freezed == isVerified ? _self.isVerified : isVerified // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 

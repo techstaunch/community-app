@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Community {
 
- String? get id; String? get name; String? get description; String? get logoUrl; String? get inviteCode;
+ String? get id; String? get name; String? get description; String? get logoUrl; String? get inviteCode; String? get membershipStatus;
 /// Create a copy of Community
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $CommunityCopyWith<Community> get copyWith => _$CommunityCopyWithImpl<Community>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Community&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl)&&(identical(other.inviteCode, inviteCode) || other.inviteCode == inviteCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Community&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl)&&(identical(other.inviteCode, inviteCode) || other.inviteCode == inviteCode)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,logoUrl,inviteCode);
+int get hashCode => Object.hash(runtimeType,id,name,description,logoUrl,inviteCode,membershipStatus);
 
 @override
 String toString() {
-  return 'Community(id: $id, name: $name, description: $description, logoUrl: $logoUrl, inviteCode: $inviteCode)';
+  return 'Community(id: $id, name: $name, description: $description, logoUrl: $logoUrl, inviteCode: $inviteCode, membershipStatus: $membershipStatus)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $CommunityCopyWith<$Res>  {
   factory $CommunityCopyWith(Community value, $Res Function(Community) _then) = _$CommunityCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? name, String? description, String? logoUrl, String? inviteCode
+ String? id, String? name, String? description, String? logoUrl, String? inviteCode, String? membershipStatus
 });
 
 
@@ -66,13 +66,14 @@ class _$CommunityCopyWithImpl<$Res>
 
 /// Create a copy of Community
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? logoUrl = freezed,Object? inviteCode = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? logoUrl = freezed,Object? inviteCode = freezed,Object? membershipStatus = freezed,}) {
   return _then(Community(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,logoUrl: freezed == logoUrl ? _self.logoUrl : logoUrl // ignore: cast_nullable_to_non_nullable
 as String?,inviteCode: freezed == inviteCode ? _self.inviteCode : inviteCode // ignore: cast_nullable_to_non_nullable
+as String?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode,  String? membershipStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Community() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode);case _:
+return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode,_that.membershipStatus);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.invite
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode,  String? membershipStatus)  $default,) {final _that = this;
 switch (_that) {
 case _Community():
-return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode);case _:
+return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode,_that.membershipStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.invite
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? description,  String? logoUrl,  String? inviteCode,  String? membershipStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _Community() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode);case _:
+return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.inviteCode,_that.membershipStatus);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.id,_that.name,_that.description,_that.logoUrl,_that.invite
 @JsonSerializable()
 
 class _Community implements Community {
-  const _Community({this.id, this.name, this.description, this.logoUrl, this.inviteCode});
+  const _Community({this.id, this.name, this.description, this.logoUrl, this.inviteCode, this.membershipStatus});
   factory _Community.fromJson(Map<String, dynamic> json) => _$CommunityFromJson(json);
 
 @override final  String? id;
@@ -222,6 +223,7 @@ class _Community implements Community {
 @override final  String? description;
 @override final  String? logoUrl;
 @override final  String? inviteCode;
+@override final  String? membershipStatus;
 
 /// Create a copy of Community
 /// with the given fields replaced by the non-null parameter values.
@@ -236,16 +238,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Community&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl)&&(identical(other.inviteCode, inviteCode) || other.inviteCode == inviteCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Community&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl)&&(identical(other.inviteCode, inviteCode) || other.inviteCode == inviteCode)&&(identical(other.membershipStatus, membershipStatus) || other.membershipStatus == membershipStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,logoUrl,inviteCode);
+int get hashCode => Object.hash(runtimeType,id,name,description,logoUrl,inviteCode,membershipStatus);
 
 @override
 String toString() {
-  return 'Community(id: $id, name: $name, description: $description, logoUrl: $logoUrl, inviteCode: $inviteCode)';
+  return 'Community(id: $id, name: $name, description: $description, logoUrl: $logoUrl, inviteCode: $inviteCode, membershipStatus: $membershipStatus)';
 }
 
 
@@ -256,7 +258,7 @@ abstract mixin class _$CommunityCopyWith<$Res> implements $CommunityCopyWith<$Re
   factory _$CommunityCopyWith(_Community value, $Res Function(_Community) _then) = __$CommunityCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? name, String? description, String? logoUrl, String? inviteCode
+ String? id, String? name, String? description, String? logoUrl, String? inviteCode, String? membershipStatus
 });
 
 
@@ -273,18 +275,321 @@ class __$CommunityCopyWithImpl<$Res>
 
 /// Create a copy of Community
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? logoUrl = freezed,Object? inviteCode = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? logoUrl = freezed,Object? inviteCode = freezed,Object? membershipStatus = freezed,}) {
   return _then(_Community(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,logoUrl: freezed == logoUrl ? _self.logoUrl : logoUrl // ignore: cast_nullable_to_non_nullable
 as String?,inviteCode: freezed == inviteCode ? _self.inviteCode : inviteCode // ignore: cast_nullable_to_non_nullable
+as String?,membershipStatus: freezed == membershipStatus ? _self.membershipStatus : membershipStatus // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
 
+}
+
+
+/// @nodoc
+mixin _$CommunityMembership {
+
+ String? get id; String? get communityId; String? get userId; String? get role; String? get status; Community? get community;
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CommunityMembershipCopyWith<CommunityMembership> get copyWith => _$CommunityMembershipCopyWithImpl<CommunityMembership>(this as CommunityMembership, _$identity);
+
+  /// Serializes this CommunityMembership to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommunityMembership&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.role, role) || other.role == role)&&(identical(other.status, status) || other.status == status)&&(identical(other.community, community) || other.community == community));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,userId,role,status,community);
+
+@override
+String toString() {
+  return 'CommunityMembership(id: $id, communityId: $communityId, userId: $userId, role: $role, status: $status, community: $community)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CommunityMembershipCopyWith<$Res>  {
+  factory $CommunityMembershipCopyWith(CommunityMembership value, $Res Function(CommunityMembership) _then) = _$CommunityMembershipCopyWithImpl;
+@useResult
+$Res call({
+ String? id, String? communityId, String? userId, String? role, String? status, Community? community
+});
+
+
+$CommunityCopyWith<$Res>? get community;
+
+}
+/// @nodoc
+class _$CommunityMembershipCopyWithImpl<$Res>
+    implements $CommunityMembershipCopyWith<$Res> {
+  _$CommunityMembershipCopyWithImpl(this._self, this._then);
+
+  final CommunityMembership _self;
+  final $Res Function(CommunityMembership) _then;
+
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? communityId = freezed,Object? userId = freezed,Object? role = freezed,Object? status = freezed,Object? community = freezed,}) {
+  return _then(CommunityMembership(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,community: freezed == community ? _self.community : community // ignore: cast_nullable_to_non_nullable
+as Community?,
+  ));
+}
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityCopyWith<$Res>? get community {
+    if (_self.community == null) {
+    return null;
+  }
+
+  return $CommunityCopyWith<$Res>(_self.community!, (value) {
+    return _then(_self.copyWith(community: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [CommunityMembership].
+extension CommunityMembershipPatterns on CommunityMembership {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CommunityMembership value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CommunityMembership() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CommunityMembership value)  $default,){
+final _that = this;
+switch (_that) {
+case _CommunityMembership():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CommunityMembership value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CommunityMembership() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? userId,  String? role,  String? status,  Community? community)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CommunityMembership() when $default != null:
+return $default(_that.id,_that.communityId,_that.userId,_that.role,_that.status,_that.community);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? userId,  String? role,  String? status,  Community? community)  $default,) {final _that = this;
+switch (_that) {
+case _CommunityMembership():
+return $default(_that.id,_that.communityId,_that.userId,_that.role,_that.status,_that.community);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? communityId,  String? userId,  String? role,  String? status,  Community? community)?  $default,) {final _that = this;
+switch (_that) {
+case _CommunityMembership() when $default != null:
+return $default(_that.id,_that.communityId,_that.userId,_that.role,_that.status,_that.community);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _CommunityMembership implements CommunityMembership {
+  const _CommunityMembership({this.id, this.communityId, this.userId, this.role, this.status, this.community});
+  factory _CommunityMembership.fromJson(Map<String, dynamic> json) => _$CommunityMembershipFromJson(json);
+
+@override final  String? id;
+@override final  String? communityId;
+@override final  String? userId;
+@override final  String? role;
+@override final  String? status;
+@override final  Community? community;
+
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CommunityMembershipCopyWith<_CommunityMembership> get copyWith => __$CommunityMembershipCopyWithImpl<_CommunityMembership>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$CommunityMembershipToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommunityMembership&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.role, role) || other.role == role)&&(identical(other.status, status) || other.status == status)&&(identical(other.community, community) || other.community == community));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,communityId,userId,role,status,community);
+
+@override
+String toString() {
+  return 'CommunityMembership(id: $id, communityId: $communityId, userId: $userId, role: $role, status: $status, community: $community)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CommunityMembershipCopyWith<$Res> implements $CommunityMembershipCopyWith<$Res> {
+  factory _$CommunityMembershipCopyWith(_CommunityMembership value, $Res Function(_CommunityMembership) _then) = __$CommunityMembershipCopyWithImpl;
+@override @useResult
+$Res call({
+ String? id, String? communityId, String? userId, String? role, String? status, Community? community
+});
+
+
+@override $CommunityCopyWith<$Res>? get community;
+
+}
+/// @nodoc
+class __$CommunityMembershipCopyWithImpl<$Res>
+    implements _$CommunityMembershipCopyWith<$Res> {
+  __$CommunityMembershipCopyWithImpl(this._self, this._then);
+
+  final _CommunityMembership _self;
+  final $Res Function(_CommunityMembership) _then;
+
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? communityId = freezed,Object? userId = freezed,Object? role = freezed,Object? status = freezed,Object? community = freezed,}) {
+  return _then(_CommunityMembership(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
+as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,community: freezed == community ? _self.community : community // ignore: cast_nullable_to_non_nullable
+as Community?,
+  ));
+}
+
+/// Create a copy of CommunityMembership
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityCopyWith<$Res>? get community {
+    if (_self.community == null) {
+    return null;
+  }
+
+  return $CommunityCopyWith<$Res>(_self.community!, (value) {
+    return _then(_self.copyWith(community: value));
+  });
+}
 }
 
 
@@ -841,7 +1146,7 @@ as String?,
 /// @nodoc
 mixin _$Event {
 
- String? get id; String? get communityId; String? get title; String? get description; String? get eventDate; String? get location; String? get createdAt;
+ String? get id; String? get communityId; String? get title; String? get description; String? get eventDate; String? get location; String? get ziingupEventId; String? get ziingupEventUrl; String? get createdAt;
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -854,16 +1159,16 @@ $EventCopyWith<Event> get copyWith => _$EventCopyWithImpl<Event>(this as Event, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.ziingupEventId, ziingupEventId) || other.ziingupEventId == ziingupEventId)&&(identical(other.ziingupEventUrl, ziingupEventUrl) || other.ziingupEventUrl == ziingupEventUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,createdAt);
+int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,ziingupEventId,ziingupEventUrl,createdAt);
 
 @override
 String toString() {
-  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, createdAt: $createdAt)';
+  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, ziingupEventId: $ziingupEventId, ziingupEventUrl: $ziingupEventUrl, createdAt: $createdAt)';
 }
 
 
@@ -874,7 +1179,7 @@ abstract mixin class $EventCopyWith<$Res>  {
   factory $EventCopyWith(Event value, $Res Function(Event) _then) = _$EventCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? createdAt
+ String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? ziingupEventId, String? ziingupEventUrl, String? createdAt
 });
 
 
@@ -891,7 +1196,7 @@ class _$EventCopyWithImpl<$Res>
 
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? ziingupEventId = freezed,Object? ziingupEventUrl = freezed,Object? createdAt = freezed,}) {
   return _then(Event(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
@@ -899,6 +1204,8 @@ as String?,title: freezed == title ? _self.title : title // ignore: cast_nullabl
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,eventDate: freezed == eventDate ? _self.eventDate : eventDate // ignore: cast_nullable_to_non_nullable
 as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,ziingupEventId: freezed == ziingupEventId ? _self.ziingupEventId : ziingupEventId // ignore: cast_nullable_to_non_nullable
+as String?,ziingupEventUrl: freezed == ziingupEventUrl ? _self.ziingupEventUrl : ziingupEventUrl // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -985,10 +1292,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? ziingupEventId,  String? ziingupEventUrl,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Event() when $default != null:
-return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.ziingupEventId,_that.ziingupEventUrl,_that.createdAt);case _:
   return orElse();
 
 }
@@ -1006,10 +1313,10 @@ return $default(_that.id,_that.communityId,_that.title,_that.description,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? ziingupEventId,  String? ziingupEventUrl,  String? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Event():
-return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.ziingupEventId,_that.ziingupEventUrl,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1026,10 +1333,10 @@ return $default(_that.id,_that.communityId,_that.title,_that.description,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? communityId,  String? title,  String? description,  String? eventDate,  String? location,  String? ziingupEventId,  String? ziingupEventUrl,  String? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Event() when $default != null:
-return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.createdAt);case _:
+return $default(_that.id,_that.communityId,_that.title,_that.description,_that.eventDate,_that.location,_that.ziingupEventId,_that.ziingupEventUrl,_that.createdAt);case _:
   return null;
 
 }
@@ -1041,7 +1348,7 @@ return $default(_that.id,_that.communityId,_that.title,_that.description,_that.e
 @JsonSerializable()
 
 class _Event implements Event {
-  const _Event({this.id, this.communityId, this.title, this.description, this.eventDate, this.location, this.createdAt});
+  const _Event({this.id, this.communityId, this.title, this.description, this.eventDate, this.location, this.ziingupEventId, this.ziingupEventUrl, this.createdAt});
   factory _Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
 @override final  String? id;
@@ -1050,6 +1357,8 @@ class _Event implements Event {
 @override final  String? description;
 @override final  String? eventDate;
 @override final  String? location;
+@override final  String? ziingupEventId;
+@override final  String? ziingupEventUrl;
 @override final  String? createdAt;
 
 /// Create a copy of Event
@@ -1065,16 +1374,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Event&&(identical(other.id, id) || other.id == id)&&(identical(other.communityId, communityId) || other.communityId == communityId)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.eventDate, eventDate) || other.eventDate == eventDate)&&(identical(other.location, location) || other.location == location)&&(identical(other.ziingupEventId, ziingupEventId) || other.ziingupEventId == ziingupEventId)&&(identical(other.ziingupEventUrl, ziingupEventUrl) || other.ziingupEventUrl == ziingupEventUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,createdAt);
+int get hashCode => Object.hash(runtimeType,id,communityId,title,description,eventDate,location,ziingupEventId,ziingupEventUrl,createdAt);
 
 @override
 String toString() {
-  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, createdAt: $createdAt)';
+  return 'Event(id: $id, communityId: $communityId, title: $title, description: $description, eventDate: $eventDate, location: $location, ziingupEventId: $ziingupEventId, ziingupEventUrl: $ziingupEventUrl, createdAt: $createdAt)';
 }
 
 
@@ -1085,7 +1394,7 @@ abstract mixin class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
   factory _$EventCopyWith(_Event value, $Res Function(_Event) _then) = __$EventCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? createdAt
+ String? id, String? communityId, String? title, String? description, String? eventDate, String? location, String? ziingupEventId, String? ziingupEventUrl, String? createdAt
 });
 
 
@@ -1102,7 +1411,7 @@ class __$EventCopyWithImpl<$Res>
 
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? communityId = freezed,Object? title = freezed,Object? description = freezed,Object? eventDate = freezed,Object? location = freezed,Object? ziingupEventId = freezed,Object? ziingupEventUrl = freezed,Object? createdAt = freezed,}) {
   return _then(_Event(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,communityId: freezed == communityId ? _self.communityId : communityId // ignore: cast_nullable_to_non_nullable
@@ -1110,6 +1419,8 @@ as String?,title: freezed == title ? _self.title : title // ignore: cast_nullabl
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,eventDate: freezed == eventDate ? _self.eventDate : eventDate // ignore: cast_nullable_to_non_nullable
 as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,ziingupEventId: freezed == ziingupEventId ? _self.ziingupEventId : ziingupEventId // ignore: cast_nullable_to_non_nullable
+as String?,ziingupEventUrl: freezed == ziingupEventUrl ? _self.ziingupEventUrl : ziingupEventUrl // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

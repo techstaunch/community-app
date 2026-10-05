@@ -12,6 +12,7 @@ _Community _$CommunityFromJson(Map<String, dynamic> json) => _Community(
   description: json['description'] as String?,
   logoUrl: json['logoUrl'] as String?,
   inviteCode: json['inviteCode'] as String?,
+  membershipStatus: json['membershipStatus'] as String?,
 );
 
 Map<String, dynamic> _$CommunityToJson(_Community instance) =>
@@ -21,7 +22,31 @@ Map<String, dynamic> _$CommunityToJson(_Community instance) =>
       'description': instance.description,
       'logoUrl': instance.logoUrl,
       'inviteCode': instance.inviteCode,
+      'membershipStatus': instance.membershipStatus,
     };
+
+_CommunityMembership _$CommunityMembershipFromJson(Map<String, dynamic> json) =>
+    _CommunityMembership(
+      id: json['id'] as String?,
+      communityId: json['communityId'] as String?,
+      userId: json['userId'] as String?,
+      role: json['role'] as String?,
+      status: json['status'] as String?,
+      community: json['community'] == null
+          ? null
+          : Community.fromJson(json['community'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CommunityMembershipToJson(
+  _CommunityMembership instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'communityId': instance.communityId,
+  'userId': instance.userId,
+  'role': instance.role,
+  'status': instance.status,
+  'community': instance.community,
+};
 
 _CommunityMember _$CommunityMemberFromJson(Map<String, dynamic> json) =>
     _CommunityMember(
@@ -66,6 +91,8 @@ _Event _$EventFromJson(Map<String, dynamic> json) => _Event(
   description: json['description'] as String?,
   eventDate: json['eventDate'] as String?,
   location: json['location'] as String?,
+  ziingupEventId: json['ziingupEventId'] as String?,
+  ziingupEventUrl: json['ziingupEventUrl'] as String?,
   createdAt: json['createdAt'] as String?,
 );
 
@@ -76,5 +103,7 @@ Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
   'description': instance.description,
   'eventDate': instance.eventDate,
   'location': instance.location,
+  'ziingupEventId': instance.ziingupEventId,
+  'ziingupEventUrl': instance.ziingupEventUrl,
   'createdAt': instance.createdAt,
 };

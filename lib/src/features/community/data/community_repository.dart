@@ -26,7 +26,17 @@ class CommunityRepository {
   Future<List<Community>> getMyMemberships() async {
     final response = await _dio.get(ApiEndpoints.communitiesMyMemberships);
     final data = response.data['data'] as List;
-    return data.map((e) => Community.fromJson(e['community'])).toList();
+    return data.map((e) {
+      if (e is Map<String, dynamic>) {
+        final comm = e['community'];
+        if (comm is Map<String, dynamic>) {
+          final commMap = Map<String, dynamic>.from(comm);
+          commMap['membershipStatus'] = e['status'] ?? commMap['membershipStatus'];
+          return Community.fromJson(commMap);
+        }
+      }
+      return Community.fromJson(e['community'] ?? e);
+    }).toList();
   }
 
   Future<Community> createCommunity(Map<String, dynamic> data) async {
@@ -34,44 +44,24 @@ class CommunityRepository {
     return Community.fromJson(response.data['data']);
   }
 
-  Future<List<CommunityMember>> getCommunityMembers(String communityId, {int page = 1, int limit = 10}) async {
+  Future<List<AppNotification>> getNotifications({String source = 'ALL'}) async {
     final response = await _dio.get(
-      '${ApiEndpoints.communities}/$communityId/members',
-      queryParameters: {'page': page, 'limit': limit},
+      ApiEndpoints.notifications,
+      queryParameters: {'source': source},
     );
-    final data = response.data['data'] as List;
-    return data.map((e) => CommunityMember.fromJson(e)).toList();
+    final data = response.data['data'] as List? ?? [];
+    return data.map((e) => AppNotification.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<void> approveJoinRequest(String communityId, String membershipId) async {
-    await _dio.post(
-      '${ApiEndpoints.communities}/$communityId/approve',
-      data: {'membershipId': membershipId},
-    );
-  }
-
-  Future<void> rejectJoinRequest(String communityId, String membershipId) async {
-    await _dio.post(
-      '${ApiEndpoints.communities}/$communityId/reject',
-      data: {'membershipId': membershipId},
-    );
-  }
-
-  Future<List<Announcement>> getAnnouncements(String communityId, {int page = 1, int limit = 10}) async {
-    final response = await _dio.get(
-      '/admin/$communityId/announcements',
-      queryParameters: {'page': page, 'limit': limit},
-    );
-    final data = response.data['data'] as List;
-    return data.map((e) => Announcement.fromJson(e)).toList();
-  }
-
-  Future<List<Event>> getEvents(String communityId, {int page = 1, int limit = 10}) async {
-    final response = await _dio.get(
-      '/admin/$communityId/events',
-      queryParameters: {'page': page, 'limit': limit},
-    );
-    final data = response.data['data'] as List;
-    return data.map((e) => Event.fromJson(e)).toList();
+  Future<void> markNotificationAsRead(String id) async {
+    try {
+      await _dio.post(ApiEndpoints.notificationRead(id));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 405) {
+        await _dio.patch(ApiEndpoints.notificationRead(id));
+      } else {
+        rethrow;
+      }
+    }
   }
 }
