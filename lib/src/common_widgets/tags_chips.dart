@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive_ext.dart';
 import '../theme/app_theme.dart';
 
 class Tag extends StatelessWidget {
@@ -34,16 +35,16 @@ class Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: 11,
+          fontSize: 11.sp,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -55,12 +56,14 @@ class CustomChip extends StatelessWidget {
   final String text;
   final bool isActive;
   final VoidCallback? onTap;
+  final IconData? icon;
 
   const CustomChip({
     super.key,
     required this.text,
     this.isActive = false,
     this.onTap,
+    this.icon,
   });
 
   @override
@@ -68,23 +71,36 @@ class CustomChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.all(3),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        margin: EdgeInsets.all(3.r),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
         decoration: BoxDecoration(
           color: isActive ? AppColors.orangeLight : AppColors.cream,
           border: Border.all(
             color: isActive ? AppColors.orange : AppColors.border,
             width: 1.5,
           ),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 12,
-            color: isActive ? AppColors.orangeDark : AppColors.textDark,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                size: 14.r,
+                color: isActive ? AppColors.orangeDark : AppColors.textDark,
+              ),
+              SizedBox(width: 5.w),
+            ],
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: isActive ? AppColors.orangeDark : AppColors.textDark,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
         ),
       ),
     );

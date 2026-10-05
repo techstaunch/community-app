@@ -7,7 +7,6 @@ import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/authentication/presentation/login_screen.dart';
 import '../features/authentication/presentation/otp_screen.dart';
 import '../features/authentication/presentation/register_screen.dart';
-import '../features/authentication/presentation/pending_verification_screen.dart';
 import '../features/authentication/data/auth_provider.dart';
 
 import '../features/main_navigation/presentation/main_scaffold.dart';
@@ -15,13 +14,14 @@ import '../features/home/presentation/home_screen.dart';
 import '../features/search/presentation/search_screen.dart';
 import '../features/search/presentation/biodata_screen.dart';
 import '../features/family_tree/presentation/family_tree_screen.dart';
+import '../features/family_tree/presentation/member_family_tree_screen.dart';
 import '../features/family_tree/presentation/add_family_screen.dart';
 import '../features/profile/presentation/my_profile_screen.dart';
 import '../features/profile/presentation/profile_view_screen.dart';
 import '../features/profile/presentation/work_profile_screen.dart';
 import '../features/profile/presentation/my_qr_code_screen.dart';
+import '../features/profile/presentation/blocked_users_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
-import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/community/presentation/communities_screen.dart';
 import '../features/community/presentation/community_detail_screen.dart';
 
@@ -47,7 +47,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     refreshListenable: authStateListenable,
-    redirect: (context, state) {
+    redirect: (context, state) async {
       // Read the current state dynamically inside the redirect
       final authState = ref.read(authControllerProvider);
       
@@ -121,10 +121,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
-        path: '/pending_verification',
-        builder: (context, state) => const PendingVerificationScreen(),
-      ),
-      GoRoute(
         path: '/edit_profile',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const RegisterScreen(isEditing: true),
@@ -132,12 +128,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/my_qr_code',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const MyQrCodeScreen(),
-      ),
-      GoRoute(
-        path: '/notifications',
-        parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const NotificationsScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return MyQrCodeScreen(
+            userId: extra?['userId'] as String?,
+            userName: extra?['userName'] as String?,
+            qrImageUrl: extra?['qrImageUrl'] as String?,
+          );
+        },
       ),
       GoRoute(
         path: '/biodata',
@@ -147,7 +145,32 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/profile_view',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const ProfileViewScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ProfileViewScreen(
+            userId: extra?['id'] as String?,
+            isFromMyFamilyTree: extra?['isFromMyFamilyTree'] as bool? ?? false,
+            familyNode: extra?['node'],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/blocked_users',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const BlockedUsersScreen(),
+      ),
+      GoRoute(
+        path: '/member_family_tree',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final userId = extra?['userId'] as String? ?? state.uri.queryParameters['userId'] ?? '';
+          final userName = extra?['userName'] as String? ?? state.uri.queryParameters['userName'];
+          return MemberFamilyTreeScreen(
+            userId: userId,
+            userName: userName,
+          );
+        },
       ),
       GoRoute(
         path: '/work_profile',
@@ -173,7 +196,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           final name = state.uri.queryParameters['name'] ?? 'Community Details';
-          return CommunityDetailScreen(communityId: id, communityName: name);
+          final tab = state.uri.queryParameters['tab']?.toLowerCase();
+          final initialIndex = (tab == 'events' || tab == 'event') ? 1 : 0;
+          return CommunityDetailScreen(
+            communityId: id,
+            communityName: name,
+            initialTabIndex: initialIndex,
+          );
         },
       ),
       StatefulShellRoute.indexedStack(
@@ -195,7 +224,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/search',
-                builder: (context, state) => const SearchScreen(),
+                builder: (context, state) {
+                  final extra = state.extra;
+                  int initialTab = 0;
+                  Object? navToken;
+                  if (extra is int) {
+                    initialTab = extra;
+                  } else if (extra is Map<String, dynamic>) {
+                    if (extra['tab'] is int) initialTab = extra['tab'] as int;
+                    navToken = extra['t'];
+                  } else if (state.uri.queryParameters['tab'] != null) {
+                    initialTab = int.tryParse(state.uri.queryParameters['tab']!) ?? 0;
+                  }
+                  return SearchScreen(
+                    key: ValueKey('search_tab_${initialTab}_${navToken ?? state.pageKey.value}'),
+                    initialTab: initialTab,
+                  );
+                },
               ),
             ],
           ),
@@ -213,7 +258,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/my_profile',
-                builder: (context, state) => const MyProfileScreen(),
+                builder: (context, state) {
+                  final scrollToken = state.uri.queryParameters['scrollToken'];
+                  return MyProfileScreen(
+                    key: ValueKey('profile_$scrollToken'),
+                    scrollToken: scrollToken,
+                  );
+                },
               ),
             ],
           ),

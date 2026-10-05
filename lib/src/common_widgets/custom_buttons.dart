@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../utils/responsive_ext.dart';
 import '../theme/app_theme.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -26,16 +27,19 @@ class PrimaryButton extends StatelessWidget {
           backgroundColor: backgroundColor ?? AppColors.orange,
           foregroundColor: AppColors.white,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
           ),
-          textStyle: const TextStyle(
-            fontSize: 15,
+          textStyle: TextStyle(
+            fontSize: 15.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: Text(text),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(text),
+        ),
       ),
     );
   }
@@ -62,16 +66,19 @@ class OutlinePrimaryButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.orange,
           side: const BorderSide(color: AppColors.orange, width: 1.5),
-          padding: const EdgeInsets.symmetric(vertical: 13),
+          padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 16.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
           ),
-          textStyle: const TextStyle(
-            fontSize: 15,
+          textStyle: TextStyle(
+            fontSize: 15.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: Text(text),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(text),
+        ),
       ),
     );
   }
@@ -97,17 +104,20 @@ class SmallButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.orange,
           side: const BorderSide(color: AppColors.orange, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
           minimumSize: Size.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          textStyle: const TextStyle(
-            fontSize: 12,
+          textStyle: TextStyle(
+            fontSize: 12.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
-        child: Text(text),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(text),
+        ),
       );
     }
     return ElevatedButton(
@@ -116,17 +126,20 @@ class SmallButton extends StatelessWidget {
         backgroundColor: AppColors.orange,
         foregroundColor: AppColors.white,
         elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 7.h),
         minimumSize: Size.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
-        textStyle: const TextStyle(
-          fontSize: 12,
+        textStyle: TextStyle(
+          fontSize: 12.sp,
           fontWeight: FontWeight.w600,
         ),
       ),
-      child: Text(text),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(text),
+      ),
     );
   }
 }

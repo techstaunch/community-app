@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive_ext.dart';
 import '../theme/app_theme.dart';
 
 class OrangeHeader extends StatelessWidget {
@@ -25,7 +26,7 @@ class OrangeHeader extends StatelessWidget {
           colors: [AppColors.orange, AppColors.orangeDark],
         ),
       ),
-      padding: EdgeInsets.only(top: 60, left: 20, right: 20, bottom: paddingBottom),
+      padding: EdgeInsets.only(top: 60.h, left: 20.w, right: 20.w, bottom: paddingBottom.h),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -34,21 +35,21 @@ class OrangeHeader extends StatelessWidget {
             children: [
               if (leading != null) ...[
                 leading!,
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
               ],
               Text(
                 title,
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color: Colors.white,
-                      fontSize: 26,
+                      fontSize: 26.sp,
                     ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Text(
                 subtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white70,
-                  fontSize: 12,
+                  fontSize: 12.sp,
                 ),
               ),
             ],

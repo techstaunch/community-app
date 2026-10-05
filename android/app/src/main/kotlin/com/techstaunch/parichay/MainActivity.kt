@@ -1,4 +1,4 @@
-package com.example.community_connect
+package com.techstaunch.parichay
 
 import io.flutter.embedding.android.FlutterActivity
 

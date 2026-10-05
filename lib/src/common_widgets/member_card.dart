@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive_ext.dart';
 import '../theme/app_theme.dart';
 
 class MemberCard extends StatelessWidget {
@@ -21,54 +22,58 @@ class MemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(14.r),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
           border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
             DefaultTextStyle(
-              style: const TextStyle(fontSize: 36),
+              style: TextStyle(fontSize: 36.sp),
               child: icon,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 14,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textDark,
                     ),
                     child: title,
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 12,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.sp,
                       color: AppColors.textMuted,
                     ),
                     child: subtitle,
                   ),
                   if (tag != null) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     tag!,
                   ]
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            const Text(
+            SizedBox(width: 12.w),
+            Text(
               '›',
               style: TextStyle(
                 color: AppColors.textMuted,
-                fontSize: 24,
+                fontSize: 24.sp,
               ),
             ),
           ],
