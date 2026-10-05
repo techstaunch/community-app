@@ -353,7 +353,7 @@ class ProfileRepository {
     }
   }
 
-  Future<void> uploadProfilePhoto(String filePath) async {
+  Future<void> uploadProfilePhoto(String filePath, {String? userId}) async {
     final formData = FormData.fromMap({
       'photo': await MultipartFile.fromFile(filePath),
     });
@@ -362,8 +362,10 @@ class ProfileRepository {
     final storage = const FlutterSecureStorage();
     final token = await storage.read(key: ApiEndpoints.accessTokenKey);
     
+    final endpoint = userId != null ? '${ApiEndpoints.profilePhoto}/$userId' : ApiEndpoints.profilePhoto;
+    
     await _dio.post(
-      ApiEndpoints.profilePhoto, 
+      endpoint, 
       data: formData,
       options: Options(
         headers: {

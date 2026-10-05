@@ -1,12 +1,15 @@
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../theme/app_theme.dart';
 import '../../../../utils/app_messenger.dart';
 import '../../../../common_widgets/custom_buttons.dart';
 import '../../../../common_widgets/custom_inputs.dart';
 import '../../../../common_widgets/translated_text.dart';
+import '../../../../common_widgets/app_avatar.dart';
 import 'package:community_connect/src/features/profile/data/profile_provider.dart';
 import '../../data/family_models.dart';
 import '../../data/family_provider.dart';
@@ -70,6 +73,10 @@ class EditFamilyMemberSheet extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final showAdditionalDetails = useState(false);
+    final localPhotoBytes = useState<Uint8List?>(null);
+    final localPhotoPath = useState<String?>(null);
+    final isUploadingPhoto = useState(false);
+    
     final linkedProfileAsync =
         showAdditionalDetails.value && node.linkedUserId != null
         ? ref.watch(memberProfileProvider(node.linkedUserId!))
@@ -276,12 +283,82 @@ class EditFamilyMemberSheet extends HookConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    // Family-member profile photos are disabled until the
-                    // dedicated family-member upload flow is available.
-                    Icon(
-                      Icons.person_outline,
+                    AppAvatar(
+                      imageUrl: core?.profilePhotoUrl ?? node.photoUrl,
+                      memoryBytes: localPhotoBytes.value,
                       size: 48.r,
-                      color: AppColors.textMuted,
+                      isUploading: isUploadingPhoto.value,
+                      fallbackWidget: Icon(
+                        Icons.person_outline,
+                        size: 32.r,
+                        color: AppColors.textMuted,
+                      ),
+                      onEdit: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                          ),
+                          builder: (ctx) => SafeArea(
+                            child: Wrap(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(16.w),
+                                  child: TranslatedText(
+                                    'Profile Photo',
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textDark,
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.camera_alt_outlined, color: AppColors.indigo),
+                                  title: const TranslatedText('Take a Photo'),
+                                  onTap: () async {
+                                    Navigator.pop(ctx);
+                                    final picker = ImagePicker();
+                                    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                                    if (image != null && node.id != null) {
+                                      final bytes = await image.readAsBytes();
+                                      localPhotoBytes.value = bytes;
+                                      localPhotoPath.value = image.path;
+                                      try {
+                                        await ref.read(familyControllerProvider.notifier).uploadMemberPhoto(node.id!, image.path);
+                                        AppMessenger.showSuccess('Profile photo updated successfully');
+                                      } catch (e) {
+                                        AppMessenger.showError('Failed to upload photo');
+                                      }
+                                    }
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.photo_library_outlined, color: AppColors.indigo),
+                                  title: const TranslatedText('Choose from Gallery'),
+                                  onTap: () async {
+                                    Navigator.pop(ctx);
+                                    final picker = ImagePicker();
+                                    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                                    if (image != null && node.id != null) {
+                                      final bytes = await image.readAsBytes();
+                                      localPhotoBytes.value = bytes;
+                                      localPhotoPath.value = image.path;
+                                      try {
+                                        await ref.read(familyControllerProvider.notifier).uploadMemberPhoto(node.id!, image.path);
+                                        AppMessenger.showSuccess('Profile photo updated successfully');
+                                      } catch (e) {
+                                        AppMessenger.showError('Failed to upload photo');
+                                      }
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: 12.w),
                     Expanded(
@@ -861,6 +938,7 @@ class EditFamilyMemberSheet extends HookConsumerWidget {
                           await ref
                               .read(familyControllerProvider.notifier)
                               .updateFamilyMember(memberId, data);
+
                           ref.invalidate(profileControllerProvider);
                           ref.invalidate(memberProfileProvider(memberId));
                           if (node.linkedUserId != null) {

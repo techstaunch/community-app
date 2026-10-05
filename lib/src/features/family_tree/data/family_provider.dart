@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'family_repository.dart';
 import 'family_models.dart';
+import '../../profile/data/profile_repository.dart';
 
 part 'family_provider.g.dart';
 
@@ -56,6 +57,20 @@ class FamilyController extends _$FamilyController {
       final repo = ref.read(familyRepositoryProvider);
       await repo.deleteFamilyMember(id);
       final newTree = await repo.getFamilyHierarchy();
+      state = AsyncValue.data(newTree);
+    } catch (e) {
+      state = previousState;
+      rethrow;
+    }
+  }
+
+  Future<void> uploadMemberPhoto(String id, String filePath) async {
+    final previousState = state;
+    state = const AsyncValue.loading();
+    try {
+      final profileRepo = ref.read(profileRepositoryProvider);
+      await profileRepo.uploadProfilePhoto(filePath, userId: id);
+      final newTree = await ref.read(familyRepositoryProvider).getFamilyHierarchy();
       state = AsyncValue.data(newTree);
     } catch (e) {
       state = previousState;
