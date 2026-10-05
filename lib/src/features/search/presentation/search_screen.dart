@@ -31,6 +31,7 @@ class SearchScreen extends HookConsumerWidget {
     final searchText = useValueListenable(searchController);
     final searchNotifier = ref.read(searchControllerProvider.notifier);
     final canRefresh =
+        !isMembershipApproved ||
         searchText.text.trim().isNotEmpty ||
         searchNotifier.activeFiltersCount > 0;
 
@@ -109,6 +110,7 @@ class SearchScreen extends HookConsumerWidget {
                       Expanded(
                         child: TextField(
                           controller: searchController,
+                          enabled: isMembershipApproved,
                           style: TextStyle(fontSize: 14.sp),
                           textInputAction: TextInputAction.search,
                           onChanged: (val) {
@@ -184,11 +186,13 @@ class SearchScreen extends HookConsumerWidget {
                       ),
                       SizedBox(width: 8.w),
                       GestureDetector(
-                        onTap: () => _showAdvancedFilters(
-                          context,
-                          ref,
-                          selectedTab.value,
-                        ),
+                        onTap: isMembershipApproved
+                            ? () => _showAdvancedFilters(
+                                  context,
+                                  ref,
+                                  selectedTab.value,
+                                )
+                            : null,
                         child: Container(
                           padding: EdgeInsets.all(11.r),
                           decoration: BoxDecoration(
@@ -272,8 +276,13 @@ class SearchScreen extends HookConsumerWidget {
             Expanded(
               child: AppRefreshIndicator(
                 enabled: canRefresh,
-                onRefresh: () =>
-                    ref.read(searchControllerProvider.notifier).refresh(),
+                onRefresh: () async {
+                  if (!isMembershipApproved) {
+                    await ref.refresh(myCommunitiesControllerProvider.future);
+                    await ref.refresh(currentUserMembershipStatusProvider.future);
+                  }
+                  await ref.read(searchControllerProvider.notifier).refresh();
+                },
                 child: CustomScrollView(
                   controller: scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
