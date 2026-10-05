@@ -47,3 +47,5 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 GEMINI.md
+# Widget Preview related
+.widget_preview/

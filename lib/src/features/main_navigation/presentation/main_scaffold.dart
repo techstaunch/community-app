@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_theme.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
+import 'package:community_connect/src/utils/responsive_ext.dart';
 
 class MainScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -15,8 +16,8 @@ class MainScaffold extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          height: 65,
-          decoration: BoxDecoration(
+          constraints: BoxConstraints(minHeight: 65.h),
+          decoration: const BoxDecoration(
             color: Colors.white,
             border: Border(top: BorderSide(color: AppColors.border, width: 1)),
           ),
@@ -106,29 +107,31 @@ class _NavItem extends StatelessWidget {
         scale: isActive ? 1.05 : 1.0,
         duration: const Duration(milliseconds: 200),
         child: SizedBox(
-          width: 65,
+          width: 65.w,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isActive ? AppColors.orangeLight : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Icon(
                   isActive ? activeIcon : icon,
                   color: isActive ? AppColors.orange : AppColors.textMid,
-                  size: 24,
+                  size: 22.r,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               TranslatedText(
                 label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 10.sp,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                   color: isActive ? AppColors.orange : AppColors.textMid,
                 ),

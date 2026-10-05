@@ -69,7 +69,7 @@ class TranslationService {
         await _modelManager.downloadModel(TranslateLanguage.english.bcpCode,
             isWifiRequired: false);
       }
-      onProgress?.call(3, 4, 'English model ready ✓');
+      onProgress?.call(3, 4, 'English model ready ✓'); 
 
       // Step 4: Initialize translator
       onProgress?.call(4, 4, 'Initializing translator...');
