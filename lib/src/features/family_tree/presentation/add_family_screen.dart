@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:community_connect/src/common_widgets/app_avatar.dart';
@@ -11,6 +13,7 @@ import '../../../common_widgets/custom_buttons.dart';
 import '../../../common_widgets/custom_inputs.dart';
 import 'package:community_connect/src/common_widgets/translated_text.dart';
 import '../data/family_provider.dart';
+import '../data/family_repository.dart';
 import '../data/family_models.dart';
 import '../../community/data/community_provider.dart';
 import '../../profile/data/profile_provider.dart';
@@ -118,6 +121,12 @@ class AddFamilyScreen extends HookConsumerWidget {
     final isMembershipApproved = membershipStatus.toLowerCase() == 'approved';
 
     final isCreatingNew = additionType.value == 'new';
+    
+    final localPhotoPath = useState<String?>(null);
+    final localPhotoBytes = useState<Uint8List?>(null);
+    final isUploadingPhoto = useState<bool>(false);
+    final uploadedPhotoUrl = useState<String?>(null);
+
 
     bool calculateIsMinor(DateTime? dob) {
       if (dob == null) return false;
@@ -273,6 +282,98 @@ class AddFamilyScreen extends HookConsumerWidget {
                     SizedBox(height: 20.h),
 
                     if (isCreatingNew) ...[
+                      // Photo Upload
+                      Center(
+                        child: AppAvatar(
+                          imageUrl: null,
+                          memoryBytes: localPhotoBytes.value,
+                          size: 80.r,
+                          isUploading: isUploadingPhoto.value,
+                          fallbackWidget: Icon(
+                            Icons.person_add_alt_1_outlined,
+                            size: 40.r,
+                            color: AppColors.textMuted,
+                          ),
+                          onEdit: () async {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                              ),
+                              builder: (ctx) => SafeArea(
+                                child: Wrap(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(16.w),
+                                      child: TranslatedText(
+                                        'Profile Photo',
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textDark,
+                                        ),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt_outlined, color: AppColors.indigo),
+                                      title: const TranslatedText('Take a Photo'),
+                                      onTap: () async {
+                                        Navigator.pop(ctx);
+                                        final picker = ImagePicker();
+                                        final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                                        if (image != null) {
+                                          final bytes = await image.readAsBytes();
+                                          localPhotoBytes.value = bytes;
+                                          localPhotoPath.value = image.path;
+                                          isUploadingPhoto.value = true;
+                                          try {
+                                            final url = await ref.read(familyRepositoryProvider).uploadFamilyMemberPhoto(image.path);
+                                            uploadedPhotoUrl.value = url;
+                                          } catch (e) {
+                                            AppMessenger.showError('Failed to upload photo');
+                                            localPhotoBytes.value = null;
+                                            localPhotoPath.value = null;
+                                          } finally {
+                                            isUploadingPhoto.value = false;
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library_outlined, color: AppColors.indigo),
+                                      title: const TranslatedText('Choose from Gallery'),
+                                      onTap: () async {
+                                        Navigator.pop(ctx);
+                                        final picker = ImagePicker();
+                                        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                                        if (image != null) {
+                                          final bytes = await image.readAsBytes();
+                                          localPhotoBytes.value = bytes;
+                                          localPhotoPath.value = image.path;
+                                          isUploadingPhoto.value = true;
+                                          try {
+                                            final url = await ref.read(familyRepositoryProvider).uploadFamilyMemberPhoto(image.path);
+                                            uploadedPhotoUrl.value = url;
+                                          } catch (e) {
+                                            AppMessenger.showError('Failed to upload photo');
+                                            localPhotoBytes.value = null;
+                                            localPhotoPath.value = null;
+                                          } finally {
+                                            isUploadingPhoto.value = false;
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
+                      
                       // Title Dropdown
                       TranslatedText(
                         'Title',
@@ -1148,6 +1249,10 @@ class AddFamilyScreen extends HookConsumerWidget {
                                 if (linkedUserId.value != null) {
                                   data['linkedUserId'] = linkedUserId.value;
                                 }
+                              }
+
+                              if (uploadedPhotoUrl.value != null) {
+                                data['photoUrl'] = uploadedPhotoUrl.value;
                               }
 
                               try {

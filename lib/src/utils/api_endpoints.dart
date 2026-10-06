@@ -45,6 +45,7 @@ class ApiEndpoints {
   static const String familyHierarchy = '/family/hierarchy';
   static const String familyMember = '/family';
   static String familyMemberId(String id) => '/family/$id';
+  static const String familyUploadPhoto = '/family/upload-photo';
 
   // Communities Endpoints
   static const String communities = '/communities';

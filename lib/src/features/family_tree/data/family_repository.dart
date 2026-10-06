@@ -34,6 +34,14 @@ class FamilyRepository {
     return FamilyTreeNode.fromJson(response.data['data']['tree']);
   }
 
+  Future<String> uploadFamilyMemberPhoto(String filePath) async {
+    final formData = FormData.fromMap({
+      'photo': await MultipartFile.fromFile(filePath),
+    });
+    final response = await _dio.post(ApiEndpoints.familyUploadPhoto, data: formData);
+    return response.data['data']['photoUrl'] as String;
+  }
+
   Future<FamilyMember> addFamilyMember(Map<String, dynamic> data) async {
     final response = await _dio.post(ApiEndpoints.familyMember, data: data);
     return FamilyMember.fromJson(response.data['data']);
